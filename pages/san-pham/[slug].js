@@ -8,6 +8,25 @@ import React, { useEffect, useState } from "react";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import Slider from "react-slick";
 
+const introduce = [
+  {
+    id: 1,
+    title: "Mô tả sản phẩm "
+  },
+  {
+    id: 2,
+    title: "Thành phần"
+  },
+  {
+    id: 3,
+    title: "Công dụng"
+  },
+  {
+    id: 4,
+    title: "Hướng dẫn sử dụng"
+  },
+]
+
 const Item = ({ product }, params) => {
   const [productItem, itemSlug] = product;
   const [productIt, setProduct] = useState({});
@@ -89,7 +108,7 @@ const Item = ({ product }, params) => {
                     className="w-[78px] h-[80px] bg-white py-3 mb-3"
                   >
                     {item?.image && (
-                      <Image src={item.image} alt="" width={100} height={100} />
+                      <Image src={item.image} alt="" width={100} height={100} className="w-full h-full"/>
                     )}
                   </div>
                 );
@@ -162,7 +181,20 @@ const Item = ({ product }, params) => {
         </div>
         <div>
           <div className="flex items-center justify-center mx-auto mt-5 py-2">
-            <div
+            {introduce.length > 0 && introduce.map((item) => (
+              <div
+              key={item.id}
+              className={`${
+                hidden === item.id
+                  ? "text-regal-red border-b-[3px] border-regal-red"
+                  : ""
+              } p-4  cursor-pointer hover:text-regal-red hover:border-b-[3px] hover:border-regal-red`}
+              onClick={() => setHidden(item.id)}
+            >
+              <span className="text-2xl font-sans">{item.title}</span>
+            </div>
+            ))}
+            {/* <div
               className={`${
                 hidden === 1
                   ? "text-regal-red border-b-[3px] border-regal-red"
@@ -201,7 +233,7 @@ const Item = ({ product }, params) => {
               onClick={() => setHidden(4)}
             >
               <span className="text-2xl font-sans">Hướng dẫn sử dụng</span>
-            </div>
+            </div> */}
           </div>
           <div className="px-28 mt-4">
             {hidden === 1 && (

@@ -15,6 +15,7 @@ import person from "../public/person.svg";
 import signin from "../public/signin.svg";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const menu = [
   {
@@ -50,6 +51,8 @@ const menu = [
 ];
 
 const Menu = () => {
+  const router = useRouter();
+  // console.log(router);
   return (
     <>
       <header className="header flex items-center justify-center py-6 bg-[#ffffff] px-20">
@@ -75,7 +78,14 @@ const Menu = () => {
               {menu.length > 0 &&
                 menu.map((item) => (
                   <li key={item.id} className="cursor-pointer">
-                    <Link className={`${item.id === 1? 'text-regal-red': ''} text-[#33333e] text-[16px] hover:text-regal-red`} href={`${item.link}`}>
+                    <Link
+                      className={`${
+                        item.link === router.pathname
+                          ? "text-regal-red"
+                          : "text-[#33333e]"
+                      } text-[16px] hover:text-regal-red`}
+                      href={`${item.link}`}
+                    >
                       {item.page}
                     </Link>
                   </li>
@@ -173,7 +183,9 @@ const Menu = () => {
                   />
                 </svg>
               </span>
-              <span className="w-[15px] h-4 text-[9px] text-white text-center rounded-full bg-red-500 absolute top-1/2 left-1/2 translate-x-[30%] -translate-y-2/3">0</span>
+              <span className="w-[15px] h-4 text-[9px] text-white text-center rounded-full bg-red-500 absolute top-1/2 left-1/2 translate-x-[30%] -translate-y-2/3">
+                0
+              </span>
               {/* <div
                 tabIndex={0}
                 className="dropdown-content menu shadow bg-base-100 rounded-box "

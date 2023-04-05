@@ -257,5 +257,54 @@ ul {
 /* san-pham [slug].js */
 
 .MsoNormal span{
-  margin-bottom: 5px;
+  /* margin-bottom: 5px; */
+  line-height: 2;
+}
+/* -------------------- pages/index.js */
+.slide-home:hover .slick-arrow{
+  opacity: 1;
+}
+.slide-home .slick-arrow{
+  width: 50px;
+  height: 50px;
+}
+.slide-home .slick-arrow:hover{
+  background-color: white;
+}
+.slide-home .slick-arrow svg{
+  margin: auto;
+  margin-top: 10px;
+}
+.slide-home .slick-prev{
+  left: 8px;
+  z-index: 100;
+  opacity: 0;
+}
+.slide-home .slick-next{
+  right: 18px;
+  z-index: 100;
+  opacity: 0;
+}
+.center .slick-list{
+  padding: 0 70;
+  transition: all;
+}
+.center .slick-list .slick-track .slick-slide{
+  transform: scale(0.8);
+  opacity: 0.4;
+}
+.center .slick-list .slick-track .slick-current{
+  transition: all;
+  /* outline: none; */
+  opacity: 1;
+  transform: scale(1);
+}
+
+.center .slick-prev{
+  left: 8px;
+  z-index: 100;
+}
+.center .slick-next{
+  right: 18px;
+  z-index: 100;
 }

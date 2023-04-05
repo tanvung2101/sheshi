@@ -41,7 +41,7 @@ const GioiThieu = ({ product }) => {
   }
   return (
     <>
-    <SEO title="GIỚI THIỆU SHESHI" href="/logosheshe.png"></SEO>
+    <SEO title="GIỚI THIỆU SHESHI"></SEO>
       {/* <Head>
         <link rel="icon" href="/logosheshe.png" />
         <title>GIỚI THIỆU SHESHI</title>

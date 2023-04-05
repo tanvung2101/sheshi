@@ -4,7 +4,7 @@ import Head from "next/head";
 import settings from "../settings/settings-Development";
 
 const SEO = (props) => {
-  const { title = 'CÔNG TY CỔ PHẦN TẬP ĐOÀN SHESHI', description = '', image = '' , href = '', children} = props;
+  const { title = 'CÔNG TY CỔ PHẦN TẬP ĐOÀN SHESHI', description = '', image = '' , href = '/logosheshe.png', children} = props;
   return (
     <Head>
       <link rel="icon" href={href}/>

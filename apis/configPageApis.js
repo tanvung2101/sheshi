@@ -1,15 +1,17 @@
-import axiosClient from './axiosClient'
+// import axiosClient from './axiosClient'
+
+import axios from "axios";
 
 const configPageApis = {
-  getListConfigPageContact: () => axiosClient.get("/api/config-page/contact"),
+  getListConfigPageContact: () => axios.get("http://0.0.0.0:3001/api/config-page/contact"),
   getListConfigPageContent: (params) =>
-    axiosClient.get("/api/config-page/content-page", { params }),
+    axios.get("http://0.0.0.0:3001/api/config-page/content-page", { params }),
   getListConfigPageSlide: (params) =>
-    axiosClient.get("/api/config-page/slide-page", { params }),
+    axios.get("http://0.0.0.0:3001/api/config-page/slide-page", { params }),
   updateConfigPageContact: (payload) =>
-    axiosClient.put("/api/config-page/update-page-contact", payload),
+    axios.put("http://0.0.0.0:3001/api/config-page/update-page-contact", payload),
   updateConfigPageContentSlide: (payload) =>
-    axiosClient.put("/api/config-page/update-page-content-slide", payload),
+    axios.put("http://0.0.0.0:3001/api/config-page/update-page-content-slide", payload),
 };
 
 export default configPageApis

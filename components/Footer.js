@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import logosheshe from "../public/logosheshe.png";
 import useSWR from "swr";
 import { CONTACT_PAGE } from "@/constants";
+import Link from "next/link";
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -28,25 +29,31 @@ const Footer = ({ users }) => {
               height={120}
             ></Image>
             <div>
-              <strong className="uppercase text-white text-xl">công ty cổ phần tập đoàn shishe</strong>
-              <p className="uppercase mb-5 font-medium">số gpkd: {contact?.businessLicense}</p>
+              <strong className="uppercase text-white text-xl">
+                công ty cổ phần tập đoàn shishe
+              </strong>
+              <p className="uppercase mb-5 font-medium">
+                số gpkd: {contact?.businessLicense}
+              </p>
               <p className="mb-5 font-medium">Địa chỉ: {contact?.address}</p>
-              <p className="mb-5 font-medium">Điện thoại: {contact?.telephone}</p>
+              <p className="mb-5 font-medium">
+                Điện thoại: {contact?.telephone}
+              </p>
               <p>Email: {contact?.email}</p>
             </div>
           </div>
           <div className="flex-col items-center">
             <span className="mb-5 block uppercase font-bold text-[#fefcfc]">
-              hướng dẫn mua hàng
+              <Link href="/huong-dan-mua-hang">hướng dẫn mua hàng</Link>
             </span>
             <span className="mb-5 block uppercase font-bold text-[#fefcfc]">
-              chính sách đổi trả
+              <Link href="/chinh-sach-doi-tra">chính sách đổi trả</Link>
             </span>
             <span className="mb-5 block uppercase font-bold text-[#fefcfc]">
-              chính sách giao hàng
+              <Link href="/chinh-sach-giao-hang">chính sách giao hàng</Link>
             </span>
             <span className="block uppercase font-bold text-[#fefcfc]">
-              chính sách bảo mật
+              <Link href='/chinh-sach-bao-mat'>chính sách bảo mật</Link>
             </span>
           </div>
         </div>
