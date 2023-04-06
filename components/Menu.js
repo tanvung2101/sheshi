@@ -55,7 +55,7 @@ const Menu = () => {
   // console.log(router);
   return (
     <>
-      <header className="header flex items-center justify-center py-6 bg-[#ffffff] px-20">
+      <header className="w-full header flex items-center justify-center py-6 bg-[#ffffff] px-20 ">
         <div className="h-full flex items-center bg-[#fff] gap-x-14">
           <div className="flex items-center gap-2">
             <Image
@@ -218,15 +218,17 @@ const Menu = () => {
                 className="dropdown-content menu shadow bg-base-100 rounded-box "
               >
                 <CartIcon className="w-[250px]">
-                  <Span className="flex items-center gap-2 p-3 rounded-md hover:bg-[#fef9f2]">
-                    <Image
-                      src={`${signin.src}`}
-                      alt=""
-                      width={22}
-                      height={22}
-                    ></Image>
-                    Đăng nhập
-                  </Span>
+                  <Link href='/login'>
+                    <Span className="flex items-center gap-2 p-3 rounded-md hover:bg-[#fef9f2]">
+                      <Image
+                        src={`${signin.src}`}
+                        alt=""
+                        width={22}
+                        height={22}
+                      ></Image>
+                      Đăng nhập
+                    </Span>
+                  </Link>
                   <Span className="flex items-center gap-2 p-2 rounded-md hover:bg-[#fef9f2]">
                     <Image
                       src={`${userPlus.src}`}

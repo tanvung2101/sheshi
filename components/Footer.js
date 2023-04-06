@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-const Footer = ({ users }) => {
+const Footer = () => {
   const [contact, setContact] = useState();
   const { data, error, isLoading } = useSWR(
     "http://localhost:3001/api/config-page/contact",
@@ -22,12 +22,15 @@ const Footer = ({ users }) => {
       <div className="pt-10 pb-10 bg-regal-red z-0 text-white">
         <div className="flex items-start justify-around">
           <div className="flex items-center justify-between gap-20">
-            <Image
-              src={`${logosheshe.src}`}
-              alt=""
-              width={140}
-              height={120}
-            ></Image>
+            <Link href='/'>
+              <Image
+                src={`${logosheshe.src}`}
+                alt=""
+                width={140}
+                height={120}
+                className="cursor-pointer"
+              ></Image>
+            </Link>
             <div>
               <strong className="uppercase text-white text-xl">
                 công ty cổ phần tập đoàn shishe
@@ -43,17 +46,17 @@ const Footer = ({ users }) => {
             </div>
           </div>
           <div className="flex-col items-center">
-            <span className="mb-5 block uppercase font-bold text-[#fefcfc]">
+            <span className="mb-5 block uppercase font-bold text-[#fefcfc] hover:text-yellow-300">
               <Link href="/huong-dan-mua-hang">hướng dẫn mua hàng</Link>
             </span>
-            <span className="mb-5 block uppercase font-bold text-[#fefcfc]">
+            <span className="mb-5 block uppercase font-bold text-[#fefcfc] hover:text-yellow-300">
               <Link href="/chinh-sach-doi-tra">chính sách đổi trả</Link>
             </span>
-            <span className="mb-5 block uppercase font-bold text-[#fefcfc]">
+            <span className="mb-5 block uppercase font-bold text-[#fefcfc] hover:text-yellow-300">
               <Link href="/chinh-sach-giao-hang">chính sách giao hàng</Link>
             </span>
-            <span className="block uppercase font-bold text-[#fefcfc]">
-              <Link href='/chinh-sach-bao-mat'>chính sách bảo mật</Link>
+            <span className="block uppercase font-bold text-[#fefcfc] hover:text-yellow-300">
+              <Link href="/chinh-sach-bao-mat">chính sách bảo mật</Link>
             </span>
           </div>
         </div>

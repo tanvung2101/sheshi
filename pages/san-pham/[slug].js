@@ -242,7 +242,6 @@ const Item = ({ product }, params) => {
                 dangerouslySetInnerHTML={{ __html: productIt?.description }}
               ></div>
             )}
-
             {hidden === 2 && (
               <div
                 className="text-base leading-4 mb-4 font-sans"

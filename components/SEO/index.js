@@ -9,6 +9,7 @@ const SEO = (props) => {
     <Head>
       <link rel="icon" href={href}/>
       <title>{title}</title>
+      <meta charSet="UTF-8" />
       <meta name="description" content={description} key="desc"/>
       <meta
         property="og:image"

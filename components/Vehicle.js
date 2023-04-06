@@ -35,7 +35,7 @@ const Vehicle = () => {
               className={` mb-2 relative `}
             >
               <div className={`${item.id === 1 ? 'animate-scale': ''} hiddenContent relative flex items-center justify-center rounded-full  w-[45px] h-[45px] bg-[#bc2029]`}>
-                <img src={`${item.icon}`} alt="" width={20} height={20}></img>
+                <Image src={`${item.icon}`} alt="" width={20} height={20}></Image>
               </div>
               <span className="iconPhone absolute left-[-90%] top-[50%] -translate-y-[50%] z-100 opacity-0 text-[12px] bg-[#bc2029] text-white text-center py-1 px-8">
                 {item.content}

@@ -35,6 +35,14 @@ h6 {
   font-size: inherit;
   font-weight: inherit;
 }
+h1,
+h2,
+h3,
+h4{
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 2;
+}
 
 ol,
 ul {
@@ -307,4 +315,8 @@ ul {
 .center .slick-next{
   right: 18px;
   z-index: 100;
+}
+/* pages/[slug].js */
+.pages__content__text div h3{
+  font-size: 20px;
 }
