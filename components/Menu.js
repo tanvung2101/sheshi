@@ -3,17 +3,12 @@ import React, { useRef } from "react";
 import img from "../public/logo_text.svg";
 import logosheshe from "../public/logosheshe.png";
 import "tippy.js/dist/tippy.css";
-import iconSerach from "../public/search.svg";
 import CartIcon from "./CartIcon";
 import Span from "./Span";
 import Input from "./Input";
-import eye from "../public/eye.svg";
-import bag from "../public/bag.svg";
 import userPlus from "../public/user-plus.svg";
 import { Button, Vehicle } from "@/components";
-import person from "../public/person.svg";
 import signin from "../public/signin.svg";
-import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -167,25 +162,27 @@ const Menu = () => {
               </div>
             </div>
             <div className="dropdown dropdown-end bagIcon relative">
-              <span tabIndex={0}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-                  />
-                </svg>
-              </span>
-              <span className="w-[15px] h-4 text-[9px] text-white text-center rounded-full bg-red-500 absolute top-1/2 left-1/2 translate-x-[30%] -translate-y-2/3">
-                0
-              </span>
+              <Link href='/cart'>
+                <span tabIndex={0}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+                    />
+                  </svg>
+                </span>
+                <span className="w-[15px] h-4 text-[9px] text-white text-center rounded-full bg-red-500 absolute top-1/2 left-1/2 translate-x-[30%] -translate-y-2/3">
+                  0
+                </span>
+              </Link>
               {/* <div
                 tabIndex={0}
                 className="dropdown-content menu shadow bg-base-100 rounded-box "
@@ -218,7 +215,7 @@ const Menu = () => {
                 className="dropdown-content menu shadow bg-base-100 rounded-box "
               >
                 <CartIcon className="w-[250px]">
-                  <Link href='/login'>
+                  <Link href="/login">
                     <Span className="flex items-center gap-2 p-3 rounded-md hover:bg-[#fef9f2]">
                       <Image
                         src={`${signin.src}`}
@@ -229,15 +226,17 @@ const Menu = () => {
                       Đăng nhập
                     </Span>
                   </Link>
-                  <Span className="flex items-center gap-2 p-2 rounded-md hover:bg-[#fef9f2]">
-                    <Image
-                      src={`${userPlus.src}`}
-                      alt=""
-                      width={22}
-                      height={22}
-                    ></Image>
-                    Đăng kí
-                  </Span>
+                  <Link href="/sign-up">
+                    <Span className="flex items-center gap-2 p-2 rounded-md hover:bg-[#fef9f2]">
+                      <Image
+                        src={`${userPlus.src}`}
+                        alt=""
+                        width={22}
+                        height={22}
+                      ></Image>
+                      Đăng kí
+                    </Span>
+                  </Link>
                 </CartIcon>
               </div>
             </div>

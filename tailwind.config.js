@@ -15,6 +15,16 @@ module.exports = {
         'light-pink': '#fdf2ec',
         'small-font-color': '#616260',
       },
+      animation: {
+        'spin-slow': 'linear 2s alternate',
+      },
+      keyframes: {
+        wiggle: {
+          '0%': { transform: '-translateY(50px)' },
+          '50%': { transform: '-translateY(30px)' },
+          '100%': { transform: 'translateY(0px)' },
+        }
+      }
     },
   },
   plugins: [require("daisyui")],

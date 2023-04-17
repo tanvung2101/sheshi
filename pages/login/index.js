@@ -6,7 +6,7 @@ const Login = () => {
     <>
     <SEO title="Đăng nhập"></SEO>
       <div className="my-20 flex items-center">
-        <div className="mx-auto w-[19%]">
+        <div className="mx-auto">
           <h3>Đăng nhập</h3>
           <form className="inline-block w-full bg-white">
             <div className="flex-col mb-4">

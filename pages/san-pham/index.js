@@ -1,77 +1,134 @@
 import { ItemSlide, SEO, Title } from "@/components";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import categoryApis from "./../../apis/categoryApí";
 import axios from "axios";
 import productsApis from "@/apis/productApis";
 import { GLOBAL_STATUS } from "@/constants";
+import CheckBox from "@/components/checkbox";
+import { AiOutlineClose } from "react-icons/ai";
 
+const initFilter = {
+  category: [],
+  capacity: [],
+};
 const SamPham = ({ data }) => {
   const { category, product } = data;
-  const [categorySlug, setCategorySlug] = useState([]);
-  const [productCategory, setProductCategory] = useState([]);
-  const [target, setTarget] = useState(false);
-  // console.log(category, product);
+  const [filter, setFilter] = useState(initFilter);
+  const [categorySlug, setCategorySlug] = useState(category);
+  const [productCategory, setProductCategory] = useState(product.rows);
+  console.log("productCategory", product);
+  const [productsOptions, setProductsOptions] = useState(product.rows);
   const router = useRouter();
-  const handlerClickCategory = (e) => {
-    console.log(e.target.name)
-    setCategorySlug(() => [e.target.name, ...categorySlug]);
-    console.log('categorySlug',categorySlug)
-    const data = product?.rows?.filter((row) =>
-      row.productCategory.categorySlug.includes(...categorySlug)
-    );
-    setProductCategory(() => [...productCategory, data]);
+  const updateProducts = useCallback(() => {
+    let temp = productsOptions;
+    if (filter.category.length > 0) {
+      temp = temp?.filter((e) =>
+        filter.category.includes(e.productCategory.categorySlug)
+      );
+    }
+    setProductCategory(temp);
+  }, [filter, productsOptions]);
+  useEffect(() => {
+    updateProducts();
+  }, [updateProducts]);
+  const filterSelect = (type, checked, item) => {
+    if (checked) {
+      switch (type) {
+        case "CATEGORY":
+          setFilter({
+            ...filter,
+            category: [...filter.category, item.categorySlug],
+          });
+          break;
+        case "CAPACITY":
+          setFilter({
+            ...filter,
+            capacity: [...filter.capacity, item.capacity],
+          });
+          break;
+        default:
+      }
+    } else {
+      switch (type) {
+        case "CATEGORY":
+          const newCategory = filter.category.filter(
+            (e) => e !== item.categorySlug
+          );
+          setFilter({ ...filter, category: newCategory });
+          break;
+        case "CAPACITY":
+          const newCapacity = filter.capacity.filter(
+            (e) => e !== item.capacity
+          );
+          setFilter({ ...filter, capacity: newCapacity });
+          break;
+        default:
+      }
+    }
   };
+  const clearFilter = () => setFilter(initFilter);
   return (
     <>
       <SEO title="SẢN PHẨM SHESHI" href="/logosheshe.png"></SEO>
-      
+
       <div className="bg-light-pink py-5">
         <Title className="text-3xl font-bold">sản phẩm</Title>
       </div>
       <div className="py-8 px-24 flex">
-        <div className="flex-col grow-[2]">
+        <div className="flex-col w-[20%]">
           <h4 className="text-xl text-black font-sans font-bold mb-4">
             Danh Mục Sản Phẩm
           </h4>
-          {category.length > 0 &&
-            category.map((item) => {
-              return (
-                <div key={item.id} className="relative mb-4 group">
-                  <label
-                    className="ml-8 text-base font-medium font-serif text-center hover:text-red-500"
-                    htmlFor={item.categorySlug}
+          <div>
+            {categorySlug.length > 0 &&
+              categorySlug.map((item) => {
+                return (
+                  <div
+                    // onClick={() => showHideFilter()}
+                    key={item.id}
+                    className="relative mb-4 group"
                   >
-                    <input
-                      className="absolute left-0 top-[50%] -translate-y-[50%] hidden"
-                      type="checkbox"
-                      name={item.categorySlug}
-                      id={item.categorySlug}
-                      onClick={handlerClickCategory}
-                      // checked
-                    />
-                    <span className="w-4 h-4 border border-black group-active:bg-regal-red absolute top-[50%] -translate-y-1/2 left-0">
-                      <i className="fa-thin fa-square-check"></i>
-                    </span>
-                    {item?.name}
-                  </label>
-                </div>
-              );
-            })}
+                    <CheckBox
+                      label={item.name}
+                      onChange={(input) =>
+                        filterSelect("CATEGORY", input.checked, item)
+                      }
+                      checked={filter.category.includes(item.categorySlug)}
+                    ></CheckBox>
+                  </div>
+                );
+              })}
+          </div>
+          <div className="overflow-hidden">
+            <button
+              type="button"
+              className="mt-6 flex items-center gap-1 p-2 text-sm rounded-md active:border active:border-slate-600"
+              onClick={() => clearFilter()}
+            >
+              <AiOutlineClose className="text-xs"></AiOutlineClose>
+              Xóa bộ lọc
+            </button>
+          </div>
         </div>
-        <div className="grow-[9] grid grid-rows-4 grid-flow-col gap-4">
-          {product.rows.length > 0 &&
-            product.rows.map((item) => (
-              <ItemSlide
-                className="h-[200px]"
-                key={item.id}
-                image={item?.productCategory.image}
-                name={item.name}
-                price={item.price}
-                link={`/san-pham/${item.productSlug}`}
-              ></ItemSlide>
-            ))}
+        <div className="w-[80%]">
+          <div className="grid grid-cols-3">
+            {productCategory.length > 0 &&
+              productCategory.map((item) => {
+                return (
+                  <div key={item.id}>
+                    <ItemSlide
+                      className=""
+                      image={item?.productCategory.image}
+                      name={item.name}
+                      price={item.price}
+                      link={`/san-pham/${item.productSlug}`}
+                    ></ItemSlide>
+                  </div>
+                );
+              })}
+          </div>
         </div>
       </div>
     </>

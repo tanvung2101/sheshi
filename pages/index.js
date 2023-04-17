@@ -45,7 +45,7 @@ export default function Home({ data }) {
     const result = await axios.get("http://localhost:3001/api/product", {
       params,
     });
-    console.log(result.data);
+    // console.log(result.data);
     setProduct(result.data.rows);
   };
   const getProductRelated = async () => {
@@ -72,7 +72,7 @@ export default function Home({ data }) {
       "@type": "Product",
       "name": "CÔNG TY CỔ PHẦN TẬP ĐOÀN SHESHI",
       "image": [${product?.map((item) =>
-        console.log(item?.productCategory?.image)
+        item?.productCategory?.image
       )}],
       "description": "Sleeker than ACME's Classic Anvil, the Executive Anvil is perfect for the business traveler looking for something to drop from a height.",
       "sku": "0446310786",
@@ -259,6 +259,7 @@ export default function Home({ data }) {
                       image={item?.productImage[0]?.image || ""}
                       name={item?.name}
                       price={Number(item?.productDetail[0]?.price)}
+                      qty={item.productInventory[0].quantity}
                     ></ItemSlide>
                   </div>
                 );
@@ -336,7 +337,7 @@ export default function Home({ data }) {
               <Slider {...settings}>
                 {productNew?.length > 0 &&
                   productNew?.map((item) => {
-                    // console.log('item',item.productSlug)
+                    console.log('item',item)
                     return (
                       <div key={item.id}>
                         <ItemSlide
@@ -344,6 +345,7 @@ export default function Home({ data }) {
                           image={item?.productImage[0]?.image || ""}
                           name={item?.name}
                           price={Number(item?.productDetail[0]?.price || 0)}
+                          qty={item.productInventory[0].quantity}
                         ></ItemSlide>
                       </div>
                     );

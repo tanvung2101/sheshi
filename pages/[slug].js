@@ -13,7 +13,7 @@ const Pages = ({ data }) => {
   }, [pageShow]);
   return (
     <>
-      <SEO title={pageShow.display} description={data[0].content.replace(/(<([^>]+)>)/gi, "")}></SEO>
+      <SEO title={pageShow?.display} description={data[0]?.content.replace(/(<([^>]+)>)/gi, "")}></SEO>
       <div className="bg-light-pink py-5">
         <Title className="uppercase">{pageShow.display}</Title>
       </div>
@@ -36,7 +36,7 @@ export async function getStaticPaths() {
   // console.log(paths)
   return {
     paths: paths,
-    fallback: true,
+    fallback: false,
   };
 }
 
