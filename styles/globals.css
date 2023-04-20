@@ -146,7 +146,6 @@ ul {
 
 .hiddenContent:hover+span.iconPhone {
   opacity: 1;
-
 }
 
 .animate-scale:hover::before {

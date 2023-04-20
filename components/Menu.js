@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import img from "../public/logo_text.svg";
 import logosheshe from "../public/logosheshe.png";
 import "tippy.js/dist/tippy.css";
@@ -11,6 +11,7 @@ import { Button, Vehicle } from "@/components";
 import signin from "../public/signin.svg";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { BsSearch } from "react-icons/bs";
 
 const menu = [
   {
@@ -48,6 +49,16 @@ const menu = [
 const Menu = () => {
   const router = useRouter();
   // console.log(router);
+  const [keyWord, setKeyWord] = useState();
+  console.log(keyWord)
+
+  const handler = (e) => {
+    if(e.target.value === undefined) {
+        setKeyWord('')
+    }else{
+      setKeyWord(e.target.value)
+    }
+  }
   return (
     <>
       <header className="w-full header flex items-center justify-center py-6 bg-[#ffffff] px-20 ">
@@ -111,7 +122,13 @@ const Menu = () => {
               >
                 <CartIcon>
                   <Span>Tìm kiếm sản phẩm</Span>
-                  <Input placeholder="Nhập từ khóa cần kiếm"></Input>
+                  <label className="relative">
+                    <Input onChange={handler} className='w-full' placeholder="Nhập từ khóa cần kiếm"></Input>
+                    {/* <BsSearch onClick={() => router.push(`/search?keyword=${keyWord}`)} className="absolute top-1/2 right-0 -translate-x-1/2 -translate-y-1/2"/> */}
+                    <Link href={`/search?keyword=${keyWord}`} className="absolute top-1/2 right-0 -translate-x-1/2 -translate-y-1/2">
+                      <BsSearch/>
+                    </Link>
+                  </label>
                 </CartIcon>
               </div>
             </div>
@@ -162,7 +179,7 @@ const Menu = () => {
               </div>
             </div>
             <div className="dropdown dropdown-end bagIcon relative">
-              <Link href='/cart'>
+              <Link href="/cart">
                 <span tabIndex={0}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
