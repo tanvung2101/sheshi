@@ -50,6 +50,9 @@ ul {
   margin: 0;
   padding: 0;
 }
+input{
+  width: 100%;
+}
 
 .swiper-slide {
   text-align: center;

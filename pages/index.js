@@ -32,6 +32,7 @@ export default function Home({ data }) {
   // console.log("slideImageAdvert", slideImageAdvert);
   const router = useRouter();
   const [product, setProduct] = useState();
+  // console.log('product',product)
   const [productNew, setProductNew] = useState();
   const getOutstandingProducts = async () => {
     const params = {
@@ -252,14 +253,11 @@ export default function Home({ data }) {
           <Slider {...settings}>
             {product?.length > 0 &&
               product?.map((item) => {
+                // console.log(item)
                 return (
                   <div key={item?.id}>
                     <ItemSlide
-                      link={`/san-pham/${item?.productSlug}`}
-                      image={item?.productImage[0]?.image || ""}
-                      name={item?.name}
-                      price={Number(item?.productDetail[0]?.price)}
-                      qty={item.productInventory[0].quantity}
+                      propProduct={item}
                     ></ItemSlide>
                   </div>
                 );
@@ -337,15 +335,11 @@ export default function Home({ data }) {
               <Slider {...settings}>
                 {productNew?.length > 0 &&
                   productNew?.map((item) => {
-                    console.log('item',item)
+                    // console.log('item',item)
                     return (
                       <div key={item.id}>
                         <ItemSlide
-                          link={`/san-pham/${item?.productSlug}`}
-                          image={item?.productImage[0]?.image || ""}
-                          name={item?.name}
-                          price={Number(item?.productDetail[0]?.price || 0)}
-                          qty={item.productInventory[0].quantity}
+                          propProduct={item}
                         ></ItemSlide>
                       </div>
                     );

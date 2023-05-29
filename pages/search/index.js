@@ -1,14 +1,15 @@
 import productsApis from "@/apis/productApis";
 import { ItemSlide, SEO } from "@/components";
 import { GLOBAL_STATUS } from "@/constants";
-import axios from "axios";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 const Search = ({ product }) => {
   const { router } = useRouter();
+  console.log(router)
   const {data} = product;
   const {params} = product;
+  if(params === undefined) return params === ''
   
   console.log(router);
   return (
@@ -19,14 +20,11 @@ const Search = ({ product }) => {
       <div className="px-8 grid grid-cols-4 mb-8">
         {data.rows.length > 0 &&
           data.rows.map((item) => {
+            console.log('ítemmm', item)
             return (
               <ItemSlide
                 key={item.id}
-                link={`/san-pham/${item?.productSlug}`}
-                image={item?.productImage[0]?.image || ""}
-                name={item?.name}
-                price={Number(item?.productDetail[0]?.price)}
-                qty={item.productInventory[0].quantity}
+                propProduct={item}
               />
             );
           })}

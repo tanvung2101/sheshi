@@ -20,7 +20,7 @@ const schema = yup
       .matches(
         /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
         "Vui long nhap email hop le"
-      ),
+      ).trim(),
     phoneNumber: yup
       .string()
       .required("Tối thiểu 10 kí tự")

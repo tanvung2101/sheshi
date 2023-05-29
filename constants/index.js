@@ -8,6 +8,16 @@ export const GLOBAL_STATUS = {
   ACTIVE: 1,
 };
 
+export const MASTER_DATA_NAME = {
+  STATUS_ORDER:1,
+  LEVEL_USER: 2,
+  UNIT_PRODUCT: 3,
+  CAPACITY_PRODUCT: 4,
+  ROLE: 5,
+  CONDITIONS_LEVEL:6,
+  PERCENT_REFERRAL: 7,
+}
+
 export const CONTENT_PAGE = {
   INTRODUCE_PAGE: 1,
   INTRODUCE_PAGE_STORY: 2,
@@ -18,6 +28,11 @@ export const CONTENT_PAGE = {
   POLICY_PAGE_RETURN: 7,
   POLICY_PAGE_DELIVER: 8,
   POLICY_PAGE_SECURITY: 9,
+};
+
+export const IMAGE_TYPE = {
+  SUB: 0,
+  MAIN: 1
 };
 
 

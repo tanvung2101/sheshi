@@ -12,6 +12,7 @@ import signin from "../public/signin.svg";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { BsSearch } from "react-icons/bs";
+import { useSelector } from "react-redux";
 
 const menu = [
   {
@@ -50,15 +51,18 @@ const Menu = () => {
   const router = useRouter();
   // console.log(router);
   const [keyWord, setKeyWord] = useState();
-  console.log(keyWord)
 
   const handler = (e) => {
-    if(e.target.value === undefined) {
-        setKeyWord('')
-    }else{
-      setKeyWord(e.target.value)
+    if (e.target.value === undefined) {
+      setKeyWord("");
+      return
+    } else {
+      setKeyWord(e.target.value.replace(/[.*+?^${}()|[\]\\]/g, " "));
+      // setKeyWord((e.target.value))
     }
-  }
+  };
+  const { value } = useSelector((state) => state.cartItem);
+  console.log(keyWord);
   return (
     <>
       <header className="w-full header flex items-center justify-center py-6 bg-[#ffffff] px-20 ">
@@ -123,10 +127,17 @@ const Menu = () => {
                 <CartIcon>
                   <Span>Tìm kiếm sản phẩm</Span>
                   <label className="relative">
-                    <Input onChange={handler} className='w-full' placeholder="Nhập từ khóa cần kiếm"></Input>
+                    <input
+                      className={`w-full p-2 rounded-lg outline-none bg-[#f8f9fa] border border-[#edeff1] inline-block focus:ring-4 focus:ring-blue-200 `}
+                      onChange={handler}
+                      placeholder="Nhập từ khóa cần kiếm"
+                    ></input>
                     {/* <BsSearch onClick={() => router.push(`/search?keyword=${keyWord}`)} className="absolute top-1/2 right-0 -translate-x-1/2 -translate-y-1/2"/> */}
-                    <Link href={`/search?keyword=${keyWord}`} className="absolute top-1/2 right-0 -translate-x-1/2 -translate-y-1/2">
-                      <BsSearch/>
+                    <Link
+                      href={`/search?keyword=${keyWord}`}
+                      className="absolute top-1/2 right-0 -translate-x-1/2 -translate-y-1/2"
+                    >
+                      <BsSearch />
                     </Link>
                   </label>
                 </CartIcon>
@@ -197,7 +208,7 @@ const Menu = () => {
                   </svg>
                 </span>
                 <span className="w-[15px] h-4 text-[9px] text-white text-center rounded-full bg-red-500 absolute top-1/2 left-1/2 translate-x-[30%] -translate-y-2/3">
-                  0
+                  {value?.length || 0}
                 </span>
               </Link>
               {/* <div

@@ -1,16 +1,16 @@
-import React from "react";
+import React ,{forwardRef} from "react";
 
-const Input = ({type, placeholder, className, children, onChange}) => {
+const Input = ({type, register, id, placeholder, errors, className, children, onChange, ...props}, ref) => {
   return (
     <>
       <input
-        onChange={onChange}
-        className={`p-2 rounded-lg outline-none bg-[#f8f9fa] border border-[#edeff1] inline-block focus:ring-4 focus:ring-blue-200 ${className}`}
-        type={type}
+        type="text"
+        className={`px-4 py-2 rounded-md w-full outline-none ${errors !== ''? 'focus:ring-2 focus:ring-red-300 border border-red-500' : 'border border-slate-400 focus:border-slate-600'}`}
+        id={id}
         placeholder={placeholder}
       >{children}</input>
     </>
   );
 };
 
-export default Input;
+export default forwardRef(Input);

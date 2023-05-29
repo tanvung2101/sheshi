@@ -274,10 +274,7 @@ const Item = ({ product }, params) => {
                 return (
                   <div key={item.id}>
                     <ItemSlide
-                      link={`/san-pham/${item.productSlug}`}
-                      image={item?.productImage[0]?.image || ""}
-                      name={item.name}
-                      price={Number(item.productDetail[0]?.price)}
+                      propProduct={item}
                     ></ItemSlide>
                   </div>
                 );
@@ -316,7 +313,7 @@ export async function getStaticProps(context) {
     size: 8,
     status: GLOBAL_STATUS.ACTIVE,
   };
-  const data = await axios.get("http://0.0.0.0:3001/api/product?size=8", {
+  const data = await axios.get("http://0.0.0.0:3001/api/product", {
     params1,
   });
   // ---------------------------------
@@ -339,15 +336,6 @@ export async function getStaticProps(context) {
 export async function generateMetadata({ params }) {
   const data = await axios.get("http://0.0.0.0:3001/api/product/");
   const allEvents = data.data.rows;
-  // const allPaths = allEvents?.map((path) => {
-  //   return {
-  //     params: {
-  //       title: path.name,
-  //       description: path.id,
-  //     },
-  //   };
-  // });
-
   return {
     title: allEvents.name,
     description: allEvents.id,

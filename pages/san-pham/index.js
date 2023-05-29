@@ -119,11 +119,7 @@ const SamPham = ({ data }) => {
                 return (
                   <div key={item.id}>
                     <ItemSlide
-                      className=""
-                      image={item?.productCategory.image}
-                      name={item.name}
-                      price={item.price}
-                      link={`/san-pham/${item.productSlug}`}
+                      propProduct={item}
                     ></ItemSlide>
                   </div>
                 );
