@@ -1,6 +1,6 @@
 import CartTabs from "@/components/CartTabs";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { BiErrorCircle } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import PhoneInput from "react-phone-input-2";
@@ -16,6 +16,7 @@ import { addInformation } from "@/redux/cartItemSlice";
 import { useRouter } from "next/router";
 import { SEO } from "@/components";
 // import { Input } from "@/components";
+import { RiArrowDropDownLine } from "react-icons/ri";
 
 const schema = yup
   .object({
@@ -54,6 +55,21 @@ const PaymentConfirm = () => {
   const dispatch = useDispatch();
   const { information } = useSelector((state) => state.cartItem);
   const router = useRouter();
+
+  const [active, setActive] = useState(false);
+
+  const [idCityCode, setIdCityCode] = useState();
+  const [district, setDistrict] = useState();
+
+  const [city, setCity] = useState();
+  console.log(city);
+
+  const handlerCityCode = (id) => {
+    setValue("cityCode", id);
+    setIdCityCode(id);
+  };
+  console.log("idCityCode", idCityCode);
+
   const {
     register,
     handleSubmit,
@@ -109,6 +125,16 @@ const PaymentConfirm = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setValue, totalPrice, value]);
+
+  useEffect(() => {
+    async function Date() {
+      const city = await import("../../components/locations/cities.json");
+      setCity(city.data);
+    }
+    Date();
+  }, []);
+
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -271,8 +297,8 @@ const PaymentConfirm = () => {
                     >
                       Tỉnh/Thành
                     </label>
-                    <div className="relative">
-                      <input
+                    <div className="">
+                      {/* <input
                         {...register("cityCode")}
                         className={`px-4 py-2 rounded-md w-full outline-none ${
                           errors?.cityCode?.message
@@ -281,18 +307,65 @@ const PaymentConfirm = () => {
                         }`}
                         id="address"
                         placeholder="Tỉnh/Thành"
-                      />
-                      {errors?.cityCode?.message && (
-                        <span className="text-red-500 text-sm font-normal font-sans">
-                          Trường bắt buộc
+                      /> */}
+                      <div
+                        className={`relative px-4 py-2 rounded-md w-full outline-none ${
+                          errors?.cityCode?.message
+                            ? "focus:ring-2 focus:ring-red-300 border border-red-500"
+                            : "border border-slate-400 focus:border-slate-600"
+                        }`}
+                        onClick={() => setActive(!active)}
+                      >
+                        <span className="text-[16px] font-sans font-normal">
+                          Tỉnh Thành
                         </span>
+                        <span className="absolute top-1/2 right-0 -translate-x-1/2 -translate-y-1/2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-4 h-4 hover:text-black"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                            />
+                          </svg>
+                        </span>
+                      </div>
+                      {active && (
+                        <div
+                          className="h-[250px] p-1 overflow-y-auto mt-1 rounded-md border border-slate-300"
+                          {...register("cityCode")}
+                        >
+                          {city.length > 0 &&
+                            city.map((e) => {
+                              return (
+                                <div
+                                  onClick={() => setIdCityCode(e.id)}
+                                  className="px-4 py-2 hover:bg-red-500 text-base"
+                                  key={e.id}
+                                >
+                                  {e.name}
+                                </div>
+                              );
+                            })}
+                        </div>
                       )}
-                      {errors?.cityCode?.message && (
+                    </div>
+                    {errors?.cityCode?.message && (
+                      <span className="text-red-500 text-sm font-normal font-sans">
+                        Trường bắt buộc
+                      </span>
+                    )}
+                    {/* {errors?.cityCode?.message && (
                         <span className="absolute top-0 right-0 -translate-x-1/2 translate-y-1/2">
                           <BiErrorCircle className="text-lg text-red-500" />
                         </span>
-                      )}
-                    </div>
+                      )} */}
                   </div>
                   <div className="flex flex-col gap-y-2 mt-4">
                     <label

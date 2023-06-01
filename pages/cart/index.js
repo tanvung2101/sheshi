@@ -8,7 +8,7 @@ import CartEmpty from "@/components/CartEmpty";
 
 const Cart = ({ data }) => {
   const { value } = useSelector((state) => state.cartItem);
-  console.log("value", value?.length);
+  // console.log("value", value?.length);
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const Cart = ({ data }) => {
           <div className="flex mb-10">
             <div>
               {value?.map((item, index) => {
-                console.log(index);
+                // console.log(index);
                 // setQuantity(item.quantity)
                 return (
                   <CartItemPayment key={item.id} item={item} value={value.length || 0} index={index}/>

@@ -14,11 +14,10 @@ const initFilter = {
   capacity: [],
 };
 const SamPham = ({ data }) => {
-  const { category, product } = data;
+  const { product } = data;
   const [filter, setFilter] = useState(initFilter);
-  const [categorySlug, setCategorySlug] = useState(category);
+  const [category, setCategory] = useState();
   const [productCategory, setProductCategory] = useState(product.rows);
-  console.log("productCategory", product);
   const [productsOptions, setProductsOptions] = useState(product.rows);
   const router = useRouter();
   const updateProducts = useCallback(() => {
@@ -30,8 +29,14 @@ const SamPham = ({ data }) => {
     }
     setProductCategory(temp);
   }, [filter, productsOptions]);
+
+  async function allCategory(){
+    const category = await categoryApis.getAllCategory()
+    setCategory(category.data)
+  }
   useEffect(() => {
     updateProducts();
+    allCategory()
   }, [updateProducts]);
   const filterSelect = (type, checked, item) => {
     if (checked) {
@@ -82,8 +87,8 @@ const SamPham = ({ data }) => {
             Danh Mục Sản Phẩm
           </h4>
           <div>
-            {categorySlug.length > 0 &&
-              categorySlug.map((item) => {
+            {category?.length > 0 &&
+              category?.map((item) => {
                 return (
                   <div
                     // onClick={() => showHideFilter()}
@@ -132,15 +137,15 @@ const SamPham = ({ data }) => {
 };
 
 export async function getStaticProps() {
-  const category = await categoryApis.getAllCategory();
+  // const category = await categoryApis.getAllCategory();
   const params = {
-    size: 14,
     getMainImage: true,
     status: GLOBAL_STATUS.ACTIVE,
   };
   const product = await productsApis.getAllProducts({ params });
-  // console.log(product.data);
-  const data = { category: category.data, product: product.data };
+  const data = { 
+    // category: category.data,
+     product: product.data };
   return {
     props: { data },
   };

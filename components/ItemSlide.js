@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { BsFillBagPlusFill } from "react-icons/bs";
 import Portal from "./productModal";
 import Button from "./Button";
@@ -12,7 +12,6 @@ import { createPortal } from "react-dom";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem, removeItem, updateItem } from "@/redux/cartItemSlice";
-import { redirect } from "next/navigation";
 import { useRouter } from "next/router";
 
 async function fetchMasterCapacity(params) {
@@ -27,6 +26,13 @@ async function fetchMasterCapacity(params) {
 const ItemSlide = ({ propProduct }) => {
   const dispatch = useDispatch();
   const value = useSelector((state) => state.cartItem.value);
+  // useEffect(() => {
+  //   if(value.length === 0){
+  //     JSON.parse(localStorage.getItem('cartItems'))
+  //   }else{
+  //     const data = localStorage.setItem('cartItems', JSON.stringify(value))
+  //   }
+  // }, [value])
   // console.log(value);
   const router = useRouter();
   // console.log(value)
@@ -164,7 +170,7 @@ const ItemSlide = ({ propProduct }) => {
         return
       }
     }
-    dispatch(addItem(newItem));
+    dispatch(addItem(localStorage.setItem('cartItems', JSON.stringify(value))));
     toast.success("Sản phẩm đã thêm vào vỏ hàng");
   };
   const goToCart = () => {

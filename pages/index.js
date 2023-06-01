@@ -32,6 +32,7 @@ export default function Home({ data }) {
   // console.log("slideImageAdvert", slideImageAdvert);
   const router = useRouter();
   const [product, setProduct] = useState();
+  console.log('product', product)
   // console.log('product',product)
   const [productNew, setProductNew] = useState();
   const getOutstandingProducts = async () => {
@@ -253,7 +254,7 @@ export default function Home({ data }) {
           <Slider {...settings}>
             {product?.length > 0 &&
               product?.map((item) => {
-                // console.log(item)
+                // console.log('item',item)
                 return (
                   <div key={item?.id}>
                     <ItemSlide

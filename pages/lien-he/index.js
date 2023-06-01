@@ -134,7 +134,7 @@ const LienHe = ({ contact }) => {
                     )}
                   </label>
                   <span className="text-red-500 text-sm font-normal font-sans">
-                    {errors?.fullName?.message}
+                    {errors?.fullName?.message} 
                   </span>
                 </div>
                 <div>
