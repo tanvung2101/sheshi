@@ -10,8 +10,6 @@ const initialState = {
 };
 
 
-
-
 const cartItemSlice = createSlice({
   name: "cartItems",
   initialState,
@@ -21,9 +19,9 @@ const cartItemSlice = createSlice({
       // console.log(newItem)
       const duplicate = state.value.filter(
         (e) =>
-          e.slug === newItem.slug &&
-          e.capacityId === newItem.capacityId &&
-          e.unitId === newItem.unitId
+          e.slug === newItem?.slug &&
+          e.capacityId === newItem?.capacityId &&
+          e.unitId === newItem?.unitId
       );
       console.log(duplicate);
       if (duplicate.length > 0) {
@@ -37,7 +35,6 @@ const cartItemSlice = createSlice({
           ...state.value,
           {
             id: duplicate[0].id,
-            name: newItem.name,
             slug: newItem.slug,
             capacityId: newItem.capacityId,
             unitId: newItem.unitId,
@@ -45,8 +42,7 @@ const cartItemSlice = createSlice({
             quantity: newItem.quantity + duplicate[0].quantity,
             capacity: newItem.capacity,
             totalQuantity: newItem.totalQuantity,
-            imageMain: newItem.imageMain,
-            imageSub: newItem.imageSub,
+            product: newItem.product,
           },
         ];
       } else {
@@ -85,14 +81,12 @@ const cartItemSlice = createSlice({
             capacity: item.capacity,
             capacityId: item.capacityId,
             id: item.id,
-            imageMain: item.imageMain,
-            imageSub: item.imageSub,
-            name: item.name,
             price: item.price,
             quantity: item.quantity,
             slug: item.slug,
             totalQuantity: item.totalQuantity,
             unitId: item.unitId,
+            product: item.product,
           },
         ]
       }
@@ -120,10 +114,14 @@ const cartItemSlice = createSlice({
       const newInformation = action.payload;
       state.information = newInformation;
       localStorage.setItem("cartInfomation", JSON.stringify(state.infomation));
+    },
+    deleteAll: (state, action) => {
+        state.value = [];
+        state.information = {}
     }
   },
 });
 
-export const { addItem, removeItem, updateItem, addInformation } = cartItemSlice.actions;
+export const { addItem, removeItem, updateItem, addInformation, deleteAll } = cartItemSlice.actions;
 
 export default cartItemSlice.reducer;

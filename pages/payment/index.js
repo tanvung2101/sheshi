@@ -3,15 +3,17 @@ import CartEmpty from "@/components/CartEmpty";
 import CartTabs from "@/components/CartTabs";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import shipApis from "@/apis/shipApi";
 import { TOKEN_API } from "@/constants";
-import axios from "axios";
-import data from '../../components/locations/cities.json'
+import orderApis from "./../../apis/orderApis";
+import { deleteAll } from "@/redux/cartItemSlice";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 const schema = yup
   .object({
@@ -21,18 +23,20 @@ const schema = yup
   .required();
 
 const Payment = () => {
+  const router = useRouter()
   const { value } = useSelector((state) => state.cartItem);
+  const dispatch = useDispatch();
   const { information } = useSelector((state) => state.cartItem);
-  console.log(information);
 
   const [totalPrice, setTotalPrice] = useState(0);
 
+  const [cartProduct, setCartProduct] = useState();
   const [unitGhn, setUnitGhn] = useState();
   const [unitGhtk, setUnitGhtk] = useState();
   const [fee, setFee] = useState(0);
 
   const [selectMethodPayment, setSelectMethodPayment] = useState(0);
-  const [selectBank, setSelectBank] = useState();
+  const [selectBank, setSelectBank] = useState(1);
   const {
     register,
     handleSubmit,
@@ -43,12 +47,77 @@ const Payment = () => {
     mode: "onChange",
   });
 
-  const onSubmit = (data) => {
-    const {notes, deliveryMethod, paymentMethod} = data;
-    let typePayment = paymentMethod === '0' ? '0' : `${selectBank}`;
-    console.log(typePayment)
+  const onSubmit = async (data) => {
+    const { notes, deliveryMethod, paymentMethod } = data;
+    let typePayment = paymentMethod === "0" ? "0" : `${selectBank}`;
+    console.log('selectBank', typePayment)
+    const body = {
+      address: information?.address,
+      cityCode: information?.cityCode.id,
+      deliveryMethod,
+      paymentMethod: typePayment,
+      note: notes,
+      fee: fee,
+      listProduct: value,
+      userId: null,
+      telephone: `+${information?.phoneCode}`,
+      email: information?.email,
+      referralCode: information?.referralCode,
+      fullName: information?.fullname,
+      districtCode: information?.districtCode.id,
+      wardCode: information?.wardCode.id,
+      districtAndCity: {
+        city: information?.cityCode.name,
+        district: information?.districtCode.name,
+        ward: information?.wardCode.name,
+      },
+    };
+    console.log('body', body)
+    orderApis
+      .createOrder(body)
+      .then((reponse) => {
+        console.log("reponse", reponse)
+        if (typePayment === "0") {
+          dispatch(deleteAll());
+          toast.success('Bạn đã thanh toán thành công')
+          router.replace(`/payment-success/${reponse?.order?.orderCode}`)
+        } else if (typePayment === "1") {
+          console.log('typePayment === "1"', reponse.order.orderCode)
+          orderApis
+            .createPaymentMomo({
+              requestType: "captureWallet",
+              ipnUrl: `${window.location.origin}/payment-success/${reponse.order.orderCode}`,
+              redirectUrl: `${window.location.origin}/payment-success/${reponse.order.orderCode}`,
+              amount: reponse.order.total,
+              orderInfo: `CK cho đơn hàng ${reponse.order.orderCode}`,
+              extraData: "",
+            })
+            .then(() => {
+              router.replace(`/payment-success/${reponse.order.orderCode}`)
+            })
+            .catch((err) => console.log(err)).finally(() => {
+              dispatch(deleteAll());
+              router.replace('/payment')
+            });
+        } else if (typePayment === "2") {
+          orderApis
+            .createPaymentVnpay({
+              amount: reponse.order.total,
+              orderDescription: `CK cho đơn hàng ${reponse.order.orderCode}`,
+              bankCode: "",
+              orderType: "other",
+              language:"vn",
+              returnUrl: `${window.location.origin}/payment-success/${reponse.order.orderCode}`
+            })
+            .catch((err) => console.log(err)).finally(() => {
+              dispatch(deleteAll());
+              router.replace('/payment')
+            });
+        }
+      })
+      .catch((err) => console.log(err))
+      .finally(() => console.log("thành công"));
   };
-  // console.log("selectMethodPayment", selectMethodPayment);
 
   useEffect(() => {
     setTotalPrice(
@@ -62,84 +131,83 @@ const Payment = () => {
   };
 
   const handlerDeliveryMethod = (e) => {
-    // console.log(e.target.value);
     setValue("deliveryMethod", e.target.value);
     switch (e.target.value) {
       case "1":
-        setFee(0);
+        setFee(unitGhn?.total ? unitGhn?.total : 0);
         break;
       case "2":
-        setFee(unitGhtk?.fee?.fee ? unitGhtk?.fee?.fee : 0);
+        setFee(unitGhtk?.fee ? unitGhtk?.fee : 0);
         break;
     }
   };
-  const handlerSelectBank = (e) =>{
-    setSelectBank(e.target.value)
-  }
+  const handlerSelectBank = (e) => {
+    setSelectBank(e.target.value);
+  };
 
   // tính phí giao tiết kiệm
-  const getFreeGhtk = async () => {
+  const getFreeGhtk = useCallback(async () => {
     const ghtk = await shipApis.calculatorFeeGhtk({
       pick_province: "Hà Nội",
       pick_district: "Hai Bà Trưng",
-      province: information.cityCode,
-      district: information.districtCode,
+      province: information?.cityCode?.name,
+      district: information?.districtCode?.name,
       address: "P.503 tòa nhà Auu Việt, số 1 Lê Đức Thọ",
       value: totalPrice,
       token: TOKEN_API.GIAO_HANG_TIET_KIEM,
     });
-    setUnitGhtk(ghtk.data);
-  };
+    setUnitGhtk(ghtk.fee);
+  }, [information, totalPrice]);
 
   // tính phí giao hàng nhanh
-  const getFreeGhn = async () => {
+  const getFreeGhn = useCallback(async () => {
     const fetchCity = await shipApis.getCity();
     setValue("deliveryMethod", "1");
-    const provideId = fetchCity?.data?.data?.find(
-      (city) => city.ProvinceName === "Gia Lai"
+    const provideId = fetchCity?.data?.find(
+      (city) => city.ProvinceName === information?.cityCode?.name
     )?.ProvinceID;
 
     const fetchDistrict = await shipApis.getDistrict({
       provide_id: provideId,
     });
-
     // console.log("fetchDistrict", fetchDistrict);
-    const districtId = fetchDistrict?.data?.data?.find(
+    const districtId = fetchDistrict?.data.find(
       (district) =>
         !!district.NameExtension?.find(
-          (e) => e.toLowerCase() === information.districtCode.toLowerCase()
-        )?.DistrictId
-    );
+          (e) =>
+            e.toLowerCase() === information?.districtCode?.name.toLowerCase()
+        )
+    )?.DistrictID;
+    // console.log("districtId", districtId);
     const serviceAvailable = await shipApis.getService({
       from_district: 1488,
       to_district: districtId,
       shop_id: 1,
     });
-
     const calculatorFee = await shipApis.calculatorFeeGhn({
       from_district_id: 1488,
-      service_id: serviceAvailable.data.data.server_id,
+      service_id: serviceAvailable.data[0].service_id,
       to_district_id: districtId,
       insurance_value: totalPrice,
       weight: 200,
     });
     // console.log('calculatorFee', calculatorFee)
-    // console.log('districtId', districtId);
-  };
+    setUnitGhn(calculatorFee?.data);
+    setFee(calculatorFee?.data.total ? calculatorFee?.data.total : 0);
+  }, [information, setValue, totalPrice]);
+
   useEffect(() => {
     if (totalPrice > 0) {
       getFreeGhn();
       getFreeGhtk();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  // console.log(fee)
+  }, [totalPrice, getFreeGhn, getFreeGhtk]);
   return (
     <>
       <SEO title="Thanh toán"></SEO>
       {value?.length === 0 && <CartEmpty></CartEmpty>}
+      {value?.length > 0 && <div className="mb-16 px-20">
       <CartTabs className="pt-12" tabs={3} />
-      <div className="mb-16 px-20">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-start justify-start gap-8">
             <div className="w-[70%]">
@@ -232,7 +300,7 @@ const Payment = () => {
                           name="paymentMethod"
                           value={1}
                           type="radio"
-                          checked={selectMethodPayment === 1}
+                          checked={selectMethodPayment == 1}
                           onChange={handlerMethodPayment}
                         />
                       </div>
@@ -277,6 +345,7 @@ const Payment = () => {
                             id="bank-W5cb6f2d0d84cb"
                             name="bank"
                             type="radio"
+                            checked={selectBank == 2}
                             onChange={handlerSelectBank}
                             value={2}
                           />
@@ -368,7 +437,7 @@ const Payment = () => {
             </div>
           </div>
         </form>
-      </div>
+      </div>}
     </>
   );
 };

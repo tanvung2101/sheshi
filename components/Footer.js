@@ -18,11 +18,11 @@ const Footer = () => {
   }, [data]);
 
   return (
-    <>
-      <div className="pt-10 pb-10 bg-regal-red z-0 text-white">
+    <div className="">
+      <div className="relative bottom-0 right-0 left-0 pt-10 pb-10 bg-regal-red z-0 text-white">
         <div className="flex items-start justify-around">
           <div className="flex items-center justify-between gap-20">
-            <Link href='/'>
+            <Link href="/">
               <Image
                 src={`${logosheshe.src}`}
                 alt=""
@@ -61,7 +61,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

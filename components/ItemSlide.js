@@ -112,21 +112,7 @@ const ItemSlide = ({ propProduct }) => {
   }, [
     masterCapacity,
     masterUnit,
-    propProduct?.acronym,
-    propProduct?.content,
-    propProduct?.description,
-    propProduct?.element,
-    propProduct?.expiry,
-    propProduct?.guide,
-    propProduct?.name,
-    propProduct?.nameVi,
-    propProduct?.price,
-    propProduct?.productCategory?.categorySlug,
-    propProduct?.productDetail,
-    propProduct?.productImage,
-    propProduct?.productInventory,
-    propProduct?.productSlug,
-    propProduct?.uses,
+    propProduct,
   ]);
 
   const updateQuantity = (type) => {
@@ -139,16 +125,15 @@ const ItemSlide = ({ propProduct }) => {
   };
   const addCartItem = () => {
     let newItem = {
-      name: product.name,
+      name: product?.name,
       slug: product.slug,
+      product: product,
       capacityId: product.productDetailOption[0]?.capacityId,
       unitId: product.productDetailOption[0]?.unitId,
       price: product.productDetailOption[0]?.price,
       quantity: quantity,
       capacity: product.productDetailOption[0]?.name,
       totalQuantity: detailProductQuantity,
-      imageMain: product.imageMain,
-      imageSub: product.imageSub,
     };
     if (+quantity > detailProductQuantity) {
       setQuantity(detailProductQuantity);
@@ -170,21 +155,20 @@ const ItemSlide = ({ propProduct }) => {
         return
       }
     }
-    dispatch(addItem(localStorage.setItem('cartItems', JSON.stringify(value))));
+    dispatch(addItem(newItem));
     toast.success("Sản phẩm đã thêm vào vỏ hàng");
   };
   const goToCart = () => {
     let newItem = {
-      name: product.name,
+      name: product?.name,
       slug: product.slug,
+      product: product,
       capacityId: product.productDetailOption[0]?.capacityId,
       unitId: product.productDetailOption[0]?.unitId,
       price: product.productDetailOption[0]?.price,
       quantity: quantity,
       capacity: product.productDetailOption[0]?.name,
       totalQuantity: detailProductQuantity,
-      imageMain: product.imageMain,
-      imageSub: product.imageSub,
     };
     if (+quantity > detailProductQuantity) {
       setQuantity(detailProductQuantity);

@@ -4,7 +4,7 @@ import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo  } from "react";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import Slider from "react-slick";
 import { useDispatch, useSelector } from "react-redux";
@@ -82,42 +82,61 @@ const Item = ({ productDetail }, params) => {
   useEffect(() => {
     fetchMasterData();
   }, []);
-
-  const productDetailOption = [];
+console.log('product', product)
   useEffect(() => {
+    const productDetailOption = [];
     if (masterCapacity?.length > 0) {
       itemSlug?.productDetail?.map((e) => {
         const capacity = masterCapacity?.find((cap) => cap.id === e.capacityId);
         const unit = masterUnit?.find((un) => un.id === e.unitId);
-        productDetailOption.push({
-          capacityId: capacity?.id,
-          unitId: unit?.id,
-          price: e.price,
-          quantity: productIt?.productInventory?.find(
-            (q) => q.subProductId === e.id && q.productId === e.productId
-          )?.quantity,
-          value: capacity?.id + " " + unit?.id,
-          name: capacity?.name + " " + unit?.name,
+        
+          productDetailOption.push({
+            capacityId: capacity?.id,
+            unitId: unit?.id,
+            price: e.price,
+            quantity: productIt?.productInventory?.find(
+              (q) => q.subProductId === e.id && q.productId === e.productId
+            )?.quantity,
+            value: capacity?.id + " " + unit?.id,
+            name: capacity?.name + " " + unit?.name,
+          });
         });
-      });
+        
+      setProduct({
+        name: productIt?.name,
+      price: productIt?.price,
+      content: productIt?.content,
+      imageMain: productIt?.productImage?.find(
+        (e) => e.isMain === IMAGE_TYPE.MAIN
+      ).image,
+      imageSub: productIt?.productImage?.filter(
+        (e) => e.isMain === IMAGE_TYPE.SUB
+      ).image,
+      categorySlug: productIt?.productCategory?.categorySlug,
+      slug: productIt?.productSlug,
+      acronym: productIt?.acronym,
+      expiry: productIt?.expiry,
+      nameVi: productIt?.nameVi,
+      description: productIt?.description,
+      element: productIt?.element,
+      uses: productIt?.uses,
+      guide: productIt?.guide,
+      productDetailOption,
+      })
     }
     setDetailProductQuantity(productDetailOption[0]?.quantity);
-  }, [productIt, masterCapacity, masterUnit, itemSlug, productDetailOption]);
+  }, [productIt, masterCapacity, masterUnit, itemSlug,]);
   const addCartItem = () => {
     let newItem = {
       name: productIt?.name,
       slug: productIt.productSlug,
-      capacityId: productDetailOption[0]?.capacityId,
-      unitId: productDetailOption[0]?.unitId,
-      price: productDetailOption[0]?.price,
+      product: product,
+      capacityId: product[0]?.capacityId,
+      unitId: product[0]?.unitId,
+      price: product[0]?.price,
       quantity: quantity,
-      capacity: productDetailOption[0]?.name,
+      capacity: product[0]?.name,
       totalQuantity: detailProductQuantity,
-      imageMain: itemSlug?.productImage?.find(
-        (e) => e.isMain === IMAGE_TYPE.MAIN
-      )?.image,
-      imageSub: itemSlug?.productImage?.find((e) => e.isMain === IMAGE_TYPE.SUB)
-        ?.image,
     };
     console.log("newItem", newItem);
     if (+quantity > detailProductQuantity) {
@@ -147,11 +166,12 @@ const Item = ({ productDetail }, params) => {
     let newItem = {
       name: productIt?.name,
       slug: productIt.productSlug,
-      capacityId: productDetailOption[0]?.capacityId,
-      unitId: productDetailOption[0]?.unitId,
-      price: productDetailOption[0]?.price,
+      product: product,
+      capacityId: product[0]?.capacityId,
+      unitId: product[0]?.unitId,
+      price: product[0]?.price,
       quantity: quantity,
-      capacity: productDetailOption[0]?.name,
+      capacity: product[0]?.name,
       totalQuantity: detailProductQuantity,
       imageMain: itemSlug?.productImage?.find(
         (e) => e.isMain === IMAGE_TYPE.MAIN

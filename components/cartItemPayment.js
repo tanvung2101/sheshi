@@ -45,7 +45,7 @@ const CartItemPayment = ({ item, value, index }) => {
       >
         <div className="">
           <Image
-            src={item.imageMain}
+            src={item?.product?.productImage[0].image}
             alt=""
             width="100"
             height="100"
@@ -55,11 +55,11 @@ const CartItemPayment = ({ item, value, index }) => {
         <div className="flex items-center justify-center gap-5">
           <div className="w-40">
             <p className="text-black text-2xl font-extrabold text-left mt-1/2 hover:text-[#ecbe26]">
-              {item.name + " - " + item.capacity}
+              {item?.product?.name + " - " + item?.capacity}
             </p>
           </div>
           <p className="text-regal-red text-2xl font-extrabold text-center mt-1/2">
-            {item?.price.toLocaleString("vi", {
+            {item?.price?.toLocaleString("vi", {
               style: "currency",
               currency: "VND",
             })}
@@ -76,11 +76,11 @@ const CartItemPayment = ({ item, value, index }) => {
                 className="w-12 h-12 bg-[#faf9f5] text-center"
                 readOnly
                 value={quantity}
-                // onChange={(e) => {
-                //   if (!+e.target.value) return;
-                //   if (+e.target.value > item.totalQuantity)
-                //     return toast.error("sản phẩm hết hàng");
-                // }}
+                onChange={(e) => {
+                  if (!+e.target.value) return;
+                  if (+e.target.value > item.totalQuantity)
+                    return toast.error("sản phẩm hết hàng");
+                }}
               />
               <div
                 className="w-12 h-12 flex items-center justify-center bg-[#faf9f5] cursor-pointer"

@@ -32,7 +32,7 @@ const SamPham = ({ data }) => {
 
   async function allCategory(){
     const category = await categoryApis.getAllCategory()
-    setCategory(category.data)
+    setCategory(category)
   }
   useEffect(() => {
     updateProducts();
