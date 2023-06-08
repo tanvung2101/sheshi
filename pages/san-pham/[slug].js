@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { IMAGE_TYPE, MASTER_DATA_NAME } from "@/constants";
 import { toast } from "react-toastify";
 import { addItem } from "@/redux/cartItemSlice";
+import { notFound } from 'next/navigation';
 
 const introduce = [
   {
@@ -53,6 +54,7 @@ const Item = ({ productDetail }, params) => {
   const [masterUnit, setMasterUnit] = useState();
   const [quantity, setQuantity] = useState(1);
   const [detailProductQuantity, setDetailProductQuantity] = useState();
+  const [productDetailOption, setProductDetailOption] = useState();
 
   const [hidden, setHidden] = useState(1);
   useEffect(() => {
@@ -90,7 +92,7 @@ console.log('product', product)
         const capacity = masterCapacity?.find((cap) => cap.id === e.capacityId);
         const unit = masterUnit?.find((un) => un.id === e.unitId);
         
-          productDetailOption.push({
+        productDetailOption.push({
             capacityId: capacity?.id,
             unitId: unit?.id,
             price: e.price,
@@ -103,15 +105,10 @@ console.log('product', product)
         });
         
       setProduct({
+        id: productIt?.id,
         name: productIt?.name,
       price: productIt?.price,
       content: productIt?.content,
-      imageMain: productIt?.productImage?.find(
-        (e) => e.isMain === IMAGE_TYPE.MAIN
-      ).image,
-      imageSub: productIt?.productImage?.filter(
-        (e) => e.isMain === IMAGE_TYPE.SUB
-      ).image,
       categorySlug: productIt?.productCategory?.categorySlug,
       slug: productIt?.productSlug,
       acronym: productIt?.acronym,
@@ -121,21 +118,24 @@ console.log('product', product)
       element: productIt?.element,
       uses: productIt?.uses,
       guide: productIt?.guide,
-      productDetailOption,
+      productCategory: productIt?.productCategory,
+      productImage:productIt?.productImage,
+      productDetail:productIt?.productDetail,
+      productInventory:productIt?.productInventory,
       })
     }
     setDetailProductQuantity(productDetailOption[0]?.quantity);
+    setProductDetailOption(productDetailOption)
   }, [productIt, masterCapacity, masterUnit, itemSlug,]);
   const addCartItem = () => {
     let newItem = {
-      name: productIt?.name,
       slug: productIt.productSlug,
       product: product,
-      capacityId: product[0]?.capacityId,
-      unitId: product[0]?.unitId,
-      price: product[0]?.price,
+      capacityId: productDetailOption[0]?.capacityId,
+      unitId: productDetailOption[0]?.unitId,
+      price: productDetailOption[0]?.price,
       quantity: quantity,
-      capacity: product[0]?.name,
+      capacity: productDetailOption[0]?.name,
       totalQuantity: detailProductQuantity,
     };
     console.log("newItem", newItem);
@@ -164,20 +164,14 @@ console.log('product', product)
   };
   const goToCart = () => {
     let newItem = {
-      name: productIt?.name,
       slug: productIt.productSlug,
       product: product,
-      capacityId: product[0]?.capacityId,
-      unitId: product[0]?.unitId,
-      price: product[0]?.price,
+      capacityId: productDetailOption[0]?.capacityId,
+      unitId: productDetailOption[0]?.unitId,
+      price: productDetailOption[0]?.price,
       quantity: quantity,
-      capacity: product[0]?.name,
+      capacity: productDetailOption[0]?.name,
       totalQuantity: detailProductQuantity,
-      imageMain: itemSlug?.productImage?.find(
-        (e) => e.isMain === IMAGE_TYPE.MAIN
-      )?.image,
-      imageSub: itemSlug?.productImage?.find((e) => e.isMain === IMAGE_TYPE.SUB)
-        ?.image,
     };
     console.log("newItem", newItem);
     if (+quantity > detailProductQuantity) {
@@ -254,9 +248,9 @@ console.log('product', product)
         href={productIt?.productCategory?.image}
         content={productIt?.description?.replace(/(<([^>]+)>)/gi, "")}
       ></SEO>
-      <div className="bg-light-pink pb-8">
-        <div className="px-28 bg-light-pink flex gap-16 py-5">
-          <div className="flex justify-center mt-4 gap-5">
+      <div className="pb-8 bg-light-pink">
+        <div className="flex gap-16 py-5 px-28 bg-light-pink">
+          <div className="flex justify-center gap-5 mt-4">
             <div>
               {productIt?.productImage?.slice(0, 3).map((item) => {
                 return (
@@ -294,49 +288,49 @@ console.log('product', product)
               <h2 className="block mt-4 text-4xl font-bold">
                 {productIt?.name}
               </h2>
-              <span className="block mt-4 text-base font-sans">
+              <span className="block mt-4 font-sans text-base">
                 {productIt?.nameVi}
               </span>
-              <span className="block mt-4 text-base font-sans">
+              <span className="block mt-4 font-sans text-base">
                 Mã: {productIt?.acronym}
               </span>
-              <span className="block mt-4 text-3xl font-bold text-regal-red font-sans">
+              <span className="block mt-4 font-sans text-3xl font-bold text-regal-red">
                 {productIt?.price}
               </span>
               <span className="block mt-4 text-lg">
                 Tình trạng:{" "}
                 <label className="text-[#8fc83c] font-bold">Còn hàng</label>
               </span>
-              <span className="block mt-4 text-lg mb-4">
+              <span className="block mt-4 mb-4 text-lg">
                 Hạn sử dụng: {productIt?.expiry}
               </span>
             </div>
             <div className="flex-col">
-              <span className="text-xl font-semibold font-sans inline-block">
+              <span className="inline-block font-sans text-xl font-semibold">
                 Số lượng
               </span>
-              <div className="flex text-center text-2xl font-medium">
+              <div className="flex text-2xl font-medium text-center">
                 <div
-                  className="w-12 h-12 flex items-center justify-center bg-white cursor-pointer"
+                  className="flex items-center justify-center w-12 h-12 bg-white cursor-pointer"
                   onClick={() => updateQuantity()}
                 >
                   -
                 </div>
                 <input
                   type="text"
-                  className="w-12 h-12 bg-white text-center"
+                  className="w-12 h-12 text-center bg-white"
                   value={quantity}
                   readOnly
                 />
                 <div
-                  className="w-12 h-12 flex items-center justify-center bg-white cursor-pointer"
+                  className="flex items-center justify-center w-12 h-12 bg-white cursor-pointer"
                   onClick={() => updateQuantity("plus")}
                 >
                   +
                 </div>
               </div>
             </div>
-            <div className="uppercase mt-7 text-lg text-white ">
+            <div className="text-lg text-white uppercase mt-7 ">
               <span className="bg-[#dc3545] p-3 rounded-lg">50 ml</span>
             </div>
             <div className="flex items-start gap-5 mt-5 text-center">
@@ -346,14 +340,14 @@ console.log('product', product)
               >
                 Thêm vào giỏ
               </Button>
-              <Button className="py-3 px-8 uppercase bg-regal-red rounded-lg text-white font-bold" onClick={() => goToCart()}>
+              <Button className="px-8 py-3 font-bold text-white uppercase rounded-lg bg-regal-red" onClick={() => goToCart()}>
                 mua ngay
               </Button>
             </div>
           </div>
         </div>
         <div>
-          <div className="flex items-center justify-center mx-auto mt-5 py-2">
+          <div className="flex items-center justify-center py-2 mx-auto mt-5">
             {introduce.length > 0 &&
               introduce.map((item) => (
                 <div
@@ -365,34 +359,34 @@ console.log('product', product)
                   } p-4  cursor-pointer hover:text-regal-red hover:border-b-[3px] hover:border-regal-red`}
                   onClick={() => setHidden(item.id)}
                 >
-                  <span className="text-2xl font-sans">{item.title}</span>
+                  <span className="font-sans text-2xl">{item.title}</span>
                 </div>
               ))}
           </div>
-          <div className="px-28 mt-4">
+          <div className="mt-4 px-28">
             {hidden === 1 && (
               <div
-                className="text-base leading-4 mb-4 font-sans flex-col gap-y-4"
+                className="flex-col mb-4 font-sans text-base leading-4 gap-y-4"
                 dangerouslySetInnerHTML={{ __html: productIt?.description }}
               ></div>
             )}
             {hidden === 2 && (
               <div
-                className="text-base leading-4 mb-4 font-sans"
+                className="mb-4 font-sans text-base leading-4"
                 dangerouslySetInnerHTML={{ __html: productIt?.element }}
               ></div>
             )}
             {/*  */}
             {hidden === 3 && (
               <div
-                className="text-base leading-4 mb-4 font-sans"
+                className="mb-4 font-sans text-base leading-4"
                 dangerouslySetInnerHTML={{ __html: productIt?.guide }}
               ></div>
             )}
             {/*  */}
             {hidden === 4 && (
               <div
-                className="text-base leading-4 mb-4 font-sans"
+                className="mb-4 font-sans text-base leading-4"
                 dangerouslySetInnerHTML={{ __html: productIt?.uses }}
               ></div>
             )}
@@ -401,7 +395,7 @@ console.log('product', product)
       </div>
       <div>
         {/* slider bar */}
-        <div className="px-14 my-10">
+        <div className="my-10 px-14">
           <Slider {...settings}>
             {productItem?.length > 0 &&
               productItem?.map((item) => {
@@ -431,6 +425,9 @@ export async function getStaticPaths() {
       },
     };
   });
+  if(!allPaths){
+    notFound();
+  }
   return {
     paths: allPaths,
     fallback: false,
@@ -448,10 +445,13 @@ export async function getStaticProps(context) {
     "http://0.0.0.0:3001/api/product/get-by-slug",
     { params }
   );
+  if(!product1){
+    return notFound();
+  }
   const productDetail = [data.data.rows, product1.data];
-  // console.log(product);
   return {
     props: { productDetail },
+    revalidate: 100,
   };
 }
 

@@ -18,8 +18,8 @@ const Footer = () => {
   }, [data]);
 
   return (
-    <div className="">
-      <div className="relative bottom-0 right-0 left-0 pt-10 pb-10 bg-regal-red z-0 text-white">
+    <div className="relative bottom-0 left-0 right-0">
+      <div className="z-0 pt-10 pb-10 text-white bg-regal-red">
         <div className="flex items-start justify-around">
           <div className="flex items-center justify-between gap-20">
             <Link href="/">
@@ -32,10 +32,10 @@ const Footer = () => {
               ></Image>
             </Link>
             <div>
-              <strong className="uppercase text-white text-xl">
+              <strong className="text-xl text-white uppercase">
                 công ty cổ phần tập đoàn shishe
               </strong>
-              <p className="uppercase mb-5 font-medium">
+              <p className="mb-5 font-medium uppercase">
                 số gpkd: {contact?.businessLicense}
               </p>
               <p className="mb-5 font-medium">Địa chỉ: {contact?.address}</p>

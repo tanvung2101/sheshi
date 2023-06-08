@@ -171,7 +171,6 @@ const PaymentConfirm = () => {
         `../../components/locations/districts/${idCityCode.id}.json`
       );
       setDistrict(district.data);
-      // console.log(district.data)
     }
     districtCode();
   }, [idCityCode, idDistrictCode]);
@@ -181,7 +180,6 @@ const PaymentConfirm = () => {
         `../../components/locations/wards/${idDistrictCode.id}.json`
       );
       setWard(ward.data);
-      // console.log(district.data)
     }
     wardCodeCode();
   }, [idDistrictCode])
@@ -218,7 +216,7 @@ const PaymentConfirm = () => {
                         }`}
                         placeholder="Họ và tên"
                       />
-                      <span className="text-red-500 text-sm font-normal font-sans">
+                      <span className="font-sans text-sm font-normal text-red-500">
                         {errors?.fullname?.message}
                       </span>
                       {errors?.fullname?.message && (
@@ -228,7 +226,7 @@ const PaymentConfirm = () => {
                       )}
                     </div>
                   </div>
-                  <div className="flex flex-col gap-y-2 mt-4">
+                  <div className="flex flex-col mt-4 gap-y-2">
                     <label
                       htmlFor="email"
                       className="text-[16px] font-sans font-normal"
@@ -247,7 +245,7 @@ const PaymentConfirm = () => {
                         placeholder="Nhập email của bạn"
                       />
                       {errors?.email?.message && (
-                        <span className="text-red-500 text-sm font-normal font-sans">
+                        <span className="font-sans text-sm font-normal text-red-500">
                           Trường bắt buộc
                         </span>
                       )}
@@ -300,7 +298,7 @@ const PaymentConfirm = () => {
                       rules={{ required: true }}
                     />
                     {errors?.phoneCode?.message && (
-                      <span className="text-red-500 text-sm font-normal font-sans">
+                      <span className="font-sans text-sm font-normal text-red-500">
                         Trường bắt buộc
                       </span>
                     )}
@@ -310,7 +308,7 @@ const PaymentConfirm = () => {
                       </span>
                     )}
                   </div>
-                  <div className="flex flex-col gap-y-2 mt-4">
+                  <div className="flex flex-col mt-4 gap-y-2">
                     <label
                       htmlFor="address"
                       className="text-[16px] font-sans font-normal"
@@ -329,7 +327,7 @@ const PaymentConfirm = () => {
                         placeholder="Địa chỉ"
                       />
                       {errors?.address?.message && (
-                        <span className="text-red-500 text-sm font-normal font-sans">
+                        <span className="font-sans text-sm font-normal text-red-500">
                           Trường bắt buộc
                         </span>
                       )}
@@ -340,7 +338,7 @@ const PaymentConfirm = () => {
                       )}
                     </div>
                   </div>
-                  <div className="flex flex-col gap-y-2 mt-4">
+                  <div className="flex flex-col mt-4 gap-y-2">
                     <label
                       htmlFor="address"
                       className="text-[16px] font-sans font-normal"
@@ -363,7 +361,7 @@ const PaymentConfirm = () => {
                             ? information?.cityCode?.name
                             : "Tỉnh/Thành"}
                         </span>
-                        <span className="absolute top-1/2 right-0 -translate-x-1/2 -translate-y-1/2">
+                        <span className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -390,7 +388,7 @@ const PaymentConfirm = () => {
                               return (
                                 <div
                                   onClick={() => handlerCityCode(e.id, e.name)}
-                                  className="px-4 py-2 hover:bg-red-500 text-base"
+                                  className="px-4 py-2 text-base hover:bg-red-500"
                                   key={e.id}
                                 >
                                   {e.name}
@@ -401,12 +399,12 @@ const PaymentConfirm = () => {
                       )}
                     </div>
                     {errors?.cityCode?.message && (
-                      <span className="text-red-500 text-sm font-normal font-sans">
+                      <span className="font-sans text-sm font-normal text-red-500">
                         Trường bắt buộc
                       </span>
                     )}
                   </div>
-                  <div className="flex flex-col gap-y-2 mt-4">
+                  <div className="flex flex-col mt-4 gap-y-2">
                     <label
                       htmlFor="address"
                       className="text-[16px] font-sans font-normal"
@@ -430,7 +428,7 @@ const PaymentConfirm = () => {
                               ? information?.districtCode?.name
                               : "Quận/Huyện"}
                           </span>
-                          <span className="absolute top-1/2 right-0 -translate-x-1/2 -translate-y-1/2">
+                          <span className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -459,7 +457,7 @@ const PaymentConfirm = () => {
                                     onClick={() =>
                                       handlerDistrictCode(e.id, e.name)
                                     }
-                                    className="px-4 py-2 hover:bg-red-500 text-base"
+                                    className="px-4 py-2 text-base hover:bg-red-500"
                                     key={e.id}
                                   >
                                     {e.name}
@@ -470,7 +468,7 @@ const PaymentConfirm = () => {
                         )}
                       </div>
                       {errors?.districtCode?.message && (
-                        <span className="text-red-500 text-sm font-normal font-sans">
+                        <span className="font-sans text-sm font-normal text-red-500">
                           Trường bắt buộc
                         </span>
                       )}
@@ -481,7 +479,7 @@ const PaymentConfirm = () => {
                       )}
                     </div>
                   </div>
-                  <div className="flex flex-col gap-y-2 mt-4">
+                  <div className="flex flex-col mt-4 gap-y-2">
                     <label
                       htmlFor="address"
                       className="text-[16px] font-sans font-normal"
@@ -505,7 +503,7 @@ const PaymentConfirm = () => {
                               ? information?.wardCode?.name
                               : "Phường/Xã"}
                           </span>
-                          <span className="absolute top-1/2 right-0 -translate-x-1/2 -translate-y-1/2">
+                          <span className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -534,7 +532,7 @@ const PaymentConfirm = () => {
                                     onClick={() =>
                                       handlerWardCode(e.id, e.name)
                                     }
-                                    className="px-4 py-2 hover:bg-red-500 text-base"
+                                    className="px-4 py-2 text-base hover:bg-red-500"
                                     key={e.id}
                                   >
                                     {e.name}
@@ -545,7 +543,7 @@ const PaymentConfirm = () => {
                         )}
                       </div>
                       {errors?.wardCode?.message && (
-                        <span className="text-red-500 text-sm font-normal font-sans">
+                        <span className="font-sans text-sm font-normal text-red-500">
                           Trường bắt buộc
                         </span>
                       )}
@@ -556,7 +554,7 @@ const PaymentConfirm = () => {
                       )}
                     </div>
                   </div>
-                  <div className="flex flex-col gap-y-2 mt-4">
+                  <div className="flex flex-col mt-4 gap-y-2">
                     <label
                       htmlFor="address"
                       className="text-[16px] font-sans font-normal"
@@ -576,7 +574,7 @@ const PaymentConfirm = () => {
                       />
 
                       {errors?.referralCode?.message && (
-                        <span className="text-red-500 text-sm font-normal font-sans">
+                        <span className="font-sans text-sm font-normal text-red-500">
                           Trường bắt buộc
                         </span>
                       )}
@@ -590,14 +588,14 @@ const PaymentConfirm = () => {
                 </div>
                 <div className="w-[35%] mt-0">
                   <div className="p-4 flex flex-col gap-5 shadow-md max-h-[300px]">
-                    <p className="text-xl font-sans font-normal">
+                    <p className="font-sans text-xl font-normal">
                       Bạn đang có sản phẩm trong giỏ hàng
                     </p>
                     <div className="flex items-center justify-between">
-                      <span className="text-xl font-sans font-normal">
+                      <span className="font-sans text-xl font-normal">
                         Thành Tiền:
                       </span>
-                      <span className="text-2xl text-regal-red font-sans font-bold">
+                      <span className="font-sans text-2xl font-bold text-regal-red">
                         {totalPrice?.toLocaleString("vi", {
                           style: "currency",
                           currency: "VND",
@@ -605,13 +603,13 @@ const PaymentConfirm = () => {
                       </span>
                     </div>
                     <div className="flex items-center justify-center gap-5">
-                      <div className="py-2 px-3 rounded-md bg-white text-regal-red border border-regal-red text-base font-light font-serif hover:bg-regal-red transition-all hover:text-white">
+                      <div className="px-3 py-2 font-serif text-base font-light transition-all bg-white border rounded-md text-regal-red border-regal-red hover:bg-regal-red hover:text-white">
                         <Link href="/cart">Trở về giỏ hàng</Link>
                       </div>
                       <button
                         type="submit"
                         // disabled={isSubmitting}
-                        className="py-2 px-3 rounded-md bg-regal-red text-white text-base font-light font-serif"
+                        className="px-3 py-2 font-serif text-base font-light text-white rounded-md bg-regal-red"
                       >
                         Tiến hàng thanh toán
                       </button>

@@ -545,5 +545,6 @@ export async function getStaticProps() {
   const data = { contents: contents.data, slideImageHome, slideImageAdvert };
   return {
     props: { data },
+    revalidate: 60,
   };
 }

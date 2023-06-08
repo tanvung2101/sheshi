@@ -51,6 +51,8 @@ const Menu = () => {
   const router = useRouter();
   // console.log(router);
   const [keyWord, setKeyWord] = useState();
+  const emailOrderRef = useRef()
+  const orderCodeOrderRef = useRef()
 
   const handler = (e) => {
     if (e.target.value === undefined) {
@@ -58,9 +60,22 @@ const Menu = () => {
       return
     } else {
       setKeyWord(e.target.value.replace(/[.*+?^${}()|[\]\\]/g, " "));
-      // setKeyWord((e.target.value))
     }
   };
+  const handlerSerachOrder = (e) => {
+    e.preventDefault();
+    console.log(emailOrderRef.current.value)
+    const emailOrder = emailOrderRef.current.value
+    const orderCodeOrder = orderCodeOrderRef.current.value
+    if(emailOrder || orderCodeOrder){
+      router.replace(`/search-order?email=${emailOrder }&orderCode=${orderCodeOrder}`);
+      emailOrderRef.current.value = ''
+      orderCodeOrderRef.current.value = ''
+    }else{
+      return
+    }
+    
+  }
   const { value } = useSelector((state) => state.cartItem);
   console.log(keyWord);
   return (
@@ -84,7 +99,7 @@ const Menu = () => {
             ></Image>
           </div>
           <div className="">
-            <ul className="flex item-center gap-10 uppercase font-semibold">
+            <ul className="flex gap-10 font-semibold uppercase item-center">
               {menu.length > 0 &&
                 menu.map((item) => (
                   <li key={item.id} className="cursor-pointer">
@@ -122,7 +137,7 @@ const Menu = () => {
               </span>
               <div
                 tabIndex={0}
-                className="dropdown-content menu shadow bg-base-100 rounded-box"
+                className="shadow dropdown-content menu bg-base-100 rounded-box"
               >
                 <CartIcon>
                   <Span>Tìm kiếm sản phẩm</Span>
@@ -132,10 +147,9 @@ const Menu = () => {
                       onChange={handler}
                       placeholder="Nhập từ khóa cần kiếm"
                     ></input>
-                    {/* <BsSearch onClick={() => router.push(`/search?keyword=${keyWord}`)} className="absolute top-1/2 right-0 -translate-x-1/2 -translate-y-1/2"/> */}
                     <Link
                       href={`/search?keyword=${keyWord}`}
-                      className="absolute top-1/2 right-0 -translate-x-1/2 -translate-y-1/2"
+                      className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2"
                     >
                       <BsSearch />
                     </Link>
@@ -167,29 +181,32 @@ const Menu = () => {
               </span>
               <div
                 tabIndex={0}
-                className="dropdown-content menu shadow bg-base-100 rounded-box "
+                className="shadow dropdown-content menu bg-base-100 rounded-box "
               >
-                <form className="block">
+                <form className="block" onSubmit={handlerSerachOrder}>
                   <CartIcon>
                     <Span>Tìm kiếm đơn hàng</Span>
-                    <Input
+                    <input
+                      ref={emailOrderRef}
                       type="text"
                       placeholder="Nhập email"
-                      className="mb-2"
-                    ></Input>
-                    <Input
+                      className={`w-full p-2 rounded-lg outline-none bg-[#f8f9fa] border border-[#edeff1] inline-block focus:ring-4 focus:ring-blue-200 `}
+                    ></input>
+                    <input
+                      ref={orderCodeOrderRef}
                       type="text"
                       placeholder="Nhập mã đơn hàng"
-                      className="mb-2"
-                    ></Input>
-                    <Button className="p-2 px-20 rounded-lg outline-none bg-[#f8f9fa] border border-[#edeff1] text-sm hover:bg-slate-300">
+                      className={`my-4 w-full p-2 rounded-lg outline-none bg-[#f8f9fa] border border-[#edeff1] inline-block focus:ring-4 focus:ring-blue-200 `}
+                    ></input>
+                    <Button 
+                        className="p-2 px-20 rounded-lg outline-none bg-[#f8f9fa] border border-[#edeff1] text-sm hover:bg-slate-300">
                       Submit
                     </Button>
                   </CartIcon>
                 </form>
               </div>
             </div>
-            <div className="dropdown dropdown-end bagIcon relative">
+            <div className="relative dropdown dropdown-end bagIcon">
               <Link href="/cart">
                 <span tabIndex={0}>
                   <svg
@@ -211,15 +228,6 @@ const Menu = () => {
                   {value?.length || 0}
                 </span>
               </Link>
-              {/* <div
-                tabIndex={0}
-                className="dropdown-content menu shadow bg-base-100 rounded-box "
-              >
-                <CartIcon>
-                  <Span>Tìm kiếm sản phẩm</Span>
-                  <Input placeholder="Nhập từ khóa cần kiếm"></Input>
-                </CartIcon>
-              </div> */}
             </div>
             <div className="dropdown dropdown-end personIcon">
               <span tabIndex={0}>
@@ -240,7 +248,7 @@ const Menu = () => {
               </span>
               <div
                 tabIndex={0}
-                className="dropdown-content menu shadow bg-base-100 rounded-box "
+                className="shadow dropdown-content menu bg-base-100 rounded-box "
               >
                 <CartIcon className="w-[250px]">
                   <Link href="/login">
@@ -268,76 +276,6 @@ const Menu = () => {
                 </CartIcon>
               </div>
             </div>
-
-            {/* <span ref={ref} className="relative searchIcon" id="searchIcon">
-              <Image
-                src={`${iconSerach.src}`}
-                alt=""
-                width={22}
-                height={22}
-                onClick={() => setOnClick(1)}
-              ></Image>
-              {click === 1 ? (
-                <CartIcon>
-                  <Span>Tìm kiếm sản phẩm</Span>
-                  <Input placeholder="Nhập từ khóa cần kiếm"></Input>
-                </CartIcon>
-              ) : (
-                ""
-              )}
-            </span>
-            <span className="relative eysIcon" onClick={() => setOnClick(2)}>
-              <Image src={`${eye.src}`} alt="" width={22} height={22}></Image>
-              {click === 2 ? (
-                <CartIcon>
-                  <Span>Tìm kiếm đơn hàng</Span>
-                  <Input
-                    type="text"
-                    placeholder="Nhập email"
-                    className="mb-2"
-                  ></Input>
-                  <Input
-                    type="text"
-                    placeholder="Nhập mã đơn hàng"
-                    className="mb-2"
-                  ></Input>
-                  <Button className="p-2 rounded-lg outline-none bg-[#f8f9fa] border border-[#edeff1] text-sm hover:bg-slate-300">
-                    Submit
-                  </Button>
-                </CartIcon>
-              ) : (
-                ""
-              )}
-            </span> */}
-            {/* <span className="relative bagIcon" onClick={() => setOnClick(3)}>
-              <Image src={`${bag.src}`} alt="" width={22} height={22}></Image>
-            </span>
-            <span className="relative parsonIcon" onClick={() => setOnClick(4)}>
-              <Image
-                src={`${person.src}`}
-                alt=""
-                width={22}
-                height={22}
-              ></Image>
-              {click === 4 ? (
-                <CartIcon className="w-[250px]">
-                  <Span className="flex items-center gap-2 p-3 rounded-md hover:bg-[#fef9f2]">
-                    <Image
-                      src={`${signin.src}`}
-                      alt=""
-                      width={22}
-                      height={22}
-                    ></Image>
-                    Đăng nhập
-                  </Span>
-                  <Span className="flex items-center gap-2 p-2 rounded-md hover:bg-[#fef9f2]">
-                    Đăng kí
-                  </Span>
-                </CartIcon>
-              ) : (
-                ""
-              )}
-            </span> */}
           </div>
         </div>
       </header>

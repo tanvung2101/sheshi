@@ -32,8 +32,10 @@ export default function App({ Component, pageProps }) {
           />
           {/* Same as */}
           <ToastContainer />
+          
 
           <Component {...pageProps} />
+         
 
           <Footer></Footer>
         </PersistGate>
@@ -42,6 +44,3 @@ export default function App({ Component, pageProps }) {
   );
 }
 
-export const metadata = {
-  title: "hello",
-};

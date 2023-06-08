@@ -45,7 +45,7 @@ const CartItemPayment = ({ item, value, index }) => {
       >
         <div className="">
           <Image
-            src={item?.product?.productImage[0].image}
+            src={item?.product?.productImage[0]?.image}
             alt=""
             width="100"
             height="100"

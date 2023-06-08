@@ -18,6 +18,14 @@ export const MASTER_DATA_NAME = {
   PERCENT_REFERRAL: 7,
 }
 
+export const STATUS_ORDER = {
+  WAITTING_CONFIRM: 1,
+  CONFIRMED: 2,
+  SHIPPING: 3,
+  DELIVERED: 4,
+  REJECT: 5,
+};
+
 export const CONTENT_PAGE = {
   INTRODUCE_PAGE: 1,
   INTRODUCE_PAGE_STORY: 2,
@@ -42,6 +50,17 @@ export const SLIDE_PAGE = {
   HOME_PAGE_ADVERTMENT: 3,
   SCHOOL_PAGE: 4
 };
+
+export const DELIVERY_METHOD_MAP = [
+  { value: 1, label: "Giao hàng nhanh" },
+  { value: 2, label: "Giao hàng tiết kiệm" },
+];
+
+export const PAYMENT_METHOD_MAP = [
+  { value: 0, label: "Thanh toán bằng tiền mặt" },
+  { value: 1, label: "Thanh toán bằng Momo" },
+  { value: 2, label: "Thanh toán bằng VNPay" },
+];
 
 export const TOKEN_API = {
   GIAO_HANG_TIET_KIEM: "A947Fb917eF4D78C188DAa2CdBa2354a0f6FF570",

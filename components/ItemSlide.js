@@ -24,6 +24,7 @@ async function fetchMasterCapacity(params) {
 }
 
 const ItemSlide = ({ propProduct }) => {
+  console.log('propProduct', propProduct)
   const dispatch = useDispatch();
   const value = useSelector((state) => state.cartItem.value);
   // useEffect(() => {
@@ -45,6 +46,7 @@ const ItemSlide = ({ propProduct }) => {
   const [quantity, setQuantity] = useState(1);
   const [detailProduct, setDetailProduct] = useState();
   const [detailProductQuantity, setDetailProductQuantity] = useState();
+  const [productDetailOption, setProductDetailOption] = useState();
   
 
   const fetchMasterData = async () => {
@@ -83,15 +85,10 @@ const ItemSlide = ({ propProduct }) => {
     }
 
     setProduct({
+      id: propProduct?.id,
       name: propProduct?.name,
       price: propProduct?.price,
       content: propProduct?.content,
-      imageMain: propProduct?.productImage?.find(
-        (e) => e.isMain === IMAGE_TYPE.MAIN
-      ).image,
-      imageSub: propProduct?.productImage?.filter(
-        (e) => e.isMain === IMAGE_TYPE.SUB
-      ).image,
       categorySlug: propProduct?.productCategory?.categorySlug,
       slug: propProduct?.productSlug,
       acronym: propProduct?.acronym,
@@ -101,7 +98,11 @@ const ItemSlide = ({ propProduct }) => {
       element: propProduct?.element,
       uses: propProduct?.uses,
       guide: propProduct?.guide,
-      productDetailOption,
+      productCategory: propProduct?.productCategory,
+      productImage:propProduct?.productImage,
+      productDetail:propProduct?.productDetail,
+      productInventory:propProduct?.productInventory,
+
     });
     setPrice(productDetailOption[0]?.price);
     setCapcity(
@@ -109,6 +110,7 @@ const ItemSlide = ({ propProduct }) => {
     );
     setDetailProduct(productDetailOption[0]?.quantity);
     setDetailProductQuantity(productDetailOption[0]?.quantity);
+    setProductDetailOption(productDetailOption)
   }, [
     masterCapacity,
     masterUnit,
@@ -125,14 +127,13 @@ const ItemSlide = ({ propProduct }) => {
   };
   const addCartItem = () => {
     let newItem = {
-      name: product?.name,
       slug: product.slug,
       product: product,
-      capacityId: product.productDetailOption[0]?.capacityId,
-      unitId: product.productDetailOption[0]?.unitId,
-      price: product.productDetailOption[0]?.price,
+      capacityId: productDetailOption[0]?.capacityId,
+      unitId: productDetailOption[0]?.unitId,
+      price: productDetailOption[0]?.price,
       quantity: quantity,
-      capacity: product.productDetailOption[0]?.name,
+      capacity: productDetailOption[0]?.name,
       totalQuantity: detailProductQuantity,
     };
     if (+quantity > detailProductQuantity) {
@@ -160,14 +161,13 @@ const ItemSlide = ({ propProduct }) => {
   };
   const goToCart = () => {
     let newItem = {
-      name: product?.name,
       slug: product.slug,
       product: product,
-      capacityId: product.productDetailOption[0]?.capacityId,
-      unitId: product.productDetailOption[0]?.unitId,
-      price: product.productDetailOption[0]?.price,
+      capacityId: productDetailOption[0]?.capacityId,
+      unitId: productDetailOption[0]?.unitId,
+      price: productDetailOption[0]?.price,
       quantity: quantity,
-      capacity: product.productDetailOption[0]?.name,
+      capacity: productDetailOption[0]?.name,
       totalQuantity: detailProductQuantity,
     };
     if (+quantity > detailProductQuantity) {
@@ -216,7 +216,7 @@ const ItemSlide = ({ propProduct }) => {
         <div className="w-1/2">
           <div className="box-border">
             <Image
-              src={product?.imageMain}
+              src={product?.productImage[0]?.image}
               alt=""
               width={400}
               height={450}
@@ -227,17 +227,17 @@ const ItemSlide = ({ propProduct }) => {
         <div className="flex-col w-1/2">
           <div>
             <h4>{product?.name}</h4>
-            <span className="block mt-4 text-3xl font-bold text-regal-red font-sans">
+            <span className="block mt-4 font-sans text-3xl font-bold text-regal-red">
               {price?.toLocaleString("vi", {
                 style: "currency",
                 currency: "VND",
               })}
             </span>
             <div className="flex-col mt-4">
-              <span className="text-xl font-semibold font-sans inline-block">
+              <span className="inline-block font-sans text-xl font-semibold">
                 Số lượng
               </span>
-              <div className="flex text-center text-2xl font-medium ">
+              <div className="flex text-2xl font-medium text-center ">
                 <div
                   className="w-12 h-12 flex items-center justify-center bg-[#faf9f5] cursor-pointer"
                   onClick={() => updateQuantity()}
@@ -259,9 +259,9 @@ const ItemSlide = ({ propProduct }) => {
                   +
                 </div>
               </div>
-              <div className="uppercase mt-7 text-lg text-white ">
+              <div className="text-lg text-white uppercase mt-7 ">
                 <span className="bg-[#dc3545] p-3 rounded-lg">
-                  {product?.productDetailOption[0]?.name}
+                  {productDetailOption?.name}
                 </span>
               </div>
               <div className="flex items-start gap-5 mt-5 text-center">
@@ -274,7 +274,7 @@ const ItemSlide = ({ propProduct }) => {
                 <Button
                   type="submit"
                   onClick={() => goToCart()}
-                  className="py-3 px-8 uppercase bg-regal-red rounded-lg text-white font-bold"
+                  className="px-8 py-3 font-bold text-white uppercase rounded-lg bg-regal-red"
                 >
                   {/* <Link href={"/cart"}>mua ngay</Link> */} Mua ngay
                 </Button>
@@ -290,9 +290,9 @@ const ItemSlide = ({ propProduct }) => {
       <div className="relative flex-col items-center justify-center p-5 mx-auto hover:text-regal-red group">
         <div className="w-full mb-2">
           <Link href={`/san-pham/${product?.slug}`}>
-            {product?.imageMain && (
+            {product?.productImage && (
               <Image
-                src={product?.imageMain}
+                src={product?.productImage[0]?.image}
                 alt=""
                 width={100}
                 height={100}
