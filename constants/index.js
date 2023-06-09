@@ -26,6 +26,15 @@ export const STATUS_ORDER = {
   REJECT: 5,
 };
 
+export const LOGIN_TYPE = {
+  USER: 1,
+  MERCHANT: 2,
+};
+
+export const STATUS_REQUEST = {
+  UNAUTHORIZED: 401,
+};
+
 export const CONTENT_PAGE = {
   INTRODUCE_PAGE: 1,
   INTRODUCE_PAGE_STORY: 2,

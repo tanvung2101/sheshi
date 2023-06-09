@@ -10,8 +10,13 @@ import userPlus from "../public/user-plus.svg";
 import { Button, Vehicle } from "@/components";
 import signin from "../public/signin.svg";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { BsSearch } from "react-icons/bs";
+import { useRouter } from "next/navigation";
+import {
+  BsBoxArrowRight,
+  BsPersonBoundingBox,
+  BsReceipt,
+  BsSearch,
+} from "react-icons/bs";
 import { useSelector } from "react-redux";
 
 const menu = [
@@ -51,31 +56,32 @@ const Menu = () => {
   const router = useRouter();
   // console.log(router);
   const [keyWord, setKeyWord] = useState();
-  const emailOrderRef = useRef()
-  const orderCodeOrderRef = useRef()
+  const emailOrderRef = useRef();
+  const orderCodeOrderRef = useRef();
 
   const handler = (e) => {
     if (e.target.value === undefined) {
       setKeyWord("");
-      return
+      return;
     } else {
       setKeyWord(e.target.value.replace(/[.*+?^${}()|[\]\\]/g, " "));
     }
   };
   const handlerSerachOrder = (e) => {
     e.preventDefault();
-    console.log(emailOrderRef.current.value)
-    const emailOrder = emailOrderRef.current.value
-    const orderCodeOrder = orderCodeOrderRef.current.value
-    if(emailOrder || orderCodeOrder){
-      router.replace(`/search-order?email=${emailOrder }&orderCode=${orderCodeOrder}`);
-      emailOrderRef.current.value = ''
-      orderCodeOrderRef.current.value = ''
-    }else{
-      return
+    console.log(emailOrderRef.current.value);
+    const emailOrder = emailOrderRef.current.value;
+    const orderCodeOrder = orderCodeOrderRef.current.value;
+    if (emailOrder || orderCodeOrder) {
+      router.replace(
+        `/search-order?email=${emailOrder}&orderCode=${orderCodeOrder}`
+      );
+      emailOrderRef.current.value = "";
+      orderCodeOrderRef.current.value = "";
+    } else {
+      return;
     }
-    
-  }
+  };
   const { value } = useSelector((state) => state.cartItem);
   console.log(keyWord);
   return (
@@ -118,6 +124,7 @@ const Menu = () => {
             </ul>
           </div>
           <div className="flex items-center justify-center gap-8 ml-16">
+            {/* tìm kiếm sản phẩm*/}
             <div className="dropdown dropdown-end searchIcon">
               <span tabIndex={0}>
                 <svg
@@ -157,6 +164,7 @@ const Menu = () => {
                 </CartIcon>
               </div>
             </div>
+            {/* tìm kiếm đơn hàng */}
             <div className="dropdown dropdown-end eysIcon">
               <span tabIndex={0}>
                 <svg
@@ -198,14 +206,14 @@ const Menu = () => {
                       placeholder="Nhập mã đơn hàng"
                       className={`my-4 w-full p-2 rounded-lg outline-none bg-[#f8f9fa] border border-[#edeff1] inline-block focus:ring-4 focus:ring-blue-200 `}
                     ></input>
-                    <Button 
-                        className="p-2 px-20 rounded-lg outline-none bg-[#f8f9fa] border border-[#edeff1] text-sm hover:bg-slate-300">
+                    <Button className="p-2 px-20 rounded-lg outline-none bg-[#f8f9fa] border border-[#edeff1] text-sm hover:bg-slate-300">
                       Submit
                     </Button>
                   </CartIcon>
                 </form>
               </div>
             </div>
+            {/* giỏ hàng */}
             <div className="relative dropdown dropdown-end bagIcon">
               <Link href="/cart">
                 <span tabIndex={0}>
@@ -229,6 +237,7 @@ const Menu = () => {
                 </span>
               </Link>
             </div>
+            {/* signin - register */}
             <div className="dropdown dropdown-end personIcon">
               <span tabIndex={0}>
                 <svg
@@ -252,18 +261,19 @@ const Menu = () => {
               >
                 <CartIcon className="w-[250px]">
                   <Link href="/login">
-                    <Span className="flex items-center gap-2 p-3 rounded-md hover:bg-[#fef9f2]">
+                    <Span className="flex items-center gap-2 p-3 text-sm rounded-md hover:bg-[#fef9f2]">
                       <Image
                         src={`${signin.src}`}
                         alt=""
                         width={22}
                         height={22}
+                        className="w-4 h-4"
                       ></Image>
                       Đăng nhập
                     </Span>
                   </Link>
                   <Link href="/sign-up">
-                    <Span className="flex items-center gap-2 p-2 rounded-md hover:bg-[#fef9f2]">
+                    <Span className="flex items-center gap-2 p-2 text-sm rounded-md hover:bg-[#fef9f2]">
                       <Image
                         src={`${userPlus.src}`}
                         alt=""
@@ -275,6 +285,44 @@ const Menu = () => {
                   </Link>
                 </CartIcon>
               </div>
+            </div>
+            {/* profile */}
+            <div className="relative flex items-center justify-between">
+              <div className="w-[30px] h-[30px]">
+                <Image
+                  src="https://images.unsplash.com/photo-1682687220067-dced9a881b56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60"
+                  alt="image"
+                  width={10}
+                  height={10}
+                  className="object-cover w-full h-full rounded-full"
+                />
+              </div>
+              <ul className="absolute z-[99] right-0 flex flex-col items-start justify-center top-full min-w-[250px] px-3 py-4 bg-[#f6f6f6] rounded-md shadow-md">
+                <li className='w-full h-full px-3 py-3 rounded-md hover:bg-[#fdf2ec]'>
+                  <Link href="" className="flex items-center gap-4">
+                    <span>
+                      <BsPersonBoundingBox></BsPersonBoundingBox>
+                    </span>
+                    <p className="text-[15px] font-normal">Trang cá nhân</p>
+                  </Link>
+                </li>
+                <li className='w-full h-full px-3 py-3 rounded-md hover:bg-[#fdf2ec]'>
+                  <Link href="" className="flex items-center gap-4">
+                    <span>
+                      <BsReceipt></BsReceipt>
+                    </span>
+                    <p className="text-[15px] font-normal">Đơn hàng của tôi</p>
+                  </Link>
+                </li>
+                <li className='w-full h-full px-3 py-3 rounded-md hover:bg-[#fdf2ec]'>
+                  <Link href="" className="flex items-center gap-4">
+                    <span>
+                      <BsBoxArrowRight></BsBoxArrowRight>
+                    </span>
+                    <p className="text-[15px] font-normal">Đăng xuất</p>
+                  </Link>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
