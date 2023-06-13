@@ -27,6 +27,7 @@ const Payment = () => {
   const { value } = useSelector((state) => state.cartItem);
   const dispatch = useDispatch();
   const { information } = useSelector((state) => state.cartItem);
+  console.log(information?.districtCode?.name.toLowerCase())
 
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -166,19 +167,20 @@ const Payment = () => {
     const provideId = fetchCity?.data?.find(
       (city) => city.ProvinceName === information?.cityCode?.name
     )?.ProvinceID;
-
+    
     const fetchDistrict = await shipApis.getDistrict({
       provide_id: provideId,
     });
-    // console.log("fetchDistrict", fetchDistrict);
+    console.log("fetchDistrict", fetchDistrict);
     const districtId = fetchDistrict?.data.find(
       (district) =>
         !!district.NameExtension?.find(
-          (e) =>
-            e.toLowerCase() === information?.districtCode?.name.toLowerCase()
+          (e) => {
+            return (e.toLowerCase() === information?.districtCode?.name.toLowerCase())
+          } 
         )
     )?.DistrictID;
-    // console.log("districtId", districtId);
+    console.log("districtId", districtId);
     const serviceAvailable = await shipApis.getService({
       from_district: 1488,
       to_district: districtId,
@@ -191,7 +193,7 @@ const Payment = () => {
       insurance_value: totalPrice,
       weight: 200,
     });
-    // console.log('calculatorFee', calculatorFee)
+    console.log('calculatorFee', calculatorFee)
     setUnitGhn(calculatorFee?.data);
     setFee(calculatorFee?.data.total ? calculatorFee?.data.total : 0);
   }, [information, setValue, totalPrice]);
@@ -206,7 +208,7 @@ const Payment = () => {
     <>
       <SEO title="Thanh toán"></SEO>
       {value?.length === 0 && <CartEmpty></CartEmpty>}
-      {value?.length > 0 && <div className="mb-16 px-20">
+      {value?.length > 0 && <div className="px-20 mb-16">
       <CartTabs className="pt-12" tabs={3} />
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-start justify-start gap-8">
@@ -216,15 +218,15 @@ const Payment = () => {
                 {...register("deliveryMethod")}
                 onChange={handlerDeliveryMethod}
               >
-                <div className="px-3 pt-1 pb-3 border border-gray-300 border-b-0 bg-gray-100 rounded-t-md">
+                <div className="px-3 pt-1 pb-3 bg-gray-100 border border-b-0 border-gray-300 rounded-t-md">
                   <span className="text-[18px] font-medium">
                     Phương thức giao hàng
                   </span>
                 </div>
-                <label className="flex items-center justify-start gap-5 pl-4 pt-6 pb-3 border-b-0 border border-gray-300 cursor-pointer">
+                <label className="flex items-center justify-start gap-5 pt-6 pb-3 pl-4 border border-b-0 border-gray-300 cursor-pointer">
                   <div id="">
                     <input
-                      className="radio checked:bg-blue-500 w-5 h-5"
+                      className="w-5 h-5 radio checked:bg-blue-500"
                       name="ship"
                       type="radio"
                       value={1}
@@ -243,10 +245,10 @@ const Payment = () => {
                     <strong className="text-[18px]">Giao hàng nhanh</strong>
                   </div>
                 </label>
-                <label className="flex items-center justify-start gap-5 pl-4 pt-6 pb-3 border border-gray-300 cursor-pointer">
+                <label className="flex items-center justify-start gap-5 pt-6 pb-3 pl-4 border border-gray-300 cursor-pointer">
                   <div id="">
                     <input
-                      className="radio checked:bg-blue-500 w-5 h-5"
+                      className="w-5 h-5 radio checked:bg-blue-500"
                       name="ship"
                       type="radio"
                       value={2}
@@ -267,17 +269,17 @@ const Payment = () => {
                 </label>
               </div>
               <div className="flex flex-col">
-                <div className="px-3 pt-1 pb-3 border border-gray-300 border-b-0 bg-gray-100 rounded-t-md">
+                <div className="px-3 pt-1 pb-3 bg-gray-100 border border-b-0 border-gray-300 rounded-t-md">
                   <span className="text-[18px] font-medium">
                     Phương thức giao hàng
                   </span>
                 </div>
                 <div className="border border-gray-300">
-                  <label className="flex items-center justify-start gap-5 pl-4 pt-6 pb-3 cursor-pointer">
+                  <label className="flex items-center justify-start gap-5 pt-6 pb-3 pl-4 cursor-pointer">
                     <div>
                       <input
                         {...register("paymentMethod")}
-                        className="radio checked:bg-blue-500 w-5 h-5"
+                        className="w-5 h-5 radio checked:bg-blue-500"
                         name="paymentMethod"
                         value={0}
                         type="radio"
@@ -292,11 +294,11 @@ const Payment = () => {
                     </div>
                   </label>
                   <div>
-                    <label className="flex items-center justify-start gap-5 pl-4 pt-6 pb-3 cursor-pointer">
+                    <label className="flex items-center justify-start gap-5 pt-6 pb-3 pl-4 cursor-pointer">
                       <div>
                         <input
                           {...register("paymentMethod")}
-                          className="radio checked:bg-blue-500 w-5 h-5"
+                          className="w-5 h-5 radio checked:bg-blue-500"
                           name="paymentMethod"
                           value={1}
                           type="radio"
@@ -311,10 +313,10 @@ const Payment = () => {
                   </div>
                   {selectMethodPayment == 1 && (
                     <div>
-                      <div className="flex items-start justify-start gap-5 pl-4 pt-6 pb-3 cursor-pointer">
+                      <div className="flex items-start justify-start gap-5 pt-6 pb-3 pl-4 cursor-pointer">
                         <div className="self-center">
                           <input
-                            className="radio checked:bg-blue-500 w-5 h-5"
+                            className="w-5 h-5 radio checked:bg-blue-500"
                             name="bank"
                             type="radio"
                             value={1}
@@ -338,10 +340,10 @@ const Payment = () => {
                           </span>
                         </div>
                       </div>
-                      <div className="flex items-start justify-start gap-5 pl-4 pt-6 pb-3 cursor-pointer">
+                      <div className="flex items-start justify-start gap-5 pt-6 pb-3 pl-4 cursor-pointer">
                         <div className="self-center">
                           <input
-                            className="radio checked:bg-blue-500 w-5 h-5"
+                            className="w-5 h-5 radio checked:bg-blue-500"
                             id="bank-W5cb6f2d0d84cb"
                             name="bank"
                             type="radio"
@@ -369,11 +371,11 @@ const Payment = () => {
                     </div>
                   )}
                 </div>
-                <div className="mt-5 flex flex-col">
+                <div className="flex flex-col mt-5">
                   <label className="text-lg">Ghi chú cho đơn hàng</label>
                   <textarea
                     {...register("notes")}
-                    className="outline-none border border-slate-700 rounded-md"
+                    className="border rounded-md outline-none border-slate-700"
                     rows={5}
                   ></textarea>
                 </div>
@@ -382,14 +384,14 @@ const Payment = () => {
             <div className="w-[30%]">
               <div className="mt-0">
                 <div className="px-4 py-6 flex flex-col gap-8 shadow-md max-h-[450px]">
-                  <p className="text-xl font-sans font-normal">
+                  <p className="font-sans text-xl font-normal">
                     Bạn đang 1 có sản phẩm trong giỏ hàng
                   </p>
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl font-sans font-normal">
+                    <span className="font-sans text-2xl font-normal">
                       Thành Tiền:
                     </span>
-                    <span className="text-3xl text-regal-red font-sans font-bold">
+                    <span className="font-sans text-3xl font-bold text-regal-red">
                       {Number(totalPrice)?.toLocaleString("vi", {
                         style: "currency",
                         currency: "VND",
@@ -397,10 +399,10 @@ const Payment = () => {
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl font-sans font-normal">
+                    <span className="font-sans text-2xl font-normal">
                       Phí giao hàng:
                     </span>
-                    <span className="text-3xl text-regal-red font-sans font-bold">
+                    <span className="font-sans text-3xl font-bold text-regal-red">
                       {Number(fee)?.toLocaleString("vi", {
                         style: "currency",
                         currency: "VND",
@@ -408,10 +410,10 @@ const Payment = () => {
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl font-sans font-normal">
+                    <span className="font-sans text-2xl font-normal">
                       Tổng:
                     </span>
-                    <span className="text-3xl text-regal-red font-sans font-bold">
+                    <span className="font-sans text-3xl font-bold text-regal-red">
                       {(totalPrice + fee)?.toLocaleString("vi", {
                         style: "currency",
                         currency: "VND",
@@ -419,13 +421,13 @@ const Payment = () => {
                     </span>
                   </div>
                   <div className="flex items-center justify-center gap-5">
-                    <button className="py-2 px-3 rounded-md bg-white text-regal-red border border-regal-red text-base font-light font-serif hover:bg-regal-red transition-all hover:text-white">
+                    <button className="px-3 py-2 font-serif text-base font-light transition-all bg-white border rounded-md text-regal-red border-regal-red hover:bg-regal-red hover:text-white">
                       <Link href="/payment-confirm">Trở về nhập địa chỉ</Link>
                     </button>
                     <button
                       type="submit"
                       // disabled={isSubmitting}
-                      className="py-2 px-3 rounded-md bg-regal-red text-white text-base font-light font-serif"
+                      className="px-3 py-2 font-serif text-base font-light text-white rounded-md bg-regal-red"
                     >
                       {/* <Link href="/payment-confirm"> */}
                       Tiến hàng thanh toán

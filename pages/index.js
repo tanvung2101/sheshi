@@ -32,7 +32,7 @@ export default function Home({ data }) {
   // console.log("slideImageAdvert", slideImageAdvert);
   const router = useRouter();
   const [product, setProduct] = useState();
-  console.log('product', product)
+  // console.log('product', product)
   // console.log('product',product)
   const [productNew, setProductNew] = useState();
   const getOutstandingProducts = async () => {
@@ -73,9 +73,7 @@ export default function Home({ data }) {
       "@context": "http://localhost:3000/",
       "@type": "Product",
       "name": "CÔNG TY CỔ PHẦN TẬP ĐOÀN SHESHI",
-      "image": [${product?.map((item) =>
-        item?.productCategory?.image
-      )}],
+      "image": [${product?.map((item) => item?.productCategory?.image)}],
       "description": "Sleeker than ACME's Classic Anvil, the Executive Anvil is perfect for the business traveler looking for something to drop from a height.",
       "sku": "0446310786",
       "mpn": "925872",
@@ -159,7 +157,7 @@ export default function Home({ data }) {
   const settingsSlideImage = {
     dots: false,
     infinite: false,
-    className: 'slide-home',
+    className: "slide-home",
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -248,18 +246,16 @@ export default function Home({ data }) {
         </Slider>
       </div>
       {/* SẢN PHẨM NỔI BẬT */}
-      <div className="bg-light-pink pt-16 pb-16 ">
+      <div className="pt-16 pb-16 bg-light-pink ">
         <Title className="mb-5">sản phẩm nổi bật</Title>
-        <div className="px-14 my-10">
+        <div className="my-10 px-14">
           <Slider {...settings}>
             {product?.length > 0 &&
               product?.map((item) => {
                 // console.log('item',item)
                 return (
                   <div key={item?.id}>
-                    <ItemSlide
-                      propProduct={item}
-                    ></ItemSlide>
+                    <ItemSlide propProduct={item}></ItemSlide>
                   </div>
                 );
               })}
@@ -279,16 +275,16 @@ export default function Home({ data }) {
             // console.log("item", item);
             return (
               <div key={item.id}>
-                <h3 className="uppercase text-3xl text-regal-red font-bold mb-5">
+                <h3 className="mb-5 text-3xl font-bold uppercase text-regal-red">
                   học viện đào tạo sheshi
                 </h3>
                 <div
-                  className="mb-5 text-lg font-sans font-normal"
+                  className="mb-5 font-sans text-lg font-normal"
                   dangerouslySetInnerHTML={{ __html: item?.content }}
                 ></div>
                 <Link
                   href="/hoc-vien-dao-tao-sheshi"
-                  className="uppercase text-lg text-regal-red font-bold hover:text-yellow-200"
+                  className="text-lg font-bold uppercase text-regal-red hover:text-yellow-200"
                 >
                   Xem chi tiết
                 </Link>
@@ -309,11 +305,11 @@ export default function Home({ data }) {
         </div>
       </div>
       {/* SHESHI CHUYỂN GIAO CÔNG NGHỆ CỦA TẬP ĐOÀN MỸ PHẨM ML.S HÀN QUỐC */}
-      <div className="pt-14 bg-light-pink h-[700px]">
-        <Title className='mb-14 text-3xl'>{slideImageAdvert[0]?.title}</Title>
+      <div className="py-14 bg-light-pink ">
+        <Title className="text-3xl mb-14">{slideImageAdvert[0]?.title}</Title>
         <Slider {...settings_news}>
           {slideImageAdvert.map((item) => (
-            <div key={item.id} className=''>
+            <div key={item.id} className="">
               <Image
                 src={item?.image || ""}
                 alt=""
@@ -328,20 +324,18 @@ export default function Home({ data }) {
       {/* SẢN PHẨM MỚI */}
       <div className="mt-10">
         <div>
-          <h2 className="uppercase text-regal-red font-bold text-2xl text-center mb-5">
+          <h2 className="mb-5 text-2xl font-bold text-center uppercase text-regal-red">
             sản phẩm mới
           </h2>
-          <div className="px-14 my-10">
-            <div className="px-14 my-10">
+          <div className="my-10 px-14">
+            <div className="my-10 px-14">
               <Slider {...settings}>
                 {productNew?.length > 0 &&
                   productNew?.map((item) => {
                     // console.log('item',item)
                     return (
                       <div key={item.id}>
-                        <ItemSlide
-                          propProduct={item}
-                        ></ItemSlide>
+                        <ItemSlide propProduct={item}></ItemSlide>
                       </div>
                     );
                   })}
@@ -350,13 +344,13 @@ export default function Home({ data }) {
           </div>
           <Button
             onClick={() => router.push("/san-pham")}
-            className="bg-regal-red text-light-pink p-2 rounded-lg mx-auto block"
+            className="block p-2 mx-auto rounded-lg bg-regal-red text-light-pink"
           >
             xem thêm
           </Button>
         </div>
         <div className="mt-20">
-          <h2 className="uppercase text-regal-red font-bold text-2xl text-center mb-5">
+          <h2 className="mb-5 text-2xl font-bold text-center uppercase text-regal-red">
             cảm nhận khách hàng
           </h2>
           <p className="text-center w-[800px] mx-auto">
@@ -374,7 +368,7 @@ export default function Home({ data }) {
           onSlideChange={() => console.log("slide change")}
           onSwiper={(swiper) => swiper}
         >
-          <SwiperSlide className="mt-14 flex items-center">
+          <SwiperSlide className="flex items-center mt-14">
             <div className="flex items-center justify-between p-10">
               <CartSlide
                 src={`${feed1.src}`}
@@ -386,7 +380,7 @@ export default function Home({ data }) {
                   về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
                   sản phẩm."
                 face="facebook"
-                className='hover:shadow-md'
+                className="hover:shadow-md"
               ></CartSlide>
               <CartSlide
                 src={`${feed1.src}`}
@@ -398,7 +392,7 @@ export default function Home({ data }) {
                   về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
                   sản phẩm."
                 face="facebook"
-                className='hover:shadow-md'
+                className="hover:shadow-md"
               ></CartSlide>
               <CartSlide
                 src={`${feed1?.src}`}
@@ -410,11 +404,11 @@ export default function Home({ data }) {
                   về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
                   sản phẩm."
                 face="facebook"
-                className='hover:shadow-md'
+                className="hover:shadow-md"
               ></CartSlide>
             </div>
           </SwiperSlide>
-          <SwiperSlide className="mt-14 flex items-center">
+          <SwiperSlide className="flex items-center mt-14">
             <div className="flex items-center justify-between p-10">
               <CartSlide
                 src={`${feed1.src}`}
@@ -426,7 +420,7 @@ export default function Home({ data }) {
                   về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
                   sản phẩm."
                 face="facebook"
-                className='hover:shadow-md'
+                className="hover:shadow-md"
               ></CartSlide>
               <CartSlide
                 src={`${feed1.src}`}
@@ -438,7 +432,7 @@ export default function Home({ data }) {
                   về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
                   sản phẩm."
                 face="facebook"
-                className='hover:shadow-md'
+                className="hover:shadow-md"
               ></CartSlide>
               <CartSlide
                 src={`${feed1.src}`}
@@ -450,12 +444,12 @@ export default function Home({ data }) {
                   về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
                   sản phẩm."
                 face="facebook"
-                className='hover:shadow-md'
+                className="hover:shadow-md"
               ></CartSlide>
             </div>
           </SwiperSlide>
-          <SwiperSlide className="mt-14 flex items-center">
-            <div className="w-full flex items-center justify-between p-10">
+          <SwiperSlide className="flex items-center mt-14">
+            <div className="flex items-center justify-between w-full p-10">
               <CartSlide
                 src={`${feed1.src}`}
                 width={50}
@@ -466,7 +460,7 @@ export default function Home({ data }) {
                   về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
                   sản phẩm."
                 face="facebook"
-                className='hover:shadow-md'
+                className="hover:shadow-md"
               ></CartSlide>
               <CartSlide
                 src={`${feed1.src}`}
@@ -478,7 +472,7 @@ export default function Home({ data }) {
                   về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
                   sản phẩm."
                 face="facebook"
-                className='hover:shadow-md'
+                className="hover:shadow-md"
               ></CartSlide>
               <CartSlide
                 src={`${feed1.src}`}
@@ -490,7 +484,7 @@ export default function Home({ data }) {
                   về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
                   sản phẩm."
                 face="facebook"
-                className='hover:shadow-md'
+                className="hover:shadow-md"
               ></CartSlide>
             </div>
           </SwiperSlide>
@@ -545,6 +539,6 @@ export async function getStaticProps() {
   const data = { contents: contents.data, slideImageHome, slideImageAdvert };
   return {
     props: { data },
-    revalidate: 60,
+    revalidate: 300,
   };
 }

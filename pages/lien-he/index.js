@@ -73,40 +73,40 @@ const LienHe = ({ contact }) => {
         <link rel="icon" href="/logosheshe.png" />
         <title>LIÊN HỆ SHESHI</title>
       </Head> */}
-      <div className="bg-light-pink py-5 mb-10">
+      <div className="py-5 mb-10 bg-light-pink">
         <Title className="text-3xl font-bold">liên hệ</Title>
       </div>
-      <div className="mx-auto flex justify-center my-14">
-        <div className="px-24 flex-col mx-auto w-full">
+      <div className="flex justify-center mx-auto my-14">
+        <div className="flex-col w-full px-24 mx-auto">
           <div className="mb-5">
             <span className="block text-[18px] font-medium font-sans">
               Nếu bạn có thắc mắc hãy liên hệ với chúng tôi qua địa chỉ
             </span>
           </div>
-          <div className="mx-auto flex mb-4">
+          <div className="flex mx-auto mb-4">
             <p className="text-lg w-[40%]  font-sans">Điện thoại:</p>
-            <p className="text-lg font-sans">{contact.telephone}</p>
+            <p className="font-sans text-lg">{contact.telephone}</p>
           </div>
-          <div className="mx-auto flex mb-4">
+          <div className="flex mx-auto mb-4">
             <p className="text-lg w-[40%] font-sans">Địa chỉ:</p>
-            <p className="text-lg font-sans">{contact.address}</p>
+            <p className="font-sans text-lg">{contact.address}</p>
           </div>
-          <div className="mx-auto flex mb-4">
+          <div className="flex mx-auto mb-4">
             <p className="text-lg w-[40%] font-sans">Email:</p>
-            <p className="text-lg font-sans">{contact.email}</p>
+            <p className="font-sans text-lg">{contact.email}</p>
           </div>
-          <div className="mx-auto flex mb-4">
+          <div className="flex mx-auto mb-4">
             <p className="text-lg w-[40%] shrink-0 font-sans">
               Thời gian làm việc:
             </p>
-            <p className="text-lg font-sans">{contact.timeWorking}</p>
+            <p className="font-sans text-lg">{contact.timeWorking}</p>
           </div>
         </div>
         <div className="w-full px-20">
-          <h3 className="text-3xl font-bold mb-5">
+          <h3 className="mb-5 text-3xl font-bold">
             Gửi thắc mắc cho chúng tôi
           </h3>
-          <p className="text-small-font-color font-bold mb-5 text-base leading-6 tracking-wider">
+          <p className="mb-5 text-base font-bold leading-6 tracking-wider text-small-font-color">
             Nếu bạn có thắc mắc gì, có thể gửi yêu cầu cho chúng tôi và chúng
             tôi <br /> sẽ liên lạc với bạn sớm nhất có thể
           </p>
@@ -118,22 +118,20 @@ const LienHe = ({ contact }) => {
                     <input
                       text="text"
                       placeholder="Họ và tên"
-                      {...register("fullName", {
-                        required: "This is required",
-                      })}
+                      {...register("fullName")}
                       className={`py-3 pl-3 pr-20 rounded-md outline-none text-base border border-slate-300 ${
                         errors?.fullName?.message
                           ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
                           : "border border-slate-300 hover:border hover:border-slate-500"
                       }`}
                     />
-                    {errors.fullName && (
+                    {errors?.fullName?.message && (
                       <span className="absolute top-0 right-0 -translate-x-1/2">
                         <BiErrorCircle className="text-lg text-red-500" />
                       </span>
                     )}
                   </label>
-                  <span className="text-red-500 text-sm font-normal font-sans">
+                  <span className="font-sans text-sm font-normal text-red-500">
                     {errors?.fullName?.message} 
                   </span>
                 </div>
@@ -155,7 +153,7 @@ const LienHe = ({ contact }) => {
                       </span>
                     )}
                   </label>
-                  <span className="text-red-500 text-sm font-normal font-sans">
+                  <span className="font-sans text-sm font-normal text-red-500">
                     {errors?.email?.message}
                   </span>
                 </div>
@@ -179,7 +177,7 @@ const LienHe = ({ contact }) => {
                     </span>
                   )}
                 </label>
-                <span className="text-red-500 text-sm font-normal font-sans">
+                <span className="font-sans text-sm font-normal text-red-500">
                   {errors?.phoneNumber?.message}
                 </span>
               </div>
@@ -193,9 +191,9 @@ const LienHe = ({ contact }) => {
               </div>
               <button
                 type="submit"
-                className="mt-4 p-2 bg-regal-red rounded-lg"
+                className="p-2 mt-4 rounded-lg bg-regal-red"
               >
-                <span className="text-center text-white text-lg">
+                <span className="text-lg text-center text-white">
                   Gửi cho chúng tôi
                 </span>
               </button>

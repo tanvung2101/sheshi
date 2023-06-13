@@ -24,7 +24,6 @@ async function fetchMasterCapacity(params) {
 }
 
 const ItemSlide = ({ propProduct }) => {
-  console.log('propProduct', propProduct)
   const dispatch = useDispatch();
   const value = useSelector((state) => state.cartItem.value);
   // useEffect(() => {

@@ -1,6 +1,6 @@
 import { Input, SEO } from "@/components";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useState, useEffect } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { BiErrorCircle } from "react-icons/bi";
@@ -10,59 +10,126 @@ import AuthApis from "@/apis/authApis";
 import axiosClient from "@/apis/axiosClient";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { setProfileAuth, setToken } from "@/redux/accountSlice";
+import { STORAGE_KEY } from "@/constants/storage-key";
+// import LocalStorage from "@/utils/storage";
+import { checkConditionLevelUp } from "@/utils/funcs";
+import dynamic from "next/dynamic";
 
-const schema = yup.object({
-  email: yup
-    .string()
-    .email('Email không hợp lệ')
-    .required("Trường bắt buộc")
-    .max(255)
-    .matches(
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      "Email không đúng định dạng"
-    ),
-    password: yup.string().required("Trường bắt buộc").min(6, 'Tối thiểu 6 kí tự').max(30, 'Tối đa 30 kí tự').trim(),
-  type: yup.number().required(),
-}).required('Trường bắt buộc');
+// const Login = dynamic(() => import("./../../components/Login"), {
+//   ssr: false,
+// });
 
-const Login = () => {
-  const router = useRouter()
+const schema = yup
+  .object({
+    email: yup
+      .string()
+      .email("Email không hợp lệ")
+      .required("Trường bắt buộc")
+      .max(255)
+      .matches(
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        "Email không đúng định dạng"
+      ),
+    password: yup
+      .string()
+      .required("Trường bắt buộc")
+      .min(6, "Tối thiểu 6 kí tự")
+      .max(30, "Tối đa 30 kí tự")
+      .trim(),
+    type: yup.number().required(),
+  })
+  .required("Trường bắt buộc");
 
-  const [loading, setLoading] = useState(false)
+const PageLogin = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.account);
+
+  const [loading, setLoading] = useState(false);
   const [hiddentPass, setHiddentPass] = useState(false);
+  const [data, setData] = useState(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       type: LOGIN_TYPE.USER,
-    }
+    },
   });
+
   const onSubmit = (data) => {
-    const {type, email, password} = data;
+    const { type, email, password } = data;
+    setData({ ...data });
+    // AuthApis.login({ type, email, password })
+    //   .then(({ token }) => {
+    //     axiosClient.defaults.headers.common = {
+    //       Authorization: `Bearer ${token}`,
+    //     };
 
-    setLoading(true)
-    AuthApis.login({type, email, password}).then(({token}) => {
-      axiosClient.defaults.headers.common = {
-        Authorization: `Bearer ${token}`
-      }
-
-      return AuthApis.getProfile()
-    }).then((res) => {
-      console.log(res)
-      router.replace('/')
-    }).catch(err => {
-      toast.error(err.response.data.message)
-    }).finally(() => {
-      setLoading(false)
-    })
+    //     LocalStorage.set(STORAGE_KEY.TOKEN, token);
+    //     dispatch(setToken(token));
+    //     return AuthApis.getProfile();
+    //   })
+    //   .then((reponse) => {
+    //     console.log(reponse);
+    //     checkConditionLevelUp(reponse);
+    //     dispatch(setProfileAuth(reponse));
+    //     router.replace("/");
+    //   })
+    //   .catch((err) => {
+    //     toast.error(err?.response?.data?.message);
+    //   })
+    //   .finally(() => {
+    //     setLoading(false);
+    //   });
   };
+
+  useEffect(() => {
+    if (data) {
+      const { type, email, password } = data;
+      console.log(type, email, password);
+      AuthApis.login({ type, email, password })
+        .then(async ({ token }) => {
+          axiosClient.defaults.headers.common = {
+            Authorization: `Bearer ${token}`,
+          };
+
+          await window.localStorage.setItem(
+            STORAGE_KEY.TOKEN,
+            JSON.stringify(token)
+          );
+          const tokenLogin = window.localStorage.getItem(STORAGE_KEY.TOKEN);
+          console.log(JSON.parse(tokenLogin));
+          // LocalStorage.set(STORAGE_KEY.TOKEN, token);
+          dispatch(setToken(JSON.parse(tokenLogin)));
+          return AuthApis.getProfile();
+        })
+        .then((reponse) => {
+          console.log(reponse);
+          checkConditionLevelUp(reponse);
+          dispatch(setProfileAuth(reponse));
+          router.replace("/");
+        })
+        .catch((err) => {
+          toast.error(err?.response?.data?.message);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [data, dispatch, router]);
+
+  // if (token) return router.push("/");
   return (
     <>
       <SEO title="Đăng nhập"></SEO>
+
       <div className="flex items-center my-20">
         <div className="mx-auto min-w-[25%]">
           <h3>Đăng nhập</h3>
@@ -136,9 +203,18 @@ const Login = () => {
                 Quên mật khẩu
               </span>
             </div>
-            <button type="submit" className={`relative flex items-center justify-center w-full gap-4 py-2 mt-5 text-base text-white rounded-md cursor-pointer bg-regal-red 
-            ${loading ? 'after:content-[" "] after:absolute after:top-0 after:left-0 after:right-0 after:w-full after:h-full after:rounded-md after:bg-slate-200 after:bg-opacity-50' : ''}`}>
-              {loading && <div className="w-[18px] h-[18px] border-[4px] border-white border-r-[4px] border-r-transparent  rounded-full bg-opacity-40 transition-all animate-spin"></div>}
+            <button
+              type="submit"
+              className={`relative flex items-center justify-center w-full gap-4 py-2 mt-5 text-base text-white rounded-md cursor-pointer bg-regal-red 
+            ${
+              loading
+                ? 'after:content-[" "] after:absolute after:top-0 after:left-0 after:right-0 after:w-full after:h-full after:rounded-md after:bg-slate-200 after:bg-opacity-50'
+                : ""
+            }`}
+            >
+              {loading && (
+                <div className="w-[18px] h-[18px] border-[4px] border-white border-r-[4px] border-r-transparent  rounded-full bg-opacity-40 transition-all animate-spin"></div>
+              )}
               Đăng nhập
             </button>
             <div className="flex items-center justify-center mt-5">
@@ -156,4 +232,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default PageLogin;

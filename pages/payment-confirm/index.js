@@ -1,6 +1,6 @@
 import CartTabs from "@/components/CartTabs";
 import Link from "next/link";
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiErrorCircle } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import PhoneInput from "react-phone-input-2";
@@ -182,7 +182,7 @@ const PaymentConfirm = () => {
       setWard(ward.data);
     }
     wardCodeCode();
-  }, [idDistrictCode])
+  }, [idDistrictCode]);
 
   return (
     <>
@@ -448,7 +448,7 @@ const PaymentConfirm = () => {
                         {activeDistric && (
                           <div
                             className="h-[250px] p-1 overflow-y-auto mt-1 rounded-md border border-slate-300"
-                            {...register("cityCode")}
+                            {...register("districtCode")}
                           >
                             {district?.length > 0 &&
                               district.map((e) => {
@@ -523,7 +523,7 @@ const PaymentConfirm = () => {
                         {activeWard && (
                           <div
                             className="h-[250px] p-1 overflow-y-auto mt-1 rounded-md border border-slate-300"
-                            {...register("cityCode")}
+                            {...register("wardCode")}
                           >
                             {ward?.length > 0 &&
                               ward.map((e) => {
