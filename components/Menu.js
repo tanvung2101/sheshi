@@ -62,7 +62,6 @@ const Menu = ({ children }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { token, info } = useSelector((state) => state.account);
-  console.log("info", info);
 
   const [isShow, setIsShow] = useState(false);
 
@@ -73,7 +72,7 @@ const Menu = ({ children }) => {
 
   const handler = (e) => {
     if (e.target.value === undefined) {
-      setKeyWord("");
+      setKeyWord();
       return;
     } else {
       setKeyWord(e.target.value.replace(/[.*+?^${}()|[\]\\]/g, " "));
@@ -99,7 +98,8 @@ const Menu = ({ children }) => {
   const onLogoutAction = () => {
     dispatch(deleteAll());
     dispatch(clearInfo());
-    localStorage.removeItem("accessToken");
+    window.localStorage.clear();
+    dispatch(setToken(null))
     router.push("/");
   };
 
@@ -115,8 +115,9 @@ const Menu = ({ children }) => {
   };
   useEffect(() => {
     const tokenLogin = window.localStorage.getItem(STORAGE_KEY.TOKEN);
-    if (JSON.parse(tokenLogin)) {
-      return dispatch(setToken(JSON.parse(tokenLogin)));
+    console.log(tokenLogin);
+    if (tokenLogin) {
+      return dispatch(setToken(tokenLogin));
     } else {
       dispatch(setToken());
     }
@@ -147,11 +148,10 @@ const Menu = ({ children }) => {
                 menu.map((item) => (
                   <li key={item.id} className="cursor-pointer">
                     <Link
-                      className={`${
-                        item.link === router.pathname
-                          ? "text-regal-red"
-                          : "text-[#33333e]"
-                      } text-[16px] hover:text-regal-red`}
+                      className={`${item.link === router.pathname
+                        ? "text-regal-red"
+                        : "text-[#33333e]"
+                        } text-[16px] hover:text-regal-red`}
                       href={`${item.link}`}
                     >
                       {item.page}
@@ -192,7 +192,7 @@ const Menu = ({ children }) => {
                       placeholder="Nhập từ khóa cần kiếm"
                     ></input>
                     <Link
-                      href={`/search?keyword=${keyWord}`}
+                      href={`/search?keyword=${keyWord || ''}`}
                       className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2"
                     >
                       <BsSearch />
@@ -300,7 +300,7 @@ const Menu = ({ children }) => {
                       </Link>
                     </li>
                     <li className="w-full h-full px-3 py-3 rounded-md hover:bg-[#fdf2ec]">
-                      <Link href="" className="flex items-center gap-4">
+                      <Link href="/my-order" className="flex items-center gap-4">
                         <span>
                           <BsReceipt></BsReceipt>
                         </span>
@@ -313,7 +313,7 @@ const Menu = ({ children }) => {
                       onClick={onLogoutAction}
                       className="w-full h-full px-3 py-3 rounded-md hover:bg-[#fdf2ec]"
                     >
-                      <Link href="" className="flex items-center gap-4">
+                      <Link href="/" className="flex items-center gap-4">
                         <span>
                           <BsBoxArrowRight></BsBoxArrowRight>
                         </span>
@@ -376,93 +376,6 @@ const Menu = ({ children }) => {
                 </div>
               </>
             )}
-            {/* signin - register */}
-            {/* <div className="dropdown dropdown-end personIcon">
-                <span tabIndex={0}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-                    />
-                  </svg>
-                </span>
-                <div
-                  tabIndex={0}
-                  className="shadow dropdown-content menu bg-base-100 rounded-box "
-                >
-                  <CartIcon className="w-[250px]">
-                    <Link href="/login">
-                      <Span className="flex items-center gap-2 p-3 text-sm rounded-md hover:bg-[#fef9f2]">
-                        <Image
-                          src={`${signin.src}`}
-                          alt=""
-                          width={22}
-                          height={22}
-                          className="w-4 h-4"
-                        ></Image>
-                        Đăng nhập
-                      </Span>
-                    </Link>
-                    <Link href="/sign-up">
-                      <Span className="flex items-center gap-2 p-2 text-sm rounded-md hover:bg-[#fef9f2]">
-                        <Image
-                          src={`${userPlus.src}`}
-                          alt=""
-                          width={22}
-                          height={22}
-                        ></Image>
-                        Đăng kí
-                      </Span>
-                    </Link>
-                  </CartIcon>
-                </div>
-              </div> */}
-            {/* profile */}
-            {/* <div className="relative flex items-center justify-between">
-                <div className="w-[30px] h-[30px]">
-                  <Image
-                    src="https://images.unsplash.com/photo-1682687220067-dced9a881b56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60"
-                    alt="image"
-                    width={10}
-                    height={10}
-                    className="object-cover w-full h-full rounded-full"
-                  />
-                </div>
-                <ul className="absolute z-[99] right-0 flex flex-col items-start justify-center top-full min-w-[250px] px-3 py-4 bg-[#f6f6f6] rounded-md shadow-md">
-                  <li className='w-full h-full px-3 py-3 rounded-md hover:bg-[#fdf2ec]'>
-                    <Link href="" className="flex items-center gap-4">
-                      <span>
-                        <BsPersonBoundingBox></BsPersonBoundingBox>
-                      </span>
-                      <p className="text-[15px] font-normal">Trang cá nhân</p>
-                    </Link>
-                  </li>
-                  <li className='w-full h-full px-3 py-3 rounded-md hover:bg-[#fdf2ec]'>
-                    <Link href="" className="flex items-center gap-4">
-                      <span>
-                        <BsReceipt></BsReceipt>
-                      </span>
-                      <p className="text-[15px] font-normal">Đơn hàng của tôi</p>
-                    </Link>
-                  </li>
-                  <li className='w-full h-full px-3 py-3 rounded-md hover:bg-[#fdf2ec]'>
-                    <Link href="" className="flex items-center gap-4">
-                      <span>
-                        <BsBoxArrowRight></BsBoxArrowRight>
-                      </span>
-                      <p className="text-[15px] font-normal">Đăng xuất</p>
-                    </Link>
-                  </li>
-                </ul>
-              </div> */}
           </div>
         </div>
       </div>

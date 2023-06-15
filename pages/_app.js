@@ -4,15 +4,15 @@ import { Footer, Menu } from "@/components";
 import "@/styles/globals.css";
 import { ToastContainer, Zoom } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Provider, useDispatch } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import { store } from "@/store";
 import { STORAGE_KEY } from "@/constants/storage-key";
 import { setToken } from "@/redux/accountSlice";
 
-// import { PersistGate } from "redux-persist/integration/react";
-// import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
 
-// let persistor = persistStore(store);
+let persistor = persistStore(store);
 
 export default function App({ Component, pageProps }) {
   // const dispatch = useDispatch();
@@ -25,26 +25,26 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Provider store={store}>
-        {/* <PersistGate loading={null} persistor={persistor}> */}
-        <ToastContainer
-          position="top-right"
-          transition={Zoom}
-          autoClose={5000}
-          hideProgressBar
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="dark"
-        />
-        {/* Same as */}
-        <Menu>
-          <Component {...pageProps} />
-        </Menu>
-        <Footer></Footer>
-        {/* </PersistGate> */}
+        <PersistGate loading={null} persistor={persistor}>
+          <ToastContainer
+            position="top-right"
+            transition={Zoom}
+            autoClose={5000}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+          />
+          {/* Same as */}
+          <Menu>
+            <Component {...pageProps} />
+          </Menu>
+          <Footer></Footer>
+        </PersistGate>
       </Provider>
     </>
   );

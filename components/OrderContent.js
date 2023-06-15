@@ -2,36 +2,39 @@ import { DELIVERY_METHOD_MAP, PAYMENT_METHOD_MAP } from "@/constants";
 import React from "react";
 
 const OrderContent = ({ orderSearchItem, address }) => {
+  console.log('orderSearchItem', orderSearchItem)
   return (
-    <div className="flex items-start gap-8">
-      <div>
+    <div className="flex items-start justify-start flex-wrap">
+      <div className="flex flex-col w-[25%] text-center pr-3">
         <div className="py-2 border-b-[1px] border-b-gray-300">
-          <p className="uppercase font-bold text-[16px] text-center">
+          <span className="uppercase font-bold text-[16px]">
             địa chỉ nhận hàng
-          </p>
+          </span>
         </div>
         {orderSearchItem && (
-          <div className="flex flex-col items-center">
-            <span className="text-base font-medium text-center">
+          // <div className="flex flex-col items-center leading-6">
+          <>
+            <span className="text-base font-normal leading-6 text-center">
               {orderSearchItem.address}
             </span>
-            <span className="text-base font-medium text-center">
+            <span className="text-base font-normal leading-6 text-center">
               {address.addressWard}
             </span>
-            <span className="text-base font-medium text-center">
+            <span className="text-base font-normal leading-6 text-center">
               {address.addressDistrict}
             </span>
-            <span className="text-base font-medium text-center">
+            <span className="text-base font-normal leading-6 text-center">
               {address.addressCity}
             </span>
-            <span className="text-base font-medium text-center">
+            <span className="text-base font-normal leading-6 text-center">
               {orderSearchItem?.telephone}
             </span>
-          </div>
+          </>
+          // </div>
         )}
-      </div>
-      <div>
-        <div className="py-2 px-[60px] border-b-[1px] border-b-gray-300">
+      </div >
+      <div className="flex flex-col w-[25%] text-center px-3">
+        <div className="py-2 border-b-[1px] border-b-gray-300">
           <span className="uppercase font-bold text-[16px]">
             ĐƠN VỊ GIAO HÀNG
           </span>
@@ -41,8 +44,8 @@ const OrderContent = ({ orderSearchItem, address }) => {
             DELIVERY_METHOD_MAP.find((e) => e.value === orderSearchItem.shipId)?.label}
         </p>
       </div>
-      <div>
-        <div className="py-2 px-[60px] border-b-[1px] border-b-gray-300">
+      <div className="flex flex-col w-[25%] text-center px-3">
+        <div className="py-2 border-b-[1px] border-b-gray-300">
           <span className="uppercase font-medium text-[16px]">
             phương thức thanh toán
           </span>
@@ -54,8 +57,8 @@ const OrderContent = ({ orderSearchItem, address }) => {
             )?.label}
         </p>
       </div>
-      <div>
-        <div className="py-2 px-[60px] border-b-[1px] border-b-gray-300">
+      <div className="flex flex-col w-[25%] text-center pl-3">
+        <div className="py-2 border-b-[1px] border-b-gray-300">
           <span className="uppercase font-bold text-[16px]">GHI CHÚ</span>
         </div>
         <p className="text-base font-normal leading-6 text-center">

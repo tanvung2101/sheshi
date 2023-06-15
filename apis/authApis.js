@@ -22,8 +22,8 @@ const AuthApis = {
       emailOtp,
       referralCode,
     }),
-  sendOtp: (payload) => axiosClient.post("/api/otp/send", payload),
-  restPassword: ({ email, otpCode, password, rePassword }) =>
+  sendOTP: (payload) => axiosClient.post("/api/otp/send", payload),
+  resetPassword: ({ email, otpCode, password, rePassword }) =>
     axiosClient.post("/api/user/auth/forgot-password/reset", {
       email,
       otpCode,

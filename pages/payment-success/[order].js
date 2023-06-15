@@ -25,11 +25,12 @@ async function fetchMasterCapacity(params) {
 
 function PagePaymentSucces({ orderCode }) {
   const { query } = useRouter();
+
   const [order, setOrder] = useState();
   const [masterCapacity, setMasterCapacity] = useState();
   const [masterUnit, setMasterUnit] = useState();
   const [product, setProduct] = useState([]);
-  
+
   const address = useLocation(order?.cityCode, order?.districtCode, order?.wardCode)
 
   const fetchMasterData = async () => {
@@ -52,44 +53,44 @@ function PagePaymentSucces({ orderCode }) {
   const getCartItemsInfo = useCallback(async () => {
     let cartItemsInfo = []
     const productOption = [];
-    if(order) {
-      await Promise.all( order?.orderItem.map(async (item) => {
-       const params = {
-        productId: item.productId,
-        id: item.subProductId,
-       };
-       const data = await axios.get(
-        "http://localhost:3001/api/product/get-capacity-product",
-        { params }
-      );
-      cartItemsInfo.push(data.data);
-     }))
+    if (order) {
+      await Promise.all(order?.orderItem.map(async (item) => {
+        const params = {
+          productId: item.productId,
+          id: item.subProductId,
+        };
+        const data = await axios.get(
+          "http://localhost:3001/api/product/get-capacity-product",
+          { params }
+        );
+        cartItemsInfo.push(data.data);
+      }))
     }
-  if (masterCapacity?.length > 0) {
-    cartItemsInfo.map((e) => {
-      // console.log("capacity", e);
-      const capacity = masterCapacity?.find((cap) => cap.id === e.capacityId);
-      const unit = masterUnit?.find((un) => un.id === e.unitId);
-      productOption.push({
-        capacityId: capacity?.id,
-        unitId: unit?.id,
-        price: e.price,
-        value: capacity?.id + " " + unit?.id,
-        name: capacity?.name + " " + unit?.name,
-        id: e.id,
-        productId: e.productId,
+    if (masterCapacity?.length > 0) {
+      cartItemsInfo.map((e) => {
+        // console.log("capacity", e);
+        const capacity = masterCapacity?.find((cap) => cap.id === e.capacityId);
+        const unit = masterUnit?.find((un) => un.id === e.unitId);
+        productOption.push({
+          capacityId: capacity?.id,
+          unitId: unit?.id,
+          price: e.price,
+          value: capacity?.id + " " + unit?.id,
+          name: capacity?.name + " " + unit?.name,
+          id: e.id,
+          productId: e.productId,
+        });
+        setProduct(productOption);
       });
-      setProduct(productOption);
-    });
-  }
+    }
   }, [masterCapacity, masterUnit, order]);
   useEffect(() => {
     getCartItemsInfo();
   }, [getCartItemsInfo]);
   const cancelOrder = async () => {
     const body = {
-          status: STATUS_ORDER.REJECT,
-          productDetail: order.orderItem,
+      status: STATUS_ORDER.REJECT,
+      productDetail: order.orderItem,
     }
     Swal.fire({
       title: 'Bạn thật sự',
@@ -102,11 +103,11 @@ function PagePaymentSucces({ orderCode }) {
     }).then(async (result) => {
       if (result.isConfirmed) {
         orderApis.cancelOrder(order.id, body)
-      .then(() => {})
-      .catch(err => toast.error(err.mesage))
-      .finally(() => {
-        getCartItemsInfo()
-      });
+          .then(() => { })
+          .catch(err => toast.error(err.mesage))
+          .finally(() => {
+            getCartItemsInfo()
+          });
         Swal.fire(
           'Deleted!',
           'Your file has been deleted.',
@@ -164,60 +165,10 @@ function PagePaymentSucces({ orderCode }) {
           </div>
           <div className="flex flex-col items-center my-14 ">
             <h4 className="text-[22px]">Chi tiết đơn hàng</h4>
-            {/* <div className="flex items-start gap-8">
-              <div>
-                <div className="py-2 border-b-[1px] border-b-gray-300">
-                  <p className="uppercase font-bold text-[16px] text-center">
-                    địa chỉ nhận hàng
-                  </p>
-                </div>
-                {order.length !== 0 && (
-                  <div className='flex flex-col items-center'>
-                    <span className="text-base font-medium text-center">
-                    {order.address} 
-                  </span>
-                  <span className="text-base font-medium text-center">{address.addressWard}</span>
-                  <span className="text-base font-medium text-center">{address.addressDistrict}</span>
-                  <span className="text-base font-medium text-center">{address.addressCity}</span>
-                  <span className="text-base font-medium text-center">{order?.telephone}</span>
-                  </div>
-                )}
-              </div>
-              <div>
-                <div className="py-2 px-[60px] border-b-[1px] border-b-gray-300">
-                  <span className="uppercase font-bold text-[16px]">
-                    ĐƠN VỊ GIAO HÀNG
-                  </span>
-                </div>
-                <p className="text-base font-medium leading-6 text-center">
-                {DELIVERY_METHOD_MAP.find(e => e.value === order.shipId).label}
-                </p>
-              </div>
-              <div>
-                <div className="py-2 px-[60px] border-b-[1px] border-b-gray-300">
-                  <span className="uppercase font-medium text-[16px]">
-                    phương thức thanh toán
-                  </span>
-                </div>
-                <p className="text-base font-medium leading-6 text-center">
-                  {PAYMENT_METHOD_MAP.find(e => e.value === order?.orderPayment?.paymentMethod).label}
-                </p>
-              </div>
-              <div>
-                <div className="py-2 px-[60px] border-b-[1px] border-b-gray-300">
-                  <span className="uppercase font-bold text-[16px]">
-                    GHI CHÚ
-                  </span>
-                </div>
-                <p className="text-base font-normal leading-6 text-center">
-                  {order?.note}
-                </p>
-              </div>
-            </div> */}
             <OrderContent
-          orderSearchItem={order}
-          address={address}
-        ></OrderContent>
+              orderSearchItem={order}
+              address={address}
+            ></OrderContent>
             <div className="mt-10 w-full border-b-[1px] border-b-gray-300">
               <div className="flex w-full">
                 <div className="flex flex-col w-[15%]">
@@ -245,7 +196,7 @@ function PagePaymentSucces({ orderCode }) {
                       giá
                     </p>
                   </div>
-                  
+
                 </div>
                 <div className="flex flex-col w-[10%]">
                   <div className="bg-[#fdf2ec] pt-2 pr-2 pb-4">
@@ -256,72 +207,72 @@ function PagePaymentSucces({ orderCode }) {
                 </div>
               </div>
               {order &&
-              order.orderItem?.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex w-full pb-2"
-                >
-                  <div className="flex flex-col w-[15%]">
-                    <div className="px-2 mt-3">
-                      <Image
-                        src={item?.product.productImage[0]?.image}
-                        alt=""
-                        width={80}
-                        height={50}
-                        className="w-[60px] h-[50px] object-cover"
-                      />
+                order.orderItem?.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex w-full pb-2"
+                  >
+                    <div className="flex flex-col w-[15%]">
+                      <div className="px-2 mt-3">
+                        <Image
+                          src={item?.product.productImage[0]?.image}
+                          alt=""
+                          width={80}
+                          height={50}
+                          className="w-[60px] h-[50px] object-cover"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-col w-[45%]">
+                      <div className="flex flex-col mt-3">
+                        <p className="text-lg text-regal-red hover:text-[#ecbe26]">
+                          <Link href={`/san-pham/${item?.product.productSlug}`}>
+                            {item?.product.name}
+                          </Link>
+                        </p>
+                        <p className="text-lg">
+                          Kích cỡ:{" "}
+                          {
+                            product?.find(
+                              (e) =>
+                                e.id === item.subProductId &&
+                                e.productId &&
+                                item.productId
+                            )?.name
+                          }
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex flex-col w-[5%]">
+                      <div className="flex flex-col mt-3">
+                        <span className="text-lg">
+                          {order &&
+                            order.orderItem[0]?.quantity}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col w-[25%]">
+                      <div className="flex flex-col mt-3">
+                        <p className="text-lg text-center">
+                          {item?.price?.toLocaleString("vi", {
+                            style: "currency",
+                            currency: "VND",
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex flex-col w-[10%]">
+                      <div className="flex flex-col px-2 mt-3 ">
+                        <p className="text-lg text-right">
+                          {item?.price?.toLocaleString("vi", {
+                            style: "currency",
+                            currency: "VND",
+                          })}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex flex-col w-[45%]">
-                    <div className="flex flex-col mt-3">
-                      <p className="text-lg text-regal-red hover:text-[#ecbe26]">
-                        <Link href={`/san-pham/${item?.product.productSlug}`}>
-                          {item?.product.name}
-                        </Link>
-                      </p>
-                      <p className="text-lg">
-                        Kích cỡ:{" "}
-                        {
-                          product?.find(
-                            (e) =>
-                              e.id === item.subProductId &&
-                              e.productId &&
-                              item.productId
-                          )?.name
-                        }
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex flex-col w-[5%]">
-                    <div className="flex flex-col mt-3">
-                      <span className="text-lg">
-                        {order &&
-                          order.orderItem[0]?.quantity}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex flex-col w-[25%]">
-                    <div className="flex flex-col mt-3">
-                      <p className="text-lg text-center">
-                        {item?.price?.toLocaleString("vi", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex flex-col w-[10%]">
-                    <div className="flex flex-col px-2 mt-3 ">
-                      <p className="text-lg text-right">
-                        {item?.price?.toLocaleString("vi", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
             <div className="w-full mt-2">
               <div className="flex flex-col w-[25%] float-right">
@@ -364,13 +315,13 @@ function PagePaymentSucces({ orderCode }) {
 
           <div className="flex items-center justify-center gap-8 mb-14">
             <button className="px-3 py-2 font-serif text-base font-light text-white border rounded-md border-regal-red bg-regal-red">
-                    <Link href="/">Quay trở lại trang chủ</Link>
+              <Link href="/">Quay trở lại trang chủ</Link>
             </button>
-            <button 
-                disabled={order?.orderStatus !== STATUS_ORDER.WAITTING_CONFIRM} 
-                onClick={() => cancelOrder()} className={`relative px-3 py-2 font-serif text-base font-light text-white border rounded-md bg-regal-red 
+            <button
+              disabled={order?.orderStatus !== STATUS_ORDER.WAITTING_CONFIRM}
+              onClick={() => cancelOrder()} className={`relative px-3 py-2 font-serif text-base font-light text-white border rounded-md bg-regal-red 
                 ${order?.orderStatus !== STATUS_ORDER.WAITTING_CONFIRM ? "cursor-not-allowed after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-slate-200 after:bg-opacity-30" : ''}`}>
-                    <span >Hủy đơn hàng</span>
+              <span >Hủy đơn hàng</span>
             </button>
           </div>
         </div>
@@ -393,9 +344,9 @@ function PagePaymentSucces({ orderCode }) {
 //   };
 // }
 
-export async function getServerSideProps (context) {
+export async function getServerSideProps(context) {
   const { order } = context.params;
-  if(!order){
+  if (!order) {
 
   }
   // console.log(order);
