@@ -11,6 +11,8 @@ import { BsFillCameraFill } from 'react-icons/bs'
 import { useSelector } from 'react-redux'
 import logoIcon from "../public/logosheshe.png";
 import Compressor from 'compressorjs';
+import commonApis from '@/apis/commonApis'
+import imageCompression from 'browser-image-compression';
 
 const NavbarUser = ({ bgPageProfile, bgPageMyOrder, bgPageMyBonus }) => {
     const { token, info } = useSelector((state) => state.account);
@@ -20,7 +22,11 @@ const NavbarUser = ({ bgPageProfile, bgPageMyOrder, bgPageMyBonus }) => {
     const [commissionAutomation, setCommissionAutomation] = useState()
     const [compressedFile, setCompressedFile] = useState()
 
+    const [avatar, setAvatar] = useState();
+    const [avatarPreview, setAvatarPreview] = useState();
+
     const refAvatar = useRef()
+
 
 
     const fetchMasterData = useCallback(async () => {
@@ -53,12 +59,6 @@ const NavbarUser = ({ bgPageProfile, bgPageMyOrder, bgPageMyBonus }) => {
             new Compressor(file, {
                 quality: 0.6,
                 success: (compressedResult) => {
-                    const formData = new FormData();
-
-                    // The third parameter is required for server
-                    formData.append('file', compressedResult);
-                    console.log('fgshtjrj', formData)
-                    console.log(compressedResult)
                     if (compressedResult) setCompressedFile(compressedResult)
                 }
             })
@@ -67,12 +67,23 @@ const NavbarUser = ({ bgPageProfile, bgPageMyOrder, bgPageMyBonus }) => {
         }
     }
 
-    const onChangeAvater = (file) => {
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("fileName", file?.name);
-        console.log(formData.append("file", file))
-    }
+    const onChangeAvater = useCallback((file) => {
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append("fileName", file.name);
+        try {
+            commonApis.preUploadFile(file).then(async (response) => {
+                const payloadUpdateProfile = {
+                    avatar: response,
+                    id: info?.id,
+                    fullName: info?.userInformation?.fullName
+                }
+                console.log(payloadUpdateProfile)
+            })
+        } catch (error) {
+
+        }
+    }, [info?.id, info?.userInformation?.fullName])
 
     const onGetAvatar = () => {
         let avatar = "";
@@ -87,8 +98,40 @@ const NavbarUser = ({ bgPageProfile, bgPageMyOrder, bgPageMyBonus }) => {
 
     useEffect(() => {
         if (compressedFile) onChangeAvater(compressedFile)
-    }, [compressedFile])
+    }, [compressedFile, onChangeAvater])
     // console.log('info', info)
+
+    async function handleImageUpload(event) {
+
+        const imageFile = event.target.files[0];
+        console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
+        console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
+
+        const options = {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+        }
+        try {
+            const compressedFile = await imageCompression(imageFile, options);
+            console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+            console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+            console.log(compressedFile)
+            await commonApis.preUploadFile(compressedFile).then(async (response) => {
+                const payloadUpdateProfile = {
+                    avatar: response,
+                    id: info?.id,
+                    fullName: info?.userInformation?.fullName
+                }
+                console.log(payloadUpdateProfile)
+            }); // write your own logic
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
     return (
         <div className="flex flex-col items-center justify-center gap-5 w-[25%] px-4">
             <div className="w-full h-[200px] rounded-md bg-[#fdf2ec] flex flex-col items-center justify-start">
@@ -103,16 +146,17 @@ const NavbarUser = ({ bgPageProfile, bgPageMyOrder, bgPageMyBonus }) => {
                     <button className="absolute bottom-0 right-0 flex items-start justify-center w-8 h-8 bg-white rounded-full">
                         <label htmlFor="image">
                             <BsFillCameraFill className="mt-[5px] text-lg"></BsFillCameraFill>
-                            <form>
-                                <input
-                                    ref={refAvatar}
-                                    id="image"
-                                    type="file"
-                                    accept="image/*"
-                                    className="hidden imageUser"
-                                    onChange={beforChangeAvatar}
-                                />
-                            </form>
+                            {/* <form> */}
+                            <input
+                                // ref={refAvatar}
+                                id="image"
+                                type="file"
+                                name='avatar'
+                                accept="image/*"
+                                className="hidden imageUser"
+                                onChange={handleImageUpload}
+                            />
+                            {/* </form> */}
                         </label>
                     </button>
                 </div>

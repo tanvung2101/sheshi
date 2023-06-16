@@ -53,7 +53,7 @@ const PageProfile = () => {
   const { token, info } = useSelector((state) => state.account);
   const dispatch = useDispatch();
   const router = useRouter();
-  // console.log(token);
+  console.log(info);
 
   const [active, setActive] = useState(false);
   const [activeDistric, setActiveDistric] = useState(false);

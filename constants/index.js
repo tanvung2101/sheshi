@@ -82,3 +82,17 @@ export const COMMISSION_TYPE = {
 };
 
 
+export const BONUS_TYPE = {
+  RECEIVER: 1,
+  WITHDRAW: 2,
+  REQUEST: 3,
+  REJECT: 4
+};
+
+export const BONUS_TYPE_MAP = [
+  { value: 1, label: "Nhận hoa hồng" },
+  { value: 2, label: "Rút hoa hồng" },
+  { value: 3, label: "Yêu cầu rút" },
+  { value: 4, label: "Yêu cầu bị từ chối" },
+];
+

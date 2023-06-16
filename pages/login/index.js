@@ -266,17 +266,17 @@ const PageLogin = ({ login }) => {
   );
 };
 
-export async function getServerSideProps(context) {
-  // console.log(req);
-  // console.log('hêllel',context);
-  const data = await axios.post('http://0.0.0.0:3001/api/user/auth/sign-in', {
-    email: 'vung48963@donga.edu.vn',
-    password: '111111111'
-  });
-  // console.log(data.data);
-  return {
-    props: {}, // Will be passed to the page component as props
-  }
-}
+// export async function getServerSideProps(context) {
+//   // console.log(req);
+//   // console.log('hêllel',context);
+//   const data = await axios.post('http://0.0.0.0:3001/api/user/auth/sign-in', {
+//     email: 'vung48963@donga.edu.vn',
+//     password: '111111111'
+//   });
+//   // console.log(data.data);
+//   return {
+//     props: {}, // Will be passed to the page component as props
+//   }
+// }
 
 export default PageLogin;
