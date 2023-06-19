@@ -35,8 +35,7 @@ const PageMyOrder = () => {
     }, [])
     return (
         <>
-            <div className="flex items-start justify-center px-24 mt-8 mb-20">
-                <NavbarUser bgPageMyOrder={true}></NavbarUser>
+            <NavbarUser bgPageMyOrder={true}>
                 <div className="w-[75%] flex-col items-start">
                     <h3 className='text-[25px] pb-8'>Đơn hàng của tôi</h3>
                     {orderList && orderList.map(item =>
@@ -65,7 +64,7 @@ const PageMyOrder = () => {
                         </div>
                     </div> */}
                 </div>
-            </div>
+            </NavbarUser>
         </>
     )
 }

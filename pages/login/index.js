@@ -1,4 +1,4 @@
-import { Input, SEO } from "@/components";
+import { Button, Input, SEO } from "@/components";
 import React, { useState, useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,6 +16,7 @@ import { STORAGE_KEY } from "@/constants/storage-key";
 import { checkConditionLevelUp } from "@/utils/funcs";
 import dynamic from "next/dynamic";
 import axios from "axios";
+import Link from "next/link";
 
 // const Login = dynamic(() => import("./../../components/Login"), {
 //   ssr: false,
@@ -64,36 +65,6 @@ const PageLogin = ({ login }) => {
     },
   });
 
-  // const onSubmit = (values) => {
-  //   const { type, email, password } = values;
-  //   setLoading(true)
-  //   AuthApis.login({ type, email, password })
-  //     .then(({ token }) => {
-  //       axiosClient.defaults.headers.common = {
-  //         Authorization: `Bearer ${token}`,
-  //       };
-
-  //       window.localStorage.setItem(
-  //         STORAGE_KEY.TOKEN,
-  //         JSON.stringify(token)
-  //       );
-
-  //       dispatch(setToken(token));
-  //       return AuthApis.getProfile();
-  //     })
-  //     .then((res) => {
-  //       console.log(reponse);
-  //       checkConditionLevelUp(res);
-  //       dispatch(setProfileAuth(res));
-  //       router.replace("/");
-  //     })
-  //     .catch((err) => {
-  //       toast.error(err?.response?.data?.message);
-  //     })
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  // };
 
 
   const onSubmit = (values) => {
@@ -117,50 +88,13 @@ const PageLogin = ({ login }) => {
         router.push("/");
       })
       .catch((err) => {
-        toast.error(err?.response?.data?.message);
+        // toast.error(err?.response?.data?.message);
+        toast.error('Mật khẩu hoặc email sai ');
       })
       .finally(() => {
         setLoading(false);
       });
   };
-
-
-
-  // useEffect(() => {
-  //   if (data) {
-  //     const { type, email, password } = data;
-  //     console.log(type, email, password);
-  //     AuthApis.login({ type, email, password })
-  //       .then(async ({ token }) => {
-  //         axiosClient.defaults.headers.common = {
-  //           Authorization: `Bearer ${token}`,
-  //         };
-
-  //         await window.localStorage.setItem(
-  //           STORAGE_KEY.TOKEN,
-  //           JSON.stringify(token)
-  //         );
-  //         const tokenLogin = window.localStorage.getItem(STORAGE_KEY.TOKEN);
-  //         // console.log(JSON.parse(tokenLogin));
-  //         // LocalStorage.set(STORAGE_KEY.TOKEN, token);
-  //         dispatch(setToken(token));
-  //         return AuthApis.getProfile();
-  //       })
-  //       .then((reponse) => {
-  //         console.log(reponse);
-  //         checkConditionLevelUp(reponse);
-  //         dispatch(setProfileAuth(reponse));
-  //         router.replace("/");
-  //       })
-  //       .catch((err) => {
-  //         toast.error(err?.response?.data?.message);
-  //       })
-  //       .finally(() => {
-  //         setLoading(false);
-  //       });
-  //   }
-  // }, [data, dispatch, router]);
-  // useEffect(() => {
   if (token) return router.push("/");
   // }, [token])
   return (
@@ -186,7 +120,7 @@ const PageLogin = ({ login }) => {
                   {...register("email")}
                   placeholder="Nhập email của bạn"
                   type="text"
-                  className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm${errors?.email?.message
+                  className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.email?.message
                     ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
                     : "border border-slate-300 hover:border hover:border-slate-500"
                     }`}
@@ -233,30 +167,18 @@ const PageLogin = ({ login }) => {
                 {errors?.password?.message}
               </span>
             </div>
-            <div className="mt-4 cursor-pointer">
-              <span className="text-sm text-regal-red hover:text-yellow-400">
+            <div className="mt-4 cursor-pointer mb-10">
+              <Link href='/forgot-password' className="text-sm text-regal-red hover:text-yellow-400">
                 Quên mật khẩu
-              </span>
+              </Link>
             </div>
-            <button
-              type="submit"
-              className={`relative flex items-center justify-center w-full gap-4 py-2 mt-5 text-base text-white rounded-md cursor-pointer bg-regal-red 
-            ${loading
-                  ? 'after:content-[" "] after:absolute after:top-0 after:left-0 after:right-0 after:w-full after:h-full after:rounded-md after:bg-slate-200 after:bg-opacity-50'
-                  : ""
-                }`}
-            >
-              {loading && (
-                <div className="w-[18px] h-[18px] border-[4px] border-white border-r-[4px] border-r-transparent  rounded-full bg-opacity-40 transition-all animate-spin"></div>
-              )}
-              Đăng nhập
-            </button>
+            <Button className='w-full' loading={loading} disabled={loading}>Đăng nhập</Button>
             <div className="flex items-center justify-center mt-5">
               <span className="text-xs text-center">
                 Bạn đã có tài khoản SHESHI?{" "}
-                <strong className="ml-1 text-[14px] text-regal-red hover:text-yellow-400">
+                <Link href='/sign-up' className="ml-1 text-[14px] text-regal-red font-medium hover:text-yellow-400">
                   Đăng kí
-                </strong>
+                </Link>
               </span>
             </div>
           </form>
@@ -266,17 +188,5 @@ const PageLogin = ({ login }) => {
   );
 };
 
-// export async function getServerSideProps(context) {
-//   // console.log(req);
-//   // console.log('hêllel',context);
-//   const data = await axios.post('http://0.0.0.0:3001/api/user/auth/sign-in', {
-//     email: 'vung48963@donga.edu.vn',
-//     password: '111111111'
-//   });
-//   // console.log(data.data);
-//   return {
-//     props: {}, // Will be passed to the page component as props
-//   }
-// }
 
 export default PageLogin;

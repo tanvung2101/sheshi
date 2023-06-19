@@ -6,11 +6,10 @@ const Input = ({ className, ...props }, ref) => {
       <input
         {...props}
         ref={ref}
-        className={`px-4 py-2 rounded-md w-full outline-none text-sm ${
-          props.errors
-            ? "focus:ring-2 focus:ring-red-300 border border-red-500"
-            : "border border-slate-400 focus:border-slate-600"
-        }`}
+        className={`${className} px-4 py-2 rounded-md w-full outline-none text-sm ${props.errors
+          ? "focus:ring-[4px] focus:ring-red-300 border-[1px] focus:border-red-500 border-red-500"
+          : "border border-slate-400 focus:border-slate-600"
+          }`}
         // id={props.id}
         placeholder={props.placeholder}
       >

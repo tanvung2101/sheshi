@@ -5,6 +5,7 @@ import { BONUS_TYPE, BONUS_TYPE_MAP, MASTER_DATA_NAME } from '@/constants';
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react'
 import { BsFillCameraFill } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
@@ -19,10 +20,12 @@ async function fetchMasterCapacity(params) {
 
 const PageMyBonus = () => {
     const { token, info } = useSelector((state) => state.account);
+    const router = useRouter()
 
     const [bonusList, setBonusList] = useState([]);
     const [totalBonus, setTotalBonus] = useState(0);
     const [masterOrderStatus, setMasterOrderStatus] = useState()
+    const [showModal, setShowModal] = React.useState(false);
 
     const fetchMasterData = async () => {
         const masterOrder = await fetchMasterCapacity({
@@ -36,7 +39,7 @@ const PageMyBonus = () => {
         const bonus = await accountApis.getMyBonus();
         const total = await accountApis.countTotalBonus({ userId: info?.id })
         setBonusList(bonus);
-        setTotalBonus(total.data === 0 ? 0 : total)
+        setTotalBonus(total?.data === 0 ? 0 : total)
     }, [info?.id])
 
     useEffect(() => {
@@ -44,10 +47,11 @@ const PageMyBonus = () => {
         fetchBounsList()
     }, [fetchBounsList])
 
+
+
     return (
         <>
-            <div className="flex items-start justify-center px-24 mt-8 mb-20">
-                <NavbarUser bgPageMyBonus={true}></NavbarUser>
+            <NavbarUser bgPageMyBonus={true}>
                 <div className="w-[75%] flex-col items-start">
                     <h3 className='text-3xl mb-4'>Lịch sử thưởng</h3>
                     <table className='w-full'>
@@ -61,8 +65,8 @@ const PageMyBonus = () => {
                                 <th>Loại</th>
                             </tr>
                         </thead>
-                        {bonusList.map((bonus, index) => {
-                            console.log(index)
+                        {bonusList && bonusList.map((bonus, index) => {
+                            // console.log(index)
                             return (
                                 <tbody key={bonus.id}>
                                     <tr className={`text-center ${(index + 1) % 2 === 0 ? 'bg-white' : 'bg-[#f2f2f2]'}`}>
@@ -81,7 +85,7 @@ const PageMyBonus = () => {
                                             currency: "VND",
                                         })}</td>
                                         <td className=''>
-                                            <span className={`${bonus.type === BONUS_TYPE.RECEIVER ? 'bg-green-600' : bonus.type === BONUS_TYPE.WITHDRAW ? 'bg-[#0dcaf0]' : bonus.type === BONUS_TYPE.REQUEST ? 'bg-red-600' : 'bg-red-600'} rounded-lg text-[12px] font-bold text-white px-2 pb-1`}>{BONUS_TYPE_MAP.find((e) => e.value === bonus.type)?.label}</span>
+                                            <span className={`${bonus.type === BONUS_TYPE.RECEIVER ? 'bg-green-600' : bonus.type === BONUS_TYPE.WITHDRAW ? 'bg-[#0dcaf0]' : bonus.type === BONUS_TYPE.REQUEST ? 'bg-yellow-400' : 'bg-red-600'} rounded-lg text-[12px] font-bold text-white px-2 pb-1`}>{BONUS_TYPE_MAP.find((e) => e.value === bonus.type)?.label}</span>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -90,21 +94,25 @@ const PageMyBonus = () => {
                         <tbody>
                             <tr className='text-center bg-[#c7dbd2]'>
                                 <td className='pt-3 pb-4 font-bold'>Tổng thưởng</td>
-                                <td className='font-bold' colSpan='4'>{totalBonus.toLocaleString("vi", {
+                                <td className='font-bold' colSpan='4'>{totalBonus && totalBonus.toLocaleString("vi", {
                                     style: "currency",
                                     currency: "VND",
                                 })}</td>
                                 <td colSpan='1' className=''>
-                                    {/* <button className={`relative px-2 pt-1 pb-2 rounded-md text-sm text-white bg-regal-red ${totalBonus === 0 && "after:content-[''] after:absolute after:top-0 after:left-0 after:right-0 after:w-full after:h-full after:rounded-md after:bg-slate-300 after:bg-opacity-20"}`}>
-                                    </button> */}
-                                    <label className={`relative px-2 pt-1 pb-2 rounded-md text-sm text-white bg-regal-red cursor-pointer ${totalBonus === 0 && "after:content-[''] after:absolute after:top-0 after:left-0 after:right-0 after:w-full after:h-full after:rounded-md after:bg-slate-300 after:bg-opacity-20"}`} htmlFor="my_modal_7">Yeu cau rut tien thuong</label>
-                                    <ModalWithdraw></ModalWithdraw>
+                                    <button
+                                        disabled={totalBonus && totalBonus === 0}
+                                        className={`relative px-2 pt-1 pb-2 rounded-md text-sm text-white bg-regal-red ${totalBonus === 0 && "after:content-[''] after:absolute after:top-0 after:left-0 after:right-0 after:w-full after:h-full after:rounded-md after:bg-slate-300 after:bg-opacity-20"}`}
+                                        type="button"
+                                        onClick={() => setShowModal(true)}
+                                    >Yêu cầu rút tiền thưởng</button>
+                                    <ModalWithdraw showModal={showModal} setShowModal={() => setShowModal(false)} totalBonus={totalBonus} userId={info?.id}></ModalWithdraw>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </NavbarUser>
+
         </>
     )
 }

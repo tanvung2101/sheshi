@@ -2,7 +2,7 @@ import InputCopy from "@/components/InputCopy";
 import PhoneInput from "@/components/PhoneInput";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { BiErrorCircle } from "react-icons/bi";
 import {
   BsCurrencyDollar,
@@ -19,6 +19,13 @@ import { useRouter } from "next/navigation";
 import RequireAuth from "@/components/RequireAuth";
 import { setProfileAuth } from "@/redux/accountSlice";
 import NavbarUser from "@/components/NavbarUser";
+import accountApis from "@/apis/accountApi";
+import configDataApis from "@/apis/configDataApis";
+import { MASTER_DATA_NAME, STATUS_ORDER } from "@/constants";
+import orderApis from "@/apis/orderApis";
+import { useLocation } from "@/hook/useLocation";
+import { toast } from "react-toastify";
+import { Button } from "@/components";
 
 const schema = yup.object({
   fullName: yup.string().required().min(3).max(50).trim(),
@@ -26,27 +33,9 @@ const schema = yup.object({
   phoneNumber: yup.string().min(9).max(20).trim().required().nullable(),
   address: yup.string().max(255).trim().required("Trường bắt buộc").nullable(),
   userCode: yup.string(),
-  cityCode: yup
-    .object({
-      id: yup.number().required(),
-      name: yup.string().required(),
-    })
-    .required()
-    .nullable(),
-  districtCode: yup
-    .object({
-      id: yup.number().required(),
-      name: yup.string().required(),
-    })
-    .required()
-    .nullable(),
-  wardCode: yup
-    .object({
-      id: yup.number().required(),
-      name: yup.string().required(),
-    })
-    .required()
-    .nullable(),
+  cityCode: yup.number().integer().required().nullable(),
+  districtCode: yup.number().integer().required().nullable(),
+  wardCode: yup.number().integer().required().nullable(),
 });
 
 const PageProfile = () => {
@@ -55,21 +44,80 @@ const PageProfile = () => {
   const router = useRouter();
   console.log(info);
 
+  const [listReferrer, setListReferrer] = useState([])
+  const [listReferrerWithLevel, setListReferrerWithLevel] = useState();
+  const [myBuyOfMonth, setMyBuyOfMonth] = useState(0);
+  const [refBuyOfMonth, setRefBuyOfMonth] = useState(0);
+  const [loadingUpdateProfile, setLoadingUpdateProfile] = useState(false)
+
+
   const [active, setActive] = useState(false);
   const [activeDistric, setActiveDistric] = useState(false);
   const [activeWard, setActiveWard] = useState(false);
 
-  const [idCityCode, setIdCityCode] = useState({ id: 0, name: "" });
+  const [idCityCode, setIdCityCode] = useState(info?.userInformation?.cityCode);
   const [city, setCity] = useState();
-  const [idDistrictCode, setIdDistrictCode] = useState({ id: 0, name: "" });
+  const [idDistrictCode, setIdDistrictCode] = useState(info?.userInformation?.districtCode);
   const [district, setDistrict] = useState();
-  const [idWardCode, setIdWardCode] = useState({ id: 0, name: "" });
+  const [idWardCode, setIdWardCode] = useState(info?.userInformation?.wardCode);
   const [ward, setWard] = useState();
+  const address = useLocation(idCityCode, idDistrictCode, idWardCode)
+  // console.log(address)
+
+
+
+  const getListReferrer = useCallback(async () => {
+    const accounts = await accountApis.getMyReferrer(info?.id);
+    setListReferrer(accounts)
+    const listLevel = await configDataApis.getAllConfigData({
+      idMaster: MASTER_DATA_NAME.LEVEL_USER
+    })
+    const referrerWithLevel = [];
+    listLevel.map(level => {
+      const userWithLevel = accounts.filter((a) => a.register.level === level.id)
+      const quest = accounts.filter((a) => a.register.level === 0)
+      referrerWithLevel.push({
+        level: level.name,
+        amount: userWithLevel.length,
+      })
+
+      setListReferrerWithLevel(referrerWithLevel)
+    })
+
+  }, [info])
+
+  const getOrder = async () => {
+    const myOrders = await orderApis.getOrderUser();
+    const refsOrder = await orderApis.getOrderRef();
+    let thisMonth = new Date().getMonth() + 1
+
+    setMyBuyOfMonth(myOrders
+      ?.filter((e) => new Date(e.orderDate).getMonth() + 1 === thisMonth && e.orderStatus === STATUS_ORDER.DELIVERED)
+      ?.reduce((total, num) => {
+        return total + (num.totalBeforeFee)
+      }, 0)
+    )
+
+    setRefBuyOfMonth(refsOrder
+      .filter((e) => new Date(e.orderDate).getMonth() + 1 === thisMonth && e.orderStatus === STATUS_ORDER.DELIVERED)
+      .reduce((total, num) => {
+        return total + (num.totalBeforeFee)
+      }, 0))
+
+  }
+
+  useEffect(() => {
+    getListReferrer()
+  }, [getListReferrer])
+
+  useEffect(() => {
+    getOrder()
+  }, [])
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
     control,
     setValue,
     reset,
@@ -82,12 +130,11 @@ const PageProfile = () => {
       phoneNumber: info?.phoneNumber,
       address: info?.userInformation?.address,
       userCode: info?.userCode,
-      cityCode: info?.cityCode,
-      districtCode: info?.districtCode,
-      wardCode: info?.wardCode,
+      cityCode: info?.userInformation?.cityCode,
+      districtCode: info?.userInformation?.districtCode,
+      wardCode: info?.userInformation?.wardCode,
     },
   });
-
   const { phoneCode, phoneNumber, userCode, cityCode, districtCode, wardCode } =
     useWatch({
       control,
@@ -103,15 +150,16 @@ const PageProfile = () => {
       districtCode,
       wardCode,
     } = data;
+    setLoadingUpdateProfile(true)
     console.log({
       id: info?.id,
       fullName,
       phoneNumber: `${+phoneNumber}`,
       phoneCode: `${+phoneCode}`,
       address,
-      cityCode: `${+cityCode.id}`,
-      districtCode: `${+districtCode.id}`,
-      wardCode: `${+wardCode.id}`,
+      cityCode: `${+cityCode}`,
+      districtCode: `${+districtCode}`,
+      wardCode: `${+wardCode}`,
     });
     AuthApis.updateProfileUser({
       id: info?.id,
@@ -119,17 +167,17 @@ const PageProfile = () => {
       phoneNumber: `${+phoneNumber}`,
       phoneCode: `${+phoneCode}`,
       address,
-      cityCode: `${+cityCode.id}`,
-      districtCode: `${+districtCode.id}`,
-      wardCode: +wardCode.id,
+      cityCode: `${+cityCode}`,
+      districtCode: `${+districtCode}`,
+      wardCode: +wardCode,
     })
       .then(() => {
-        console.log("ok");
         return AuthApis.getProfile();
       })
       .then((res) => {
-        console.log(res);
+        toast.success('Ban da cap nhat thanh cong')
         dispatch(setProfileAuth(res));
+        setLoadingUpdateProfile(false)
         reset({
           fullName,
           phoneNumber: `+${phoneNumber}`,
@@ -142,38 +190,42 @@ const PageProfile = () => {
       });
   };
 
-  const handlerCityCode = (id, name) => {
-    setValue("cityCode", { id, name }, { shouldDirty: true });
-    setIdCityCode({ id, name });
+  const handlerCityCode = (id) => {
+    setValue("cityCode", id, { shouldDirty: true });
+    setIdCityCode(id);
     setValue("districtCode", null);
     setValue("wardCode", null);
+    setIdDistrictCode(0)
+    setIdWardCode(0)
     setActive(false);
+    console.log('idDistrictCode', idDistrictCode)
   };
-  const handlerDistrictCode = (id, name) => {
-    setValue("districtCode", { id, name });
-    setIdDistrictCode({ id, name });
+  const handlerDistrictCode = (id) => {
+    setValue("districtCode", id);
+    setIdDistrictCode(id);
     setValue("wardCode", null);
     setActiveDistric(false);
   };
-  const handlerWardCode = (id, name) => {
-    setValue("wardCode", { id, name });
-    setIdWardCode({ id, name });
+  const handlerWardCode = (id) => {
+    setValue("wardCode", id);
+    setIdWardCode(id);
     setActiveWard(false);
   };
 
   useEffect(() => {
-    async function ciyCode() {
+    async function cityCode() {
       const city = await import("../../components/locations/cities.json");
       setCity(city.data);
     }
-    ciyCode();
+    cityCode();
   }, [city, idCityCode]);
 
   useEffect(() => {
     async function districtCode() {
-      console.log(idCityCode.id);
+      // console.log(idCityCode.id);
+      if (!idCityCode) return null
       const district = await import(
-        `../../components/locations/districts/${idCityCode.id}.json`
+        `../../components/locations/districts/${idCityCode}.json`
       );
       setDistrict(district.data);
     }
@@ -181,8 +233,9 @@ const PageProfile = () => {
   }, [idCityCode, idDistrictCode]);
   useEffect(() => {
     async function wardCodeCode() {
+      if (!idDistrictCode) return
       const ward = await import(
-        `../../components/locations/wards/${idDistrictCode.id}.json`
+        `../../components/locations/wards/${idDistrictCode}.json`
       );
       setWard(ward.data);
     }
@@ -197,49 +250,59 @@ const PageProfile = () => {
         console.log('thành công');
       });
   }, [token, dispatch]);
-  useEffect(() => {
-    if (!token) return router.replace('/')
-  }, [router, token])
+  // useEffect(() => {
+  //   if (!token) return router.push('/')
+  // }, [router, token])
   return (
     <>
-      {/* <RequireAuth> */}
-      {token && <div className="flex items-start justify-center px-24 mt-8 mb-20">
-        <NavbarUser bgPageProfile={true}></NavbarUser>
+
+
+      <NavbarUser bgPageProfile={true}>
         <div className="w-[75%] flex-col items-start">
           <section className="flex items-center justify-between px-4 mt-5">
             <div className="flex flex-col items-start justify-between gap-2 w-[30%]">
               <div className="flex items-center justify-between w-full mb-3">
-                <p className="text-lg font-bold text-regal-red">0đ</p>
+                <p className="text-lg font-bold text-regal-red">{myBuyOfMonth.toLocaleString("vi", {
+                  style: "currency",
+                  currency: "VND",
+                })}</p>
                 <span>
                   <BsCurrencyDollar className="text-4xl text-center text-regal-red"></BsCurrencyDollar>
                 </span>
               </div>
               <div className="relative w-full h-1 rounded-full bg-slate-200">
-                <div className="absolute top-0 left-0 right-0 w-[20%] h-1 bg-red-500 rounded-full"></div>
+                <div className={`absolute top-0 left-0 right-0 w-[${Math.round((myBuyOfMonth / 15000000) * 100)}%] h-1 bg-red-500 rounded-full`}></div>
               </div>
               <p className="text-sm">Doanh số trong tháng</p>
             </div>
             <div className="flex flex-col items-start justify-between gap-2 w-[30%]">
               <div className="flex items-center justify-between w-full mb-3">
-                <p className="text-lg font-bold text-[#0dcaf0]">0đ</p>
+                <p className="text-lg font-bold text-[#0dcaf0]">{refBuyOfMonth.toLocaleString("vi", {
+                  style: "currency",
+                  currency: "VND",
+                })}</p>
                 <span>
                   <BsGraphUpArrow className="text-4xl text-center text-[#0dcaf0]"></BsGraphUpArrow>
                 </span>
               </div>
               <div className="relative w-full h-1 rounded-full bg-slate-200">
-                <div className="absolute top-0 left-0 right-0 w-[20%] h-1 bg-[#0dcaf0] rounded-full"></div>
+                <div style={{
+                  width: `${Math.round((refBuyOfMonth / 15000000) * 100)}%`
+                }} className={`absolute top-0 left-0 right-0 h-1 bg-[#0dcaf0] rounded-full`}></div>
               </div>
               <p className="text-sm">Doanh số người giới thiệu trong tháng</p>
             </div>
             <div className="flex flex-col items-start justify-between gap-2 w-[30%]">
               <div className="flex items-center justify-between w-full mb-3">
-                <p className="text-lg font-bold text-yellow-300">0</p>
+                <p className="text-lg font-bold text-yellow-300">{listReferrer.length}</p>
                 <span>
                   <BsPeople className="text-4xl text-center text-yellow-300"></BsPeople>
                 </span>
               </div>
               <div className="relative w-full h-1 rounded-full bg-slate-200">
-                <div className="absolute top-0 left-0 right-0 w-[20%] h-1 bg-yellow-300 rounded-full"></div>
+                <div style={{
+                  width: `${Math.round((listReferrer.length / 20) * 100)}%`
+                }} className={`absolute top-0 left-0 right-0  h-1 bg-yellow-300 rounded-full`}></div>
               </div>
               <p className="text-sm">Số lượng người giới thiệu</p>
             </div>
@@ -380,7 +443,7 @@ const PageProfile = () => {
                       onClick={() => setActive(!active)}
                     >
                       <span className="text-[16px] font-sans font-normal">
-                        {idCityCode.name || "Tỉnh / Thành"}
+                        {address.addressCity || "Tỉnh / Thành"}
                       </span>
                       <span className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2">
                         <svg
@@ -408,7 +471,7 @@ const PageProfile = () => {
                           city?.map((e) => {
                             return (
                               <div
-                                onClick={() => handlerCityCode(e.id, e.name)}
+                                onClick={() => handlerCityCode(e.id)}
                                 className="px-4 py-2 text-base hover:bg-red-500"
                                 key={e.id}
                               >
@@ -442,7 +505,7 @@ const PageProfile = () => {
                         onClick={() => setActiveDistric(!activeDistric)}
                       >
                         <span className="text-[16px] font-sans font-normal">
-                          {districtCode?.name || "Quận/Huyện"}
+                          {address?.addressDistrict || "Quận/Huyện"}
                         </span>
                         <span className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2">
                           <svg
@@ -471,7 +534,7 @@ const PageProfile = () => {
                               return (
                                 <div
                                   onClick={() =>
-                                    handlerDistrictCode(e.id, e.name)
+                                    handlerDistrictCode(e.id)
                                   }
                                   className="px-4 py-2 text-base hover:bg-red-500"
                                   key={e.id}
@@ -507,7 +570,7 @@ const PageProfile = () => {
                         onClick={() => setActiveWard(!activeWard)}
                       >
                         <span className="text-[16px] font-sans font-normal">
-                          {wardCode?.name || "Phường/Xã"}
+                          {address?.addressWard || "Phường/Xã"}
                         </span>
                         <span className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2">
                           <svg
@@ -536,7 +599,7 @@ const PageProfile = () => {
                               return (
                                 <div
                                   onClick={() =>
-                                    handlerWardCode(e.id, e.name)
+                                    handlerWardCode(e.id)
                                   }
                                   className="px-4 py-2 text-base hover:bg-red-500"
                                   key={e.id}
@@ -555,20 +618,21 @@ const PageProfile = () => {
                     )}
                   </div>
                 </div>
-                <div className="flex justify-end mt-6">
-                  <button
+                <div className="flex items-end justify-end mt-6">
+                  {/* <button
                     type="submit"
+                    disabled={!isDirty}
                     className="px-3 py-2 font-serif text-base font-light text-white rounded-md cursor-pointer bg-regal-red"
                   >
                     Cập nhật thông tin
-                  </button>
+                  </button> */}
+                  <Button className='!w-[200px]' hiddent={true} type={'submit'} disabled={!isDirty} loading={loadingUpdateProfile}>Cập nhật thông tin</Button>
                 </div>
               </div>
             </div>
           </form>
         </div>
-      </div>}
-      {/* </RequireAuth> */}
+      </NavbarUser>
     </>
   );
 };

@@ -7,16 +7,16 @@ import React from "react";
 const Search = ({ product }) => {
   const { router } = useRouter();
   console.log(router)
-  const {data} = product;
-  const {params} = product;
-  if(params === undefined) return params === ''
-  
+  const { data } = product;
+  const { params } = product;
+  if (params === undefined) return params === ''
+
   console.log(router);
   return (
     <>
       <SEO title="tìm kiếm"></SEO>
       <h1 className="mt-20 mb-8 text-center text-4xl text-black">Tìm kiếm</h1>
-      <p className="mt-4 text-center text-lg ">{`Kết quả tìm kiếm cho "${params !== undefined? params : ''}"`}</p>
+      <p className="mt-4 text-center text-lg ">{`Kết quả tìm kiếm cho "${params}"`}</p>
       <div className="px-8 grid grid-cols-4 mb-8">
         {data.rows.length > 0 &&
           data.rows.map((item) => {
@@ -43,7 +43,7 @@ export async function getServerSideProps(content) {
 
   return {
     props: {
-      product: {data: data.data, params: content.query.keyword},
+      product: { data: data.data, params: content.query.keyword },
     },
   };
 }

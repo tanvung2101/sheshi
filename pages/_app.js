@@ -2,6 +2,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Footer, Menu } from "@/components";
 import "@/styles/globals.css";
+import '@/styles/promotions.css'
 import { ToastContainer, Zoom } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Provider, useDispatch, useSelector } from "react-redux";

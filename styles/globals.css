@@ -66,6 +66,10 @@ ul {
 }
 input {
   width: 100%;
+  border-color: transparent;
+}
+input:focus{
+  border-color: transparent;
 }
 
 .swiper-slide {

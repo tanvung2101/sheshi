@@ -8,6 +8,7 @@ import * as yup from "yup";
 import AuthApis from "@/apis/authApis";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 
 const schema = yup
@@ -65,17 +66,17 @@ const Register = () => {
   const onSubmit = (data) => {
     console.log(isValid)
     const { fullName, email, password, referralCode, username } = data;
-    console.log( data)
-    AuthApis.signUpUser({email, password, fullName, referralCode})
-      .then(() => { 
+    console.log(data)
+    AuthApis.signUpUser({ email, password, fullName, referralCode })
+      .then(() => {
         toast.success('Đăng kí thành công')
-        router.push('/login') 
+        router.push('/login')
       })
       .catch((err) => {
         toast.error(err.response.data.message)
         console.log(err)
       })
-      // .finally(() => console.log("thành công"));
+    // .finally(() => console.log("thành công"));
   };
 
   return (
@@ -101,11 +102,10 @@ const Register = () => {
                     {...register("fullName")}
                     placeholder="Họ và tên"
                     type="text"
-                    className={` w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${
-                      errors?.fullName?.message
+                    className={` w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.fullName?.message
                         ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
                         : "border border-slate-300 hover:border hover:border-slate-500"
-                    }`}
+                      }`}
                   />
                   {errors?.fullName?.message && (
                     <span className="absolute top-0 right-0 -translate-x-1/2 translate-y-1/2">
@@ -129,11 +129,10 @@ const Register = () => {
                     {...register("email")}
                     placeholder="Nhập email của bạn"
                     type="text"
-                    className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm${
-                      errors?.email?.message
+                    className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm${errors?.email?.message
                         ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
                         : "border border-slate-300 hover:border hover:border-slate-500"
-                    }`}
+                      }`}
                   />
                   {errors?.email?.message && (
                     <span className="absolute top-0 right-0 -translate-x-1/2 translate-y-1/2">
@@ -157,11 +156,10 @@ const Register = () => {
                     {...register("password")}
                     placeholder="Mật khẩu"
                     type={hiddentPass ? "password" : "text"}
-                    className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${
-                      errors?.password?.message
+                    className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.password?.message
                         ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
                         : "border border-slate-300 hover:border hover:border-slate-500"
-                    }`}
+                      }`}
                   />
                   <span
                     className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2"
@@ -190,11 +188,10 @@ const Register = () => {
                     {...register("confirmPass")}
                     placeholder="Xác nhật mật khẩu"
                     type={hiddentConfirmPass ? "password" : "text"}
-                    className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${
-                      errors?.confirmPass?.message
+                    className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.confirmPass?.message
                         ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
                         : "border border-slate-300 hover:border hover:border-slate-500"
-                    }`}
+                      }`}
                   />
                   <span
                     className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2"
@@ -223,11 +220,10 @@ const Register = () => {
                     {...register("referralCode")}
                     placeholder="ID giới thiệu"
                     type="referralCode"
-                    className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${
-                      errors?.referralCode?.message
+                    className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.referralCode?.message
                         ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
                         : "border border-slate-300 hover:border hover:border-slate-500"
-                    }`}
+                      }`}
                   />
                 </div>
                 <span className="font-sans text-sm font-normal text-red-500">
@@ -240,9 +236,9 @@ const Register = () => {
               <div className="flex items-center justify-center mt-5">
                 <span className="text-xs text-center">
                   Bạn đã có tài khoản SHESHI?
-                  <strong className="ml-1 text-[14px] text-regal-red hover:text-yellow-400 cursor-pointer">
-                    Đăng kí
-                  </strong>
+                  <Link href='/login' className="ml-1 text-[14px] text-regal-red hover:text-yellow-400 cursor-pointer">
+                    Đăng nhập
+                  </Link>
                 </span>
               </div>
             </form>

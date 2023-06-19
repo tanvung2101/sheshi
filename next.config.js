@@ -12,6 +12,7 @@ const nextConfig = {
       "upload.wikimedia.org",
       "news.khangz.com",
       "ap-southeast-1-sheshi-dev-app.s3.ap-southeast-1.amazonaws.com",
+      "unsplash.com"
     ],
   },
   async headers() {

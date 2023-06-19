@@ -3,6 +3,12 @@ export const CONTACT_PAGE = {
   ADDRESS_FOOTER: 2,
 };
 
+export const OTP_CODE_TYPE = {
+  REGISTER_EMAIL: "register_email",
+  REGISTER_PHONE: "register_phone",
+  FORGOT_PASSWORD: "forgot_password",
+};
+
 export const GLOBAL_STATUS = {
   INACTIVE: 0,
   ACTIVE: 1,
