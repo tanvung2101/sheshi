@@ -261,12 +261,12 @@ export default function Home({ data }) {
               })}
           </Slider>
         </div>
-        <Button
-          onClick={() => router.push("/san-pham")}
-          className="bg-regal-red text-[#fef9f2] p-2 rounded-lg mx-auto block"
+        <Link
+          href='/san-pham'
+          className="block max-w-[100px] p-2 mx-auto rounded-lg bg-regal-red text-center text-light-pink"
         >
           xem thêm
-        </Button>
+        </Link>
       </div>
       {/* HỌC VIỆN ĐÀO TẠO SHESHI */}
       <div className="mt-14 px-28 flex gap-10 h-[370px]">
@@ -315,7 +315,7 @@ export default function Home({ data }) {
                 alt=""
                 width={400}
                 height={300}
-                // className="w-[80%] h-[80%] object-cover"
+              // className="w-[80%] h-[80%] object-cover"
               ></Image>
             </div>
           ))}
@@ -342,12 +342,12 @@ export default function Home({ data }) {
               </Slider>
             </div>
           </div>
-          <Button
-            onClick={() => router.push("/san-pham")}
-            className="block p-2 mx-auto rounded-lg bg-regal-red text-light-pink"
+          <Link
+            href='/san-pham'
+            className="block max-w-[100px] p-2 mx-auto rounded-lg bg-regal-red text-center text-light-pink"
           >
             xem thêm
-          </Button>
+          </Link>
         </div>
         <div className="mt-20">
           <h2 className="mb-5 text-2xl font-bold text-center uppercase text-regal-red">

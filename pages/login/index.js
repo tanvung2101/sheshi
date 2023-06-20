@@ -43,8 +43,7 @@ const schema = yup
   })
   .required("Trường bắt buộc");
 
-const PageLogin = ({ login }) => {
-  console.log(login);
+const PageLogin = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.account);
@@ -69,6 +68,7 @@ const PageLogin = ({ login }) => {
 
   const onSubmit = (values) => {
     const { type, email, password } = values;
+    console.log(values)
     // window.localStorage.getItem(STORAGE_KEY.TOKEN)
     setLoading(true);
     AuthApis.login({ type, email, password })
@@ -82,10 +82,9 @@ const PageLogin = ({ login }) => {
         return AuthApis.getProfile();
       })
       .then((res) => {
-        console.log('ress', res);
         checkConditionLevelUp(res)
         dispatch(setProfileAuth(res));
-        router.push("/");
+        router.push("/", "/", { shallow: true });
       })
       .catch((err) => {
         // toast.error(err?.response?.data?.message);
@@ -95,8 +94,6 @@ const PageLogin = ({ login }) => {
         setLoading(false);
       });
   };
-  if (token) return router.push("/");
-  // }, [token])
   return (
     <>
       <SEO title="Đăng nhập"></SEO>
@@ -116,14 +113,11 @@ const PageLogin = ({ login }) => {
                 Email
               </label>
               <div className="relative">
-                <input
+                <Input
                   {...register("email")}
                   placeholder="Nhập email của bạn"
                   type="text"
-                  className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.email?.message
-                    ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
-                    : "border border-slate-300 hover:border hover:border-slate-500"
-                    }`}
+                  errors={errors?.email?.message}
                 />
                 {errors?.email?.message && (
                   <span className="absolute top-0 right-0 -translate-x-1/2 translate-y-1/2">

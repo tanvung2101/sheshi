@@ -39,7 +39,7 @@ axiosClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log(error);
+    // console.log(error);
     if (error.response.status === 401) {
       console.log('loiix rồi');
     }

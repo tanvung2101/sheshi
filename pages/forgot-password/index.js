@@ -9,10 +9,11 @@ import * as yup from "yup"
 import InputOtp from '@/components/InputOtp'
 import InputPassword from '@/components/InputPassword'
 import { useRouter } from 'next/router'
-import accountApis from '@/apis/accountApi'
 import AuthApis from '@/apis/authApis'
 import { OTP_CODE_TYPE } from '@/constants'
 import { toast } from 'react-toastify'
+import successHelper from '@/utils/success-helper'
+import warningHelper from '@/utils/warning-helper'
 
 const schema = yup
     .object({
@@ -31,15 +32,14 @@ const schema = yup
             then: () => yup.string().oneOf([yup.ref('password')], 'Mật khẩu không đúng')
         })
     })
-    .required()
 
 const PageForgotPassword = () => {
     const refCountdownOtp = useRef();
     const router = useRouter()
 
     const [loading, setLoading] = useState(false);
-    const [loadingSentcodeEmail, setLoadingSentcodeEmail] = useState(false)
-    const [countdownEmail, setCountEmail] = useState(60)
+    const [loadingSentcodeEmail, setLoadingSentCodeEmail] = useState(false)
+    const [countdownEmail, setCountdownEmail] = useState(60)
     const {
         register,
         control,
@@ -51,7 +51,8 @@ const PageForgotPassword = () => {
         resolver: yupResolver(schema),
         defaultValues: {
             emailVerified: false
-        }
+        },
+        mode: "onChange"
     })
 
     const { emailVerified, email, otpCode } = useWatch({
@@ -59,39 +60,47 @@ const PageForgotPassword = () => {
     })
 
     const onSendEmailOTP = () => {
-        setLoadingSentcodeEmail(true);
+        setLoadingSentCodeEmail(true);
         AuthApis.sendOTP({
             email: (email || '').trim(),
             type: OTP_CODE_TYPE.FORGOT_PASSWORD
-        }).then(() => {
-            setCountEmail((preCount) => preCount - 1)
-            clearInterval(refCountdownOtp.current)
-            refCountdownOtp.current = setInterval(() => {
-                setCountEmail((preCount) => preCount - 1)
-            }, 1000)
-            setValue('emailVerified', true, { shouldValidate: true })
-        }).catch((err) => console.log(err))
-            .finally(() => setLoadingSentcodeEmail(false))
-    }
-    const onSubmit = (data) => {
-        const { email, otpCode, password, rePassword } = data;
-        console.log(data)
-        setLoading(true)
-        setLoadingSentcodeEmail(true)
-        if (!data.emailVerified) {
-            AuthApis.sendOTP({
-                email: data.email,
-                type: OTP_CODE_TYPE.FORGOT_PASSWORD
-            }).then(() => {
-                setCountEmail((preCount) => preCount - 1)
+        })
+            .then(() => {
+                setCountdownEmail((preCount) => preCount - 1)
                 clearInterval(refCountdownOtp.current)
-                setValue('emailVerified', true, { shouldValidate: true })
                 refCountdownOtp.current = setInterval(() => {
-                    setCountEmail((preCount) => preCount - 1)
+                    setCountdownEmail((preCount) => preCount - 1)
                 }, 1000)
-            }).catch((err) => console.log(err))
-                .finally(() => {
-                    setLoadingSentcodeEmail(false)
+                return
+            })
+            .catch((err) => console.log(err))
+            .finally(() => {
+                setLoadingSentCodeEmail(false)
+            })
+    }
+    const onSubmit = (values) => {
+        const { email, otpCode, password, rePassword } = values;
+        setLoading(true);
+        setLoadingSentCodeEmail(true);
+        if (!values?.emailVerified) {
+            AuthApis.sendOTP({
+                email: values.email,
+                type: OTP_CODE_TYPE.FORGOT_PASSWORD,
+            })
+                .then((reponse) => {
+                    if (reponse) {
+                        setCountdownEmail((preCount) => preCount - 1);
+                        clearInterval(refCountdownOtp.current);
+                        refCountdownOtp.current = setInterval(() => {
+                            setCountdownEmail((preCount) => preCount - 1);
+                        }, 1000);
+                        setValue("emailVerified", true, { shouldValidate: true });
+                    } else {
+                        return toast.error('Không tìm thấy tài khoản')
+                    }
+                })
+                .catch(() => toast.error('Không tìm thấy tài khoản')).finally(() => {
+                    setLoadingSentCodeEmail(false)
                     setLoading(false)
                 })
         } else {
@@ -99,24 +108,26 @@ const PageForgotPassword = () => {
                 email,
                 otpCode,
                 password,
-                rePassword
+                rePassword,
             })
                 .then(() => {
-                    toast.success('Khôi phụ mật khẩu thành công')
-                    router.push('/login')
+                    successHelper('bạn thay đổi mật khẩu thành công')
+                    router.push("/login");
                 })
-                .catch(() => toast.error('Mã code sai'))
+                .catch((err) => {
+                    toast.error('err.message')
+                })
                 .finally(() => {
-                    setLoading(false)
-                    setLoadingSentcodeEmail(false)
-                })
+                    setLoadingSentCodeEmail(false);
+                    setLoading(false);
+                });
         }
-    }
+    };
 
     useEffect(() => {
         if (countdownEmail === 0) {
             clearInterval(refCountdownOtp.current)
-            setCountEmail(60)
+            setCountdownEmail(60)
         }
     }, [countdownEmail])
     return (
@@ -137,7 +148,6 @@ const PageForgotPassword = () => {
                                 disabledSend={errors?.email}
                                 onSendOTP={async () => {
                                     const isVaildEmail = await trigger('email')
-
                                     if (isVaildEmail) {
                                         onSendEmailOTP()
                                     }
@@ -152,10 +162,28 @@ const PageForgotPassword = () => {
                                     <BiErrorCircle className="text-lg text-red-500" />
                                 </span>}
                             </div>
-                            {emailVerified && <InputPassword {...register('password')} label='Mật khẩu' placeholder='Nhập mật khẩu của bạn' errors={errors?.password?.message}></InputPassword>}
-                            {emailVerified && <InputPassword {...register('rePassword')} label='Xác nhận mật khẩu' placeholder='Xác nhận mật khẩu' errors={errors?.rePassword?.message}></InputPassword>}
+                            {emailVerified && <InputPassword {...register('password')} onChange={(e) =>
+                                setValue(
+                                    "password",
+                                    (e.target.value || "").replace(" ", ""),
+                                    {
+                                        shouldValidate: true,
+                                        shouldDirty: true,
+                                    }
+                                )
+                            } label='Mật khẩu' placeholder='Nhập mật khẩu của bạn' errors={errors?.password?.message}></InputPassword>}
+                            {emailVerified && <InputPassword {...register('rePassword')} onChange={(e) =>
+                                setValue(
+                                    "rePassword",
+                                    (e.target.value || "").replace(" ", ""),
+                                    {
+                                        shouldValidate: true,
+                                        shouldDirty: true,
+                                    }
+                                )
+                            } label='Xác nhận mật khẩu' placeholder='Xác nhận mật khẩu' errors={errors?.rePassword?.message}></InputPassword>}
                         </div>
-                        <Button hiddent={true} loading={loading}>Tiếp tục</Button>
+                        <Button type='submit' hiddent={true} loading={loading}>Tiếp tục</Button>
                         <Link href='/login' className='flex items-center justify-start gap-2 mt-4 pb-8 text-regal-red hover:text-yellow-300'>
                             <BsArrowReturnLeft></BsArrowReturnLeft>
                             <span className='text-base'>Trở lại đăng nhập</span>

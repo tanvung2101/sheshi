@@ -99,8 +99,8 @@ const PageProfile = () => {
     )
 
     setRefBuyOfMonth(refsOrder
-      .filter((e) => new Date(e.orderDate).getMonth() + 1 === thisMonth && e.orderStatus === STATUS_ORDER.DELIVERED)
-      .reduce((total, num) => {
+      ?.filter((e) => new Date(e.orderDate).getMonth() + 1 === thisMonth && e.orderStatus === STATUS_ORDER.DELIVERED)
+      ?.reduce((total, num) => {
         return total + (num.totalBeforeFee)
       }, 0))
 
@@ -250,14 +250,14 @@ const PageProfile = () => {
         console.log('thành công');
       });
   }, [token, dispatch]);
-  // useEffect(() => {
-  //   if (!token) return router.push('/')
-  // }, [router, token])
+  useEffect(() => {
+    if (!token) return router.push('/', undefined, { shallow: true })
+  }, [router, token])
   return (
     <>
 
 
-      <NavbarUser bgPageProfile={true}>
+      {token && <NavbarUser bgPageProfile={true}>
         <div className="w-[75%] flex-col items-start">
           <section className="flex items-center justify-between px-4 mt-5">
             <div className="flex flex-col items-start justify-between gap-2 w-[30%]">
@@ -632,7 +632,7 @@ const PageProfile = () => {
             </div>
           </form>
         </div>
-      </NavbarUser>
+      </NavbarUser>}
     </>
   );
 };

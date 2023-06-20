@@ -5,6 +5,7 @@ import { MASTER_DATA_NAME } from '@/constants';
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { BsFillCameraFill } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
@@ -12,6 +13,7 @@ import { useSelector } from 'react-redux';
 
 const PageMyOrder = () => {
     const { token, info } = useSelector((state) => state.account);
+    const router = useRouter();
 
     const [orderList, setOrderList] = useState([])
     const [masterOrderStatus, setMasterOrderStatus] = useState()
@@ -33,9 +35,13 @@ const PageMyOrder = () => {
         fetchMasterData()
         fetchOrderList()
     }, [])
+
+    useEffect(() => {
+        if (!token) return router.push('/', undefined, { shallow: true })
+    }, [router, token])
     return (
         <>
-            <NavbarUser bgPageMyOrder={true}>
+            {token && <NavbarUser bgPageMyOrder={true}>
                 <div className="w-[75%] flex-col items-start">
                     <h3 className='text-[25px] pb-8'>Đơn hàng của tôi</h3>
                     {orderList && orderList.map(item =>
@@ -64,7 +70,7 @@ const PageMyOrder = () => {
                         </div>
                     </div> */}
                 </div>
-            </NavbarUser>
+            </NavbarUser>}
         </>
     )
 }

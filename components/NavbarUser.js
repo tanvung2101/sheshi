@@ -134,29 +134,29 @@ const NavbarUser = ({ bgPageProfile, bgPageMyOrder, bgPageMyBonus, children }) =
 
     }
 
-    useEffect(() => {
-        if (!token) {
-            const routerToken = setTimeout(() => {
-                router.push('/')
-            }, 500)
-            return () => {
-                clearTimeout(routerToken);
-            };
-        }
-        return null
-    }, [router, token])
+    // useEffect(() => {
+    //     if (!token) {
+    //         const routerToken = setTimeout(() => {
+    //             router.push('/')
+    //         }, 500)
+    //         return () => {
+    //             clearTimeout(routerToken);
+    //         };
+    //     }
+    //     return null
+    // }, [router, token])
 
     return (
         <>
-            {token && <div className="flex items-start justify-center px-24 mt-8 mb-20">
+            <div className="flex items-start justify-center px-24 mt-8 mb-20">
                 <div className="flex flex-col items-center justify-center gap-5 w-[25%] px-4">
                     <div className="w-full h-[200px] rounded-md bg-[#fdf2ec] flex flex-col items-center justify-start">
                         <div className="relative w-[120px] h-[120px] mt-4">
                             <Image
                                 src={onGetAvatar()}
                                 alt=""
-                                width={10}
-                                height={10}
+                                width={100}
+                                height={100}
                                 className="object-cover w-full h-full rounded-full"
                             />
                             <button className="absolute bottom-0 right-0 flex items-start justify-center w-8 h-8 bg-white rounded-full">
@@ -207,7 +207,7 @@ const NavbarUser = ({ bgPageProfile, bgPageMyOrder, bgPageMyBonus, children }) =
                     </ul>
                 </div>
                 {children}
-            </div>}
+            </div>
         </>
     )
 }

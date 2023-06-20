@@ -146,8 +146,8 @@ const PageSlugOrder = () => {
     }, [fetchOrderList])
     return (
         <>
-            <div className="flex items-start justify-center px-24 mt-8 mb-20">
-                <NavbarUser bgPageMyOrder={true}></NavbarUser>
+
+            <NavbarUser bgPageMyOrder={true}>
                 <div className="w-[75%] flex-col items-start">
                     <div className="flex flex-col items-center ">
                         <h4 className="text-[22px]">Chi tiết đơn hàng</h4>
@@ -342,7 +342,9 @@ const PageSlugOrder = () => {
                         )}
                     </div>
                 </div>
-            </div>
+            </NavbarUser>
+
+
         </>
     )
 }
