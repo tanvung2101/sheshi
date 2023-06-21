@@ -27,7 +27,7 @@ const PageSearchOrder = () => {
   const { query } = useRouter();
   // console.log("query", query);
   const [orderSearchItem, setOrderSerachItem] = useState();
-  // console.log("orderSearchItem", orderSearchItem);
+  console.log("orderSearchItem", orderSearchItem);
   const [masterCapacity, setMasterCapacity] = useState();
   const [masterUnit, setMasterUnit] = useState();
   const [masterOrderStatus, setMasterOrderStatus] = useState();
@@ -122,7 +122,7 @@ const PageSearchOrder = () => {
       if (result.isConfirmed) {
         orderApis
           .cancelOrder(orderSearchItem.id, body)
-          .then(() => {})
+          .then(() => { })
           .catch((err) => toast.error(err.mesage))
           .finally(() => {
             // getCartItemsInfo()
@@ -196,10 +196,9 @@ const PageSearchOrder = () => {
               }
               onClick={() => cancelOrder()}
               className={`relative px-3 py-2 font-serif text-base font-light text-white border rounded-md bg-regal-red 
-                ${
-                  orderSearchItem?.orderStatus !== STATUS_ORDER.WAITTING_CONFIRM
-                    ? "cursor-not-allowed after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-slate-200 after:bg-opacity-30"
-                    : ""
+                ${orderSearchItem?.orderStatus !== STATUS_ORDER.WAITTING_CONFIRM
+                  ? "cursor-not-allowed after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-slate-200 after:bg-opacity-30"
+                  : ""
                 }`}
             >
               <span>Hủy đơn hàng</span>

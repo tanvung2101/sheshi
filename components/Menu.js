@@ -83,15 +83,12 @@ const Menu = ({ children }) => {
     // console.log(emailOrderRef.current.value);
     const emailOrder = emailOrderRef.current.value;
     const orderCodeOrder = orderCodeOrderRef.current.value;
-    if (emailOrder || orderCodeOrder) {
-      router.replace(
-        `/search-order?email=${emailOrder}&orderCode=${orderCodeOrder}`
-      );
-      emailOrderRef.current.value = "";
-      orderCodeOrderRef.current.value = "";
-    } else {
-      return;
-    }
+
+    router.replace(
+      `/search-order?email=${emailOrder}&orderCode=${orderCodeOrder}`
+    );
+    emailOrderRef.current.value = "";
+
   };
   const { value } = useSelector((state) => state.cartItem);
 
@@ -243,9 +240,9 @@ const Menu = ({ children }) => {
                       placeholder="Nhập mã đơn hàng"
                       className={`my-4 w-full p-2 rounded-lg outline-none bg-[#f8f9fa] border border-[#edeff1] inline-block focus:ring-4 focus:ring-blue-200 `}
                     ></input>
-                    <Button className="p-2 px-20 rounded-lg outline-none bg-[#f8f9fa] border border-[#edeff1] text-sm hover:bg-slate-300">
+                    <button className="p-2 px-20 rounded-lg outline-none bg-[#f8f9fa] border border-[#edeff1] text-sm hover:bg-slate-300">
                       Submit
-                    </Button>
+                    </button>
                   </CartIcon>
                 </form>
               </div>

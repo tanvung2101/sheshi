@@ -13,7 +13,7 @@ const initFilter = {
   category: [],
   capacity: [],
 };
-const SamPham = ({ data }) => {
+const PageProduct = ({ data }) => {
   const { product } = data;
   const [filter, setFilter] = useState(initFilter);
   const [category, setCategory] = useState();
@@ -30,7 +30,7 @@ const SamPham = ({ data }) => {
     setProductCategory(temp);
   }, [filter, productsOptions]);
 
-  async function allCategory(){
+  async function allCategory() {
     const category = await categoryApis.getAllCategory()
     setCategory(category)
   }
@@ -143,13 +143,14 @@ export async function getStaticProps() {
     status: GLOBAL_STATUS.ACTIVE,
   };
   const product = await productsApis.getAllProducts({ params });
-  const data = { 
+  const data = {
     // category: category.data,
-     product: product.data };
+    product: product.data
+  };
   return {
     props: { data },
     revalidate: 60,
   };
 }
 
-export default SamPham;
+export default PageProduct;

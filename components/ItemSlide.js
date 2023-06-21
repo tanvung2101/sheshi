@@ -13,6 +13,8 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem, removeItem, updateItem } from "@/redux/cartItemSlice";
 import { useRouter } from "next/router";
+import useTrans from "@/page/hooks/useTrans";
+
 
 async function fetchMasterCapacity(params) {
   const res = await axios.get(`http://localhost:3001/api/master`, {
@@ -24,6 +26,7 @@ async function fetchMasterCapacity(params) {
 }
 
 const ItemSlide = ({ propProduct }) => {
+  const trans = useTrans()
   const dispatch = useDispatch();
   const value = useSelector((state) => state.cartItem.value);
   // useEffect(() => {
@@ -46,7 +49,8 @@ const ItemSlide = ({ propProduct }) => {
   const [detailProduct, setDetailProduct] = useState();
   const [detailProductQuantity, setDetailProductQuantity] = useState();
   const [productDetailOption, setProductDetailOption] = useState();
-  
+  console.log('productDetailOption', product)
+
 
   const fetchMasterData = async () => {
     const DataMasterCapacity = await fetchMasterCapacity(
@@ -71,6 +75,7 @@ const ItemSlide = ({ propProduct }) => {
         // console.log(capacity);
         const unit = masterUnit?.find((cap) => cap.id === e.unitId);
         productDetailOption.push({
+          id: e.id,
           capacityId: capacity?.id,
           unitId: unit?.id,
           price: e.price,
@@ -98,9 +103,10 @@ const ItemSlide = ({ propProduct }) => {
       uses: propProduct?.uses,
       guide: propProduct?.guide,
       productCategory: propProduct?.productCategory,
-      productImage:propProduct?.productImage,
-      productDetail:propProduct?.productDetail,
-      productInventory:propProduct?.productInventory,
+      productImage: propProduct?.productImage,
+      productDetail: propProduct?.productDetail,
+      productInventory: propProduct?.productInventory,
+      productDetailOption,
 
     });
     setPrice(productDetailOption[0]?.price);
@@ -140,6 +146,7 @@ const ItemSlide = ({ propProduct }) => {
       toast.error(
         `Sản phẩm hiện tại không đủ, chỉ còn ${detailProductQuantity} trong kho`
       );
+      return
     }
     const item = value.find(
       (e) =>
@@ -193,18 +200,16 @@ const ItemSlide = ({ propProduct }) => {
     dispatch(addItem(newItem))
     router.push('/cart')
     toast.success("Sản phẩm đã thêm vào vỏ hàng");
-    
+
   };
   const renderContent = (
     <div
-      className={`${
-        active ? "" : "hidden"
-      } w-full h-full fixed top-0 left-1/2 -translate-x-1/2 flex items-center justify-center overflow-hidden bg-black bg-opacity-30`}
+      className={`${active ? "" : "hidden"
+        } w-full h-full fixed top-0 left-1/2 -translate-x-1/2 flex items-center justify-center overflow-hidden bg-black bg-opacity-30`}
     >
       <div
-        className={`w-[1000px] box-border flex items-center justify-center gap-6 bg-white p-8 relative transition-all ${
-          active ? "" : "translate-y-0 transition-all"
-        }`}
+        className={`w-[900px] box-border flex items-center justify-center gap-6 bg-white p-8 relative transition-all ${active ? "" : "translate-y-0 transition-all"
+          }`}
       >
         <span
           className={`absolute top-2 right-2 text-4xl hover:text-red-500 cursor-pointer`}
@@ -212,18 +217,18 @@ const ItemSlide = ({ propProduct }) => {
         >
           <AiOutlineClose className="text-slate-500" />
         </span>
-        <div className="w-1/2">
+        <div className="w-[55%]">
           <div className="box-border">
             <Image
               src={product?.productImage[0]?.image}
               alt=""
-              width={400}
-              height={450}
+              width={200}
+              height={250}
               className="w-full max-h-[350px] object-cover"
             ></Image>
           </div>
         </div>
-        <div className="flex-col w-1/2">
+        <div className="flex-col w-[45%]">
           <div>
             <h4>{product?.name}</h4>
             <span className="block mt-4 font-sans text-3xl font-bold text-regal-red">
@@ -258,25 +263,68 @@ const ItemSlide = ({ propProduct }) => {
                   +
                 </div>
               </div>
-              <div className="text-lg text-white uppercase mt-7 ">
-                <span className="bg-[#dc3545] p-3 rounded-lg">
-                  {productDetailOption?.name}
-                </span>
+              <div className="text-lg text-white uppercase mt-7">
+                <div
+                  className="flex gap-2 w-full"
+                  onClick={(e) => {
+                    console.log('hellllo', e.target.htmlFor)
+                    if (!e.target.htmlFor) return
+                    setDetailProductQuantity(product.productDetailOption.find(
+                      (prDetail) => prDetail.value === e.target.htmlFor
+                    ).quantity);
+                    setPrice(product.productDetailOption.find(
+                      (prDetail) => prDetail.value === e.target.htmlFor
+                    ).price);
+                    setCapcity(e.target.htmlFor)
+                  }}>
+                  {product && product.productDetailOption?.map((optionCapcity) => {
+                    console.log('optionCapcity', optionCapcity)
+                    return (
+                      <div key={optionCapcity.value} className="">
+                        <input
+                          type="radio"
+                          id={optionCapcity.id}
+                          value={optionCapcity.value}
+                          name="capcity"
+                          checked={capacity === optionCapcity.value}
+                          className="hidden"
+                          readOnly
+                        />
+                        <label
+                          className={`inline-block text-center text-base border-[1px] border-red-600 rounded-md py-1 px-2 cursor-pointer ${capacity === optionCapcity.value ? 'bg-red-600 text-white' : 'text-red-600'}`}
+                          htmlFor={optionCapcity.value}>
+                          {optionCapcity.name}
+                        </label>
+                      </div>
+                    )
+                  })}
+                </div>
+                {/* {productDetailOption.map((e, index) => {
+                  return (
+                    <span key={index} className="bg-[#dc3545] p-3 rounded-lg">
+                      {e?.name}
+                    </span>
+                  )
+                })} */}
               </div>
               <div className="flex items-start gap-5 mt-5 text-center">
-                <Button
-                  onClick={() => addCartItem()}
-                  className="py-3 px-6 uppercase border border-regal-red rounded-lg text-[#bc2029] font-bold hover:bg-regal-red hover:text-white transition-all"
-                >
-                  Thêm vào giỏ
-                </Button>
-                <Button
-                  type="submit"
-                  onClick={() => goToCart()}
-                  className="px-8 py-3 font-bold text-white uppercase rounded-lg bg-regal-red"
-                >
-                  {/* <Link href={"/cart"}>mua ngay</Link> */} Mua ngay
-                </Button>
+                <div>
+                  <button
+                    onClick={() => addCartItem()}
+                    className="px-6 py-2 uppercase border border-regal-red rounded-lg text-[#bc2029] font-bold hover:bg-regal-red hover:text-white transition-all"
+                  >
+                    Thêm vào giỏ
+                  </button>
+                </div>
+                <div className="w-[]">
+                  <Button
+                    type="submit"
+                    onClick={() => goToCart()}
+                    className="w-full h-full uppercase font-bold"
+                  >
+                    {/* <Link href={"/cart"}>mua ngay</Link> */} Mua ngay
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
@@ -293,8 +341,8 @@ const ItemSlide = ({ propProduct }) => {
               <Image
                 src={product?.productImage[0]?.image}
                 alt=""
-                width={100}
-                height={100}
+                width={200}
+                height={200}
                 className="w-full h-[300px] object-cover hover:scale-95 transition duration-150 ease-in-out"
               />
             )}

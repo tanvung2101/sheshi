@@ -4,7 +4,7 @@ import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useEffect, useState, useMemo  } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import Slider from "react-slick";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,13 +45,15 @@ const Item = ({ productDetail }, params) => {
   // console.log(productDetail)
   const [productItem, itemSlug] = productDetail;
   const [productIt, setProductIt] = useState();
-  console.log("itemSlug", productItem);
+  console.log("itemSlug", productIt);
   const { value } = useSelector((state) => state.cartItem);
   const dispatch = useDispatch();
   const router = useRouter();
   const [product, setProduct] = useState();
   const [masterCapacity, setMasterCapacity] = useState();
   const [masterUnit, setMasterUnit] = useState();
+  const [price, setPrice] = useState();
+  const [capacity, setCapcity] = useState();
   const [quantity, setQuantity] = useState(1);
   const [detailProductQuantity, setDetailProductQuantity] = useState();
   const [productDetailOption, setProductDetailOption] = useState();
@@ -68,7 +70,7 @@ const Item = ({ productDetail }, params) => {
       setQuantity(+quantity - 1 < 1 ? 1 : +quantity - 1);
     }
   };
-  console.log(productIt);
+  // console.log(productIt);
   const fetchMasterData = async () => {
     const DataMasterCapacity = await fetchMasterCapacity(
       MASTER_DATA_NAME.CAPACITY_PRODUCT
@@ -79,52 +81,57 @@ const Item = ({ productDetail }, params) => {
     setMasterCapacity(DataMasterCapacity);
     setMasterUnit(DataMasterUnit);
   };
-  console.log("masterCapacity", masterCapacity);
-  console.log("masterUnit", masterUnit);
+  // console.log("masterCapacity", masterCapacity);
+  // console.log("masterUnit", masterUnit);
   useEffect(() => {
     fetchMasterData();
   }, []);
-console.log('product', product)
+  console.log('detailProductQuantity', detailProductQuantity)
   useEffect(() => {
     const productDetailOption = [];
     if (masterCapacity?.length > 0) {
       itemSlug?.productDetail?.map((e) => {
         const capacity = masterCapacity?.find((cap) => cap.id === e.capacityId);
         const unit = masterUnit?.find((un) => un.id === e.unitId);
-        
+
         productDetailOption.push({
-            capacityId: capacity?.id,
-            unitId: unit?.id,
-            price: e.price,
-            quantity: productIt?.productInventory?.find(
-              (q) => q.subProductId === e.id && q.productId === e.productId
-            )?.quantity,
-            value: capacity?.id + " " + unit?.id,
-            name: capacity?.name + " " + unit?.name,
-          });
+          capacityId: capacity?.id,
+          unitId: unit?.id,
+          price: e.price,
+          quantity: productIt?.productInventory?.find(
+            (q) => q.subProductId === e.id && q.productId === e.productId
+          )?.quantity,
+          value: capacity?.id + " " + unit?.id,
+          name: capacity?.name + " " + unit?.name,
         });
-        
+      });
+
       setProduct({
         id: productIt?.id,
         name: productIt?.name,
-      price: productIt?.price,
-      content: productIt?.content,
-      categorySlug: productIt?.productCategory?.categorySlug,
-      slug: productIt?.productSlug,
-      acronym: productIt?.acronym,
-      expiry: productIt?.expiry,
-      nameVi: productIt?.nameVi,
-      description: productIt?.description,
-      element: productIt?.element,
-      uses: productIt?.uses,
-      guide: productIt?.guide,
-      productCategory: productIt?.productCategory,
-      productImage:productIt?.productImage,
-      productDetail:productIt?.productDetail,
-      productInventory:productIt?.productInventory,
+        price: productIt?.price,
+        content: productIt?.content,
+        categorySlug: productIt?.productCategory?.categorySlug,
+        slug: productIt?.productSlug,
+        acronym: productIt?.acronym,
+        expiry: productIt?.expiry,
+        nameVi: productIt?.nameVi,
+        description: productIt?.description,
+        element: productIt?.element,
+        uses: productIt?.uses,
+        guide: productIt?.guide,
+        productCategory: productIt?.productCategory,
+        productImage: productIt?.productImage,
+        productDetail: productIt?.productDetail,
+        productInventory: productIt?.productInventory,
+        productDetailOption,
       })
     }
+    setPrice(productDetailOption[0]?.price);
     setDetailProductQuantity(productDetailOption[0]?.quantity);
+    setCapcity(
+      productDetailOption[0]?.capacityId + "-" + productDetailOption[0]?.unitId
+    );
     setProductDetailOption(productDetailOption)
   }, [productIt, masterCapacity, masterUnit, itemSlug,]);
   const addCartItem = () => {
@@ -138,7 +145,7 @@ console.log('product', product)
       capacity: productDetailOption[0]?.name,
       totalQuantity: detailProductQuantity,
     };
-    console.log("newItem", newItem);
+    // console.log("newItem", newItem);
     if (+quantity > detailProductQuantity) {
       setQuantity(detailProductQuantity);
       toast.error(
@@ -173,7 +180,7 @@ console.log('product', product)
       capacity: productDetailOption[0]?.name,
       totalQuantity: detailProductQuantity,
     };
-    console.log("newItem", newItem);
+    // console.log("newItem", newItem);
     if (+quantity > detailProductQuantity) {
       setQuantity(detailProductQuantity);
       toast.error(
@@ -285,17 +292,20 @@ console.log('product', product)
           </div>
           <div className="flex-col mt-4 text-black">
             <div>
-              <h2 className="block mt-4 text-4xl font-bold">
+              {productIt?.name && <h2 className="block mt-4 text-4xl font-bold">
                 {productIt?.name}
-              </h2>
-              <span className="block mt-4 font-sans text-base">
+              </h2>}
+              {productIt?.nameVi && <span className="block mt-4 font-sans text-base">
                 {productIt?.nameVi}
-              </span>
-              <span className="block mt-4 font-sans text-base">
+              </span>}
+              {productIt?.acronym && <span className="block mt-4 font-sans text-base">
                 Mã: {productIt?.acronym}
-              </span>
+              </span>}
               <span className="block mt-4 font-sans text-3xl font-bold text-regal-red">
-                {productIt?.price}
+                {price?.toLocaleString("vi", {
+                  style: "currency",
+                  currency: "VND",
+                })}
               </span>
               <span className="block mt-4 text-lg">
                 Tình trạng:{" "}
@@ -318,7 +328,7 @@ console.log('product', product)
                 </div>
                 <input
                   type="text"
-                  className="w-12 h-12 text-center bg-white"
+                  className="w-12 h-12 text-center bg-white outline-none"
                   value={quantity}
                   readOnly
                 />
@@ -331,19 +341,55 @@ console.log('product', product)
               </div>
             </div>
             <div className="text-lg text-white uppercase mt-7 ">
-              <span className="bg-[#dc3545] p-3 rounded-lg">50 ml</span>
+              <div
+                className="flex gap-2 w-full"
+                onClick={(e) => {
+                  console.log('hellllo', e.target.htmlFor)
+                  if (!e.target.htmlFor) return
+                  setDetailProductQuantity(product?.productDetailOption.find(
+                    (prDetail) => prDetail.value === e.target.htmlFor
+                  ).quantity);
+                  setPrice(product?.productDetailOption.find(
+                    (prDetail) => prDetail.value === e.target.htmlFor
+                  ).price);
+                  setCapcity(e.target.htmlFor)
+                }}>
+                {product && product.productDetailOption?.map((optionCapcity) => {
+                  console.log('optionCapcity', optionCapcity)
+                  return (
+                    <div key={optionCapcity.value} className="">
+                      <input
+                        type="radio"
+                        id={optionCapcity.id}
+                        value={optionCapcity.value}
+                        name="capcity"
+                        checked={capacity === optionCapcity.value}
+                        className="hidden"
+                        readOnly
+                      />
+                      <label
+                        className={`inline-block text-center text-base border-[1px] border-red-600 rounded-md py-1 px-2 cursor-pointer ${capacity === optionCapcity.value ? 'bg-red-600 text-white' : 'text-red-600'}`}
+                        htmlFor={optionCapcity.value}>
+                        {optionCapcity.name}
+                      </label>
+                    </div>
+                  )
+                })}
+              </div>
             </div>
-            <div className="flex items-start gap-5 mt-5 text-center">
-              <Button
+            {detailProductQuantity > 0 && <div className="flex items-start gap-5 mt-5 text-center">
+              <button
                 className="py-3 px-6 uppercase border border-regal-red rounded-lg text-[#bc2029] font-bold hover:bg-regal-red hover:text-white transition-all"
                 onClick={() => addCartItem()}
               >
                 Thêm vào giỏ
-              </Button>
-              <Button className="px-8 py-3 font-bold text-white uppercase rounded-lg bg-regal-red" onClick={() => goToCart()}>
+              </button>
+              <button className="px-8 py-3 font-bold text-white uppercase rounded-lg bg-regal-red" onClick={() => goToCart()}>
                 mua ngay
-              </Button>
-            </div>
+              </button>
+            </div>}
+            {detailProductQuantity < 10 && detailProductQuantity !== 0
+              && <div className="mt-3 text-regal-red">Chỉ còn {detailProductQuantity} sản phẩm</div>}
           </div>
         </div>
         <div>
@@ -352,11 +398,10 @@ console.log('product', product)
               introduce.map((item) => (
                 <div
                   key={item.id}
-                  className={`${
-                    hidden === item.id
-                      ? "text-regal-red border-b-[3px] border-regal-red"
-                      : ""
-                  } p-4  cursor-pointer hover:text-regal-red hover:border-b-[3px] hover:border-regal-red`}
+                  className={`${hidden === item.id
+                    ? "text-regal-red border-b-[3px] border-regal-red"
+                    : ""
+                    } p-4  cursor-pointer hover:text-regal-red hover:border-b-[3px] hover:border-regal-red`}
                   onClick={() => setHidden(item.id)}
                 >
                   <span className="font-sans text-2xl">{item.title}</span>
@@ -425,7 +470,7 @@ export async function getStaticPaths() {
       },
     };
   });
-  if(!allPaths){
+  if (!allPaths) {
     notFound();
   }
   return {
@@ -445,8 +490,10 @@ export async function getStaticProps(context) {
     "http://0.0.0.0:3001/api/product/get-by-slug",
     { params }
   );
-  if(!product1){
-    return notFound();
+  if (!product1) {
+    return {
+      notFound: true,
+    }
   }
   const productDetail = [data.data.rows, product1.data];
   return {

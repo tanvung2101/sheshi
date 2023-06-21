@@ -13,9 +13,11 @@ import { setToken } from "@/redux/accountSlice";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 
+import { appWithTranslation } from 'next-i18next';
+
 let persistor = persistStore(store);
 
-export default function App({ Component, pageProps }) {
+function App({ Component, pageProps }) {
   // const dispatch = useDispatch();
   // const tokenLogin = window.localStorage.getItem(STORAGE_KEY.TOKEN);
   // if (JSON.parse(tokenLogin)) {
@@ -50,3 +52,6 @@ export default function App({ Component, pageProps }) {
     </>
   );
 }
+
+
+export default appWithTranslation(App)

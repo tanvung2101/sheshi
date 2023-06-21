@@ -24,13 +24,21 @@ import configPageApis from "@/apis/configPageApis";
 import { CONTENT_PAGE, GLOBAL_STATUS, SLIDE_PAGE } from "@/constants";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import LocaleSwitcher from "@/components/locale-switcher";
+
+// import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+// import { useTranslation } from 'next-i18next'
+
 
 const OUTSTANDING_PRODUCTS = 1;
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 export default function Home({ data }) {
+  // const router = useRouter();
+  // const { locale, locales, defaultLocale } = router;
+  // const { t } = useTranslation('common');
+
   const { contents, slideImageHome, slideImageAdvert } = data;
   // console.log("slideImageAdvert", slideImageAdvert);
-  const router = useRouter();
   const [product, setProduct] = useState();
   // console.log('product', product)
   // console.log('product',product)
@@ -227,6 +235,16 @@ export default function Home({ data }) {
         />
       </Head>
       <div className="mx-auto">
+        {/* <div>
+          <h1>{t('index')}</h1>
+
+          <LocaleSwitcher />
+
+          <Link href="/san-pham" locale={locale}>
+            About
+          </Link>
+          <br />
+        </div> */}
         <Slider {...settingsSlideImage}>
           {slideImageHome.map((item) => {
             return (
@@ -509,7 +527,8 @@ export default function Home({ data }) {
 //   };
 // }
 
-export async function getStaticProps() {
+
+export async function getStaticProps({ locale }) {
   const contents = await configPageApis.getListConfigPageContent({
     pageCode: [CONTENT_PAGE.SCHOOL_PAGE_OVERVIEW],
   });
@@ -538,7 +557,10 @@ export async function getStaticProps() {
   );
   const data = { contents: contents.data, slideImageHome, slideImageAdvert };
   return {
-    props: { data },
-    revalidate: 300,
+    props: {
+      // ...(await serverSideTranslations(locale, ['common', 'footer'], null, ['en', 'it'])),
+      data,
+    },
+    // revalidate: 300,
   };
 }

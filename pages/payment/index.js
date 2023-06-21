@@ -1,4 +1,4 @@
-import { SEO } from "@/components";
+import { Button, SEO } from "@/components";
 import CartEmpty from "@/components/CartEmpty";
 import CartTabs from "@/components/CartTabs";
 import Image from "next/image";
@@ -9,11 +9,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import shipApis from "@/apis/shipApi";
-import { TOKEN_API } from "@/constants";
+import { COMMISSION_TYPE, TOKEN_API } from "@/constants";
 import orderApis from "./../../apis/orderApis";
 import { deleteAll } from "@/redux/cartItemSlice";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import commissionApis from "@/apis/commissionApis";
 
 const schema = yup
   .object({
@@ -27,9 +28,10 @@ const Payment = () => {
   const { value } = useSelector((state) => state.cartItem);
   const dispatch = useDispatch();
   const { information } = useSelector((state) => state.cartItem);
-  console.log(information?.districtCode?.name.toLowerCase())
+  const { info } = useSelector((state) => state.account);
 
   const [totalPrice, setTotalPrice] = useState(0);
+  const [commission, setCommission] = useState()
 
   const [cartProduct, setCartProduct] = useState();
   const [unitGhn, setUnitGhn] = useState();
@@ -46,7 +48,12 @@ const Payment = () => {
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
+    defaultValues: {
+    }
   });
+
+  const [loadingSelectPayment, setLoadingSelectPayment] = useState(false);
+  const [loading, setLoading] = useState(true)
 
   const onSubmit = async (data) => {
     const { notes, deliveryMethod, paymentMethod } = data;
@@ -73,7 +80,7 @@ const Payment = () => {
         ward: information?.wardCode.name,
       },
     };
-    console.log('body', body)
+    setLoadingSelectPayment(true)
     orderApis
       .createOrder(body)
       .then((reponse) => {
@@ -107,7 +114,7 @@ const Payment = () => {
               orderDescription: `CK cho đơn hàng ${reponse.order.orderCode}`,
               bankCode: "",
               orderType: "other",
-              language:"vn",
+              language: "vn",
               returnUrl: `${window.location.origin}/payment-success/${reponse.order.orderCode}`
             })
             .catch((err) => console.log(err)).finally(() => {
@@ -117,7 +124,7 @@ const Payment = () => {
         }
       })
       .catch((err) => console.log(err))
-      .finally(() => console.log("thành công"));
+      .finally(() => selectMethodPayment(false));
   };
 
   useEffect(() => {
@@ -167,7 +174,7 @@ const Payment = () => {
     const provideId = fetchCity?.data?.find(
       (city) => city.ProvinceName === information?.cityCode?.name
     )?.ProvinceID;
-    
+
     const fetchDistrict = await shipApis.getDistrict({
       provide_id: provideId,
     });
@@ -177,7 +184,7 @@ const Payment = () => {
         !!district.NameExtension?.find(
           (e) => {
             return (e.toLowerCase() === information?.districtCode?.name.toLowerCase())
-          } 
+          }
         )
     )?.DistrictID;
     console.log("districtId", districtId);
@@ -188,14 +195,15 @@ const Payment = () => {
     });
     const calculatorFee = await shipApis.calculatorFeeGhn({
       from_district_id: 1488,
-      service_id: serviceAvailable.data[0].service_id,
+      service_id: serviceAvailable?.data[0].service_id,
       to_district_id: districtId,
       insurance_value: totalPrice,
       weight: 200,
     });
-    console.log('calculatorFee', calculatorFee)
+    // console.log('calculatorFee', calculatorFee)
     setUnitGhn(calculatorFee?.data);
     setFee(calculatorFee?.data.total ? calculatorFee?.data.total : 0);
+    setLoading(false)
   }, [information, setValue, totalPrice]);
 
   useEffect(() => {
@@ -204,12 +212,24 @@ const Payment = () => {
       getFreeGhtk();
     }
   }, [totalPrice, getFreeGhn, getFreeGhtk]);
+
+  const getListCommission = useCallback(async () => {
+    const listCommission = await commissionApis.getlistCommissionLevel({
+      idLevel: info ? info.level : 0,
+      type: COMMISSION_TYPE.AUTOMATION
+    })
+    setCommission(info ? listCommission[0].commissionConfig.percent : null)
+  }, [info])
+  useEffect(() => {
+    getListCommission()
+  }, [getListCommission])
+
   return (
     <>
       <SEO title="Thanh toán"></SEO>
       {value?.length === 0 && <CartEmpty></CartEmpty>}
       {value?.length > 0 && <div className="px-20 mb-16">
-      <CartTabs className="pt-12" tabs={3} />
+        <CartTabs className="pt-12" tabs={3} />
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-start justify-start gap-8">
             <div className="w-[70%]">
@@ -409,12 +429,23 @@ const Payment = () => {
                       })}
                     </span>
                   </div>
+                  {commission && <div className="flex items-center justify-between">
+                    <span className="font-sans text-2xl font-normal">
+                      Hoa hồng cấp ({commission}%)
+                    </span>
+                    <span className="font-sans text-3xl font-bold text-regal-red">
+                      {((totalPrice * commission) / 100)?.toLocaleString("vi", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    </span>
+                  </div>}
                   <div className="flex items-center justify-between">
                     <span className="font-sans text-2xl font-normal">
                       Tổng:
                     </span>
                     <span className="font-sans text-3xl font-bold text-regal-red">
-                      {(totalPrice + fee)?.toLocaleString("vi", {
+                      {(totalPrice + fee - (((totalPrice * commission) / 100)))?.toLocaleString("vi", {
                         style: "currency",
                         currency: "VND",
                       })}
@@ -424,15 +455,16 @@ const Payment = () => {
                     <button className="px-3 py-2 font-serif text-base font-light transition-all bg-white border rounded-md text-regal-red border-regal-red hover:bg-regal-red hover:text-white">
                       <Link href="/payment-confirm">Trở về nhập địa chỉ</Link>
                     </button>
-                    <button
-                      type="submit"
-                      // disabled={isSubmitting}
-                      className="px-3 py-2 font-serif text-base font-light text-white rounded-md bg-regal-red"
-                    >
-                      {/* <Link href="/payment-confirm"> */}
-                      Tiến hàng thanh toán
-                      {/* </Link> */}
-                    </button>
+                    <div>
+                      <Button
+                        loading={loading}
+                        disabled={loadingSelectPayment}
+                        type="submit"
+                        className="font-serif text-base font-light text-white rounded-md bg-regal-red"
+                      >
+                        Tiến hàng thanh toán
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
