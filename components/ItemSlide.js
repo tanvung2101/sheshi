@@ -49,7 +49,7 @@ const ItemSlide = ({ propProduct }) => {
   const [detailProduct, setDetailProduct] = useState();
   const [detailProductQuantity, setDetailProductQuantity] = useState();
   const [productDetailOption, setProductDetailOption] = useState();
-  console.log('productDetailOption', product)
+  // console.log('productDetailOption', product)
 
 
   const fetchMasterData = async () => {
@@ -267,7 +267,7 @@ const ItemSlide = ({ propProduct }) => {
                 <div
                   className="flex gap-2 w-full"
                   onClick={(e) => {
-                    console.log('hellllo', e.target.htmlFor)
+                    // console.log('hellllo', e.target.htmlFor)
                     if (!e.target.htmlFor) return
                     setDetailProductQuantity(product.productDetailOption.find(
                       (prDetail) => prDetail.value === e.target.htmlFor

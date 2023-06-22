@@ -24,6 +24,7 @@ import { logout, clearInfo, setToken } from "@/redux/accountSlice";
 import LocalStorage from "@/utils/storage";
 import { deleteAll } from "@/redux/cartItemSlice";
 import { STORAGE_KEY } from "@/constants/storage-key";
+import LocaleSwitcher from "./locale-switcher";
 
 const menu = [
   {
@@ -60,6 +61,8 @@ const menu = [
 
 const Menu = ({ children }) => {
   const router = useRouter();
+  const { pathname, query, asPath } = router
+  console.log('gffhfhfhf', pathname)
   const dispatch = useDispatch();
   const { token, info } = useSelector((state) => state.account);
 
@@ -121,6 +124,7 @@ const Menu = ({ children }) => {
   }, [dispatch]);
   return (
     <>
+      <LocaleSwitcher />
       <div className="px-25 w-full header flex items-center justify-center py-6 bg-[#ffffff]">
         <div className="flex items-center h-full gap-x-14">
           <div className="flex items-center gap-2">
@@ -145,10 +149,10 @@ const Menu = ({ children }) => {
                 menu.map((item) => (
                   <li key={item.id} className="cursor-pointer">
                     <Link
-                      className={`${item.link === router.pathname
+                      className={`${item.link === String(router.pathname)
                         ? "text-regal-red"
                         : "text-[#33333e]"
-                        } text-[16px] hover:text-regal-red`}
+                        } text-[16px] hover:text-regal-red font-bold`}
                       href={`${item.link}`}
                     >
                       {item.page}

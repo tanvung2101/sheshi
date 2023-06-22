@@ -99,11 +99,7 @@ const PageSearchOrder = () => {
       });
     }
   }, [masterCapacity, masterUnit, query.email, query.orderCode]);
-  // useEffect(() => {
-  //   if (query.email && query.orderCode) {
-  //     getOrder();
-  //   }
-  // }, [getOrder, query]);
+
 
   const cancelOrder = async () => {
     const body = {
@@ -324,7 +320,19 @@ const PageSearchOrder = () => {
                       )}
                   </span>
                 </div>
-                <div className="flex items-center justify-between w-full pr-2 mt-5">
+                {!!orderSearchItem !== 0 && orderSearchItem?.commission && <div className="flex items-center justify-between w-full pr-2 mt-5">
+                  <span className=" text-lg font-normal text-black">
+                    Hoa hồng cấp đại lý
+                  </span>
+                  <span className="text-lg font-normal text-black">
+                    {orderSearchItem?.commission
+                      ?.toLocaleString("vi", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                  </span>
+                </div>}
+                {!!orderSearchItem !== 0 && orderSearchItem?.shiId && <div className="flex items-center justify-between w-full pr-2 mt-5">
                   <span className="text-lg font-normal text-black">
                     Phí vận chuyển
                   </span>
@@ -337,7 +345,7 @@ const PageSearchOrder = () => {
                         currency: "VND",
                       })}
                   </span>
-                </div>
+                </div>}
                 <div className="flex items-center justify-between w-full pr-2 mt-5">
                   <span className="text-lg font-medium text-regal-red">
                     Thành tiền

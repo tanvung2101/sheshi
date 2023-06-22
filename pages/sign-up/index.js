@@ -9,6 +9,8 @@ import AuthApis from "@/apis/authApis";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 
 const schema = yup
@@ -52,6 +54,7 @@ const schema = yup
 
 const Register = () => {
   const router = useRouter();
+  const { t } = useTranslation('common');
 
   const [hiddentPass, setHiddentPass] = useState(true);
   const [hiddentConfirmPass, setHiddentConfirmPass] = useState(true);
@@ -69,7 +72,7 @@ const Register = () => {
     console.log(data)
     AuthApis.signUpUser({ email, password, fullName, referralCode })
       .then(() => {
-        toast.success('Đăng kí thành công')
+        toast.success(t("sign_up_success"))
         router.push('/login')
       })
       .catch((err) => {
@@ -81,10 +84,10 @@ const Register = () => {
 
   return (
     <>
-      <SEO title="Đăng kí"></SEO>
+      <SEO title={t("sign_up")}></SEO>
       <div className="flex items-center my-20">
         <div className="mx-auto min-w-[30%]">
-          <h3>Đăng kí</h3>
+          <h3 className="text-2xl">{t("sign_up")}</h3>
           <div>
             <form
               className="inline-block w-full bg-white"
@@ -95,16 +98,16 @@ const Register = () => {
                   className="inline-block mb-3 text-sm font-normal text-black"
                   htmlFor=""
                 >
-                  Họ và tên
+                  {t("display_name")}
                 </label>
                 <div className="relative">
                   <input
                     {...register("fullName")}
-                    placeholder="Họ và tên"
+                    placeholder={t("display_name")}
                     type="text"
                     className={` w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.fullName?.message
-                        ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
-                        : "border border-slate-300 hover:border hover:border-slate-500"
+                      ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
+                      : "border border-slate-300 hover:border hover:border-slate-500"
                       }`}
                   />
                   {errors?.fullName?.message && (
@@ -122,16 +125,16 @@ const Register = () => {
                   className="inline-block mb-3 text-sm font-normal text-black"
                   htmlFor=""
                 >
-                  Email
+                  {t("email")}
                 </label>
                 <div className="relative">
                   <input
                     {...register("email")}
-                    placeholder="Nhập email của bạn"
+                    placeholder={t("email")}
                     type="text"
                     className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm${errors?.email?.message
-                        ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
-                        : "border border-slate-300 hover:border hover:border-slate-500"
+                      ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
+                      : "border border-slate-300 hover:border hover:border-slate-500"
                       }`}
                   />
                   {errors?.email?.message && (
@@ -149,16 +152,16 @@ const Register = () => {
                   className="inline-block mb-3 text-sm font-normal text-black"
                   htmlFor=""
                 >
-                  Mật khẩu
+                  {t("password")}
                 </label>
                 <div className="relative">
                   <input
                     {...register("password")}
-                    placeholder="Mật khẩu"
+                    placeholder={t("password")}
                     type={hiddentPass ? "password" : "text"}
                     className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.password?.message
-                        ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
-                        : "border border-slate-300 hover:border hover:border-slate-500"
+                      ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
+                      : "border border-slate-300 hover:border hover:border-slate-500"
                       }`}
                   />
                   <span
@@ -181,16 +184,16 @@ const Register = () => {
                   className="inline-block mb-3 text-sm font-normal text-black"
                   htmlFor=""
                 >
-                  Xác nhật mật khẩu
+                  {t("confirm_password")}
                 </label>
                 <div className="relative">
                   <input
                     {...register("confirmPass")}
-                    placeholder="Xác nhật mật khẩu"
+                    placeholder={t("confirm_password")}
                     type={hiddentConfirmPass ? "password" : "text"}
                     className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.confirmPass?.message
-                        ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
-                        : "border border-slate-300 hover:border hover:border-slate-500"
+                      ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
+                      : "border border-slate-300 hover:border hover:border-slate-500"
                       }`}
                   />
                   <span
@@ -213,16 +216,16 @@ const Register = () => {
                   className="inline-block mb-3 text-sm font-normal text-black"
                   htmlFor="referralCode"
                 >
-                  ID giới thiệu
+                  {t("referral_id")}
                 </label>
                 <div>
                   <input
                     {...register("referralCode")}
-                    placeholder="ID giới thiệu"
+                    placeholder={t("referral_id")}
                     type="referralCode"
                     className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.referralCode?.message
-                        ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
-                        : "border border-slate-300 hover:border hover:border-slate-500"
+                      ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
+                      : "border border-slate-300 hover:border hover:border-slate-500"
                       }`}
                   />
                 </div>
@@ -231,13 +234,13 @@ const Register = () => {
                 </span>
               </div>
               <button className="inline-block w-full py-2 mt-10 text-lg text-white rounded-md cursor-pointer bg-regal-red">
-                Đăng kí
+                {t("sign_up")}
               </button>
               <div className="flex items-center justify-center mt-5">
                 <span className="text-xs text-center">
-                  Bạn đã có tài khoản SHESHI?
+                  {t("already_account")}
                   <Link href='/login' className="ml-1 text-[14px] text-regal-red hover:text-yellow-400 cursor-pointer">
-                    Đăng nhập
+                    {t("sign_up")}
                   </Link>
                 </span>
               </div>
@@ -248,5 +251,16 @@ const Register = () => {
     </>
   );
 };
+
+
+export async function getStaticProps({ locale }) {
+  console.log(locale)
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'], null, ['vi', 'en'])),
+      // Will be passed to the page component as props
+    },
+  }
+}
 
 export default Register;

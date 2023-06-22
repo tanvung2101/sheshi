@@ -26,16 +26,16 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import LocaleSwitcher from "@/components/locale-switcher";
 
-// import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-// import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 
 
 const OUTSTANDING_PRODUCTS = 1;
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 export default function Home({ data }) {
-  // const router = useRouter();
-  // const { locale, locales, defaultLocale } = router;
-  // const { t } = useTranslation('common');
+  const router = useRouter();
+  const { locale, locales, defaultLocale } = router;
+  const { t } = useTranslation('common');
 
   const { contents, slideImageHome, slideImageAdvert } = data;
   // console.log("slideImageAdvert", slideImageAdvert);
@@ -235,16 +235,15 @@ export default function Home({ data }) {
         />
       </Head>
       <div className="mx-auto">
-        {/* <div>
-          <h1>{t('index')}</h1>
+        <div>
+          <h1>{t('login')}</h1>
 
-          <LocaleSwitcher />
 
           <Link href="/san-pham" locale={locale}>
             About
           </Link>
           <br />
-        </div> */}
+        </div>
         <Slider {...settingsSlideImage}>
           {slideImageHome.map((item) => {
             return (
@@ -558,7 +557,7 @@ export async function getStaticProps({ locale }) {
   const data = { contents: contents.data, slideImageHome, slideImageAdvert };
   return {
     props: {
-      // ...(await serverSideTranslations(locale, ['common', 'footer'], null, ['en', 'it'])),
+      ...(await serverSideTranslations(locale, ['common', 'footer'], null, ['en', 'vi'])),
       data,
     },
     // revalidate: 300,

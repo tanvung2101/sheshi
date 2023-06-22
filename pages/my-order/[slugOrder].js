@@ -1,7 +1,8 @@
+import commissionApis from '@/apis/commissionApis'
 import orderApis from '@/apis/orderApis'
 import NavbarUser from '@/components/NavbarUser'
 import OrderContent from '@/components/OrderContent'
-import { MASTER_DATA_NAME, STATUS_ORDER } from '@/constants'
+import { COMMISSION_TYPE, MASTER_DATA_NAME, STATUS_ORDER } from '@/constants'
 import { useLocation } from '@/hook/useLocation'
 import axios from 'axios'
 import moment from 'moment'
@@ -26,7 +27,7 @@ const PageSlugOrder = () => {
     const router = useRouter()
     const { token, info } = useSelector((state) => state.account);
     // console.log(info)
-    console.log(router.query.slugOrder)
+    // console.log(router.query.slugOrder)
 
     // const [slug, setSlug] = useState(router.query.slugOrder)
     const [masterCapacity, setMasterCapacity] = useState();
@@ -34,8 +35,9 @@ const PageSlugOrder = () => {
     const [masterOrderStatus, setMasterOrderStatus] = useState();
     const [orderList, setOrderList] = useState([]);
     const [orderDetail, setOrderDetail] = useState()
-    console.log('orderDetail', orderDetail)
+    // console.log('orderDetail', orderDetail)
     const [product, setProduct] = useState([]);
+    const [commission, setCommission] = useState()
 
 
     const fetchMasterData = async () => {
@@ -55,7 +57,7 @@ const PageSlugOrder = () => {
     };
 
     const address = useLocation(orderDetail?.cityCode, orderDetail?.districtCode, orderDetail?.wardCode)
-    console.log(address)
+    // console.log(address)
 
     const fetchOrderList = useCallback(async () => {
         let cartItemsInfo = []
@@ -144,6 +146,18 @@ const PageSlugOrder = () => {
     useEffect(() => {
         fetchOrderList();
     }, [fetchOrderList])
+
+    const getListCommission = useCallback(async () => {
+        const listCommission = await commissionApis.getlistCommissionLevel({
+            idLevel: info ? info.level : 0,
+            type: COMMISSION_TYPE.AUTOMATION
+        })
+        setCommission(info ? listCommission[0].commissionConfig.percent : null)
+    }, [info])
+    useEffect(() => {
+        getListCommission()
+    }, [getListCommission])
+    // console.log('commisstion, ', commission)
     return (
         <>
 
@@ -291,7 +305,7 @@ const PageSlugOrder = () => {
                                             </div>
                                         ))}
                                     <div className="w-full mt-2 mb-10">
-                                        <div className="flex flex-col w-[25%] float-right">
+                                        <div className="flex flex-col w-[35%] float-right">
                                             <div className="flex items-center justify-between w-full pr-2">
                                                 <span className="text-lg font-normal text-right text-black">
                                                     Tạm tính
@@ -307,20 +321,35 @@ const PageSlugOrder = () => {
                                                         )}
                                                 </span>
                                             </div>
-                                            <div className="flex items-center justify-between w-full pr-2 mt-5">
-                                                <span className="text-lg font-normal text-black">
-                                                    Phí vận chuyển
+                                            {!!orderDetail !== 0 && orderDetail?.commission && <div className="flex items-center justify-between w-full pr-2 mt-5">
+                                                <span className=" text-lg font-normal text-black">
+                                                    Hoa hồng cấp đại lý
                                                 </span>
                                                 <span className="text-lg font-normal text-black">
-                                                    {orderDetail &&
-                                                        (
-                                                            orderDetail.total - orderDetail?.totalBeforeFee
-                                                        ).toLocaleString("vi", {
+                                                    {orderDetail?.commission
+                                                        ?.toLocaleString("vi", {
                                                             style: "currency",
                                                             currency: "VND",
                                                         })}
                                                 </span>
-                                            </div>
+                                            </div>}
+                                            {!!orderDetail !== 0 && orderDetail?.shipId && <div className="flex items-center justify-between w-full pr-2 mt-5">
+                                                <span className="text-lg font-normal text-black">
+                                                    Phí vận chuyển
+                                                </span>
+                                                <span className="text-lg font-normal text-black">
+                                                    {(
+                                                        orderDetail?.total -
+                                                        orderDetail?.totalBeforeFee +
+                                                        (orderDetail?.commission
+                                                            ? orderDetail?.commission
+                                                            : 0)
+                                                    )?.toLocaleString("vi", {
+                                                        style: "currency",
+                                                        currency: "VND",
+                                                    })}
+                                                </span>
+                                            </div>}
                                             <div className="flex items-center justify-between w-full pr-2 mt-5">
                                                 <span className="text-lg font-medium text-regal-red">
                                                     Thành tiền

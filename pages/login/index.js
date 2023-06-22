@@ -17,6 +17,8 @@ import { checkConditionLevelUp } from "@/utils/funcs";
 import dynamic from "next/dynamic";
 import axios from "axios";
 import Link from "next/link";
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 // const Login = dynamic(() => import("./../../components/Login"), {
 //   ssr: false,
@@ -44,6 +46,7 @@ const schema = yup
   .required("Trường bắt buộc");
 
 const PageLogin = () => {
+  const { t } = useTranslation('common');
   const router = useRouter();
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.account);
@@ -96,11 +99,11 @@ const PageLogin = () => {
   };
   return (
     <>
-      <SEO title="Đăng nhập"></SEO>
+      <SEO title={t('login')}></SEO>
 
       <div className="flex items-center my-20">
         <div className="mx-auto min-w-[25%]">
-          <h3>Đăng nhập</h3>
+          <h3 className="text-2xl">{t('login')}</h3>
           <form
             className="inline-block w-full bg-white"
             onSubmit={handleSubmit(onSubmit)}
@@ -110,12 +113,12 @@ const PageLogin = () => {
                 className="inline-block mb-3 text-sm font-normal text-black"
                 htmlFor=""
               >
-                Email
+                {t('email')}
               </label>
               <div className="relative">
                 <Input
                   {...register("email")}
-                  placeholder="Nhập email của bạn"
+                  placeholder={t("enter_your_email")}
                   type="text"
                   errors={errors?.email?.message}
                 />
@@ -134,12 +137,12 @@ const PageLogin = () => {
                 className="inline-block mb-3 text-sm font-normal text-black"
                 htmlFor=""
               >
-                Mật khẩu
+                {t('password')}
               </label>
               <div className="relative">
                 <input
                   {...register("password")}
-                  placeholder="Mật khẩu"
+                  placeholder={t("enter_your_password")}
                   type={hiddentPass ? "password" : "text"}
                   className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.password?.message
                     ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
@@ -163,15 +166,15 @@ const PageLogin = () => {
             </div>
             <div className="mt-4 cursor-pointer mb-10">
               <Link href='/forgot-password' className="text-sm text-regal-red hover:text-yellow-400">
-                Quên mật khẩu
+                {t("forgot_password")}
               </Link>
             </div>
-            <Button className='w-full' loading={loading} disabled={loading}>Đăng nhập</Button>
+            <Button className='w-full' loading={loading} disabled={loading}>{t("login")}</Button>
             <div className="flex items-center justify-center mt-5">
               <span className="text-xs text-center">
-                Bạn đã có tài khoản SHESHI?{" "}
+                {t("already_account")}
                 <Link href='/sign-up' className="ml-1 text-[14px] text-regal-red font-medium hover:text-yellow-400">
-                  Đăng kí
+                  {t("sign_up")}
                 </Link>
               </span>
             </div>
@@ -181,6 +184,16 @@ const PageLogin = () => {
     </>
   );
 };
+
+export async function getStaticProps({ locale }) {
+  console.log(locale)
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'], null, ['vi', 'en'])),
+      // Will be passed to the page component as props
+    },
+  }
+}
 
 
 export default PageLogin;

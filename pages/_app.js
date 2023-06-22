@@ -18,13 +18,6 @@ import { appWithTranslation } from 'next-i18next';
 let persistor = persistStore(store);
 
 function App({ Component, pageProps }) {
-  // const dispatch = useDispatch();
-  // const tokenLogin = window.localStorage.getItem(STORAGE_KEY.TOKEN);
-  // if (JSON.parse(tokenLogin)) {
-  //   return dispatch(setToken(JSON.parse(tokenLogin)));
-  // } else {
-  //   dispatch(setToken());
-  // }
   return (
     <>
       <Provider store={store}>

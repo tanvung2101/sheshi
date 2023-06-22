@@ -66,6 +66,7 @@ const schema = yup
 
 const PaymentConfirm = () => {
   const { value } = useSelector((state) => state.cartItem);
+  const { t } = useTranslation('common');
   const [totalPrice, setTotalPrice] = useState(0);
   const dispatch = useDispatch();
   const { information } = useSelector((state) => state.cartItem);
@@ -201,7 +202,7 @@ const PaymentConfirm = () => {
                       htmlFor="fullname"
                       className="text-[16px] font-sans font-normal"
                     >
-                      Họ và tên
+                      {t("display_name")}
                     </label>
                     <div className="relative">
                       <input
@@ -209,12 +210,11 @@ const PaymentConfirm = () => {
                         id="fullname"
                         {...register("fullname")}
                         type="text"
-                        className={`px-4 py-2 rounded-md w-full outline-none ${
-                          errors?.fullname?.message
-                            ? "focus:ring-2 focus:ring-red-300 border border-red-500"
-                            : "border border-slate-400 focus:border-slate-600"
-                        }`}
-                        placeholder="Họ và tên"
+                        className={`px-4 py-2 rounded-md w-full outline-none ${errors?.fullname?.message
+                          ? "focus:ring-2 focus:ring-red-300 border border-red-500"
+                          : "border border-slate-400 focus:border-slate-600"
+                          }`}
+                        placeholder={t("display_name")}
                       />
                       <span className="font-sans text-sm font-normal text-red-500">
                         {errors?.fullname?.message}
@@ -231,18 +231,17 @@ const PaymentConfirm = () => {
                       htmlFor="email"
                       className="text-[16px] font-sans font-normal"
                     >
-                      Email
+                      {t("email")}
                     </label>
                     <div className="relative">
                       <input
-                        className={`px-4 py-2 rounded-md w-full outline-none ${
-                          errors?.email?.message
-                            ? "focus:ring-2 focus:ring-red-300 border border-red-500"
-                            : "border border-slate-400 focus:border-slate-600"
-                        }`}
+                        className={`px-4 py-2 rounded-md w-full outline-none ${errors?.email?.message
+                          ? "focus:ring-2 focus:ring-red-300 border border-red-500"
+                          : "border border-slate-400 focus:border-slate-600"
+                          }`}
                         id="email"
                         {...register("email")}
-                        placeholder="Nhập email của bạn"
+                        placeholder={t("email")}
                       />
                       {errors?.email?.message && (
                         <span className="font-sans text-sm font-normal text-red-500">
@@ -258,7 +257,7 @@ const PaymentConfirm = () => {
                   </div>
                   <div className="w-full mt-4">
                     <label className="text-[16px] font-sans font-normal">
-                      Số điện thoại
+                      {t("phone")}
                     </label>
                     <Controller
                       render={({ field: { onChange, onBlur, value, ref } }) => {
@@ -313,18 +312,17 @@ const PaymentConfirm = () => {
                       htmlFor="address"
                       className="text-[16px] font-sans font-normal"
                     >
-                      Địa chỉ
+                      {t("address")}
                     </label>
                     <div className="relative">
                       <input
                         {...register("address")}
-                        className={`px-4 py-2 rounded-md w-full outline-none ${
-                          errors?.address?.message
-                            ? "focus:ring-2 focus:ring-red-300 border border-red-500"
-                            : "border border-slate-400 focus:border-slate-600"
-                        }`}
+                        className={`px-4 py-2 rounded-md w-full outline-none ${errors?.address?.message
+                          ? "focus:ring-2 focus:ring-red-300 border border-red-500"
+                          : "border border-slate-400 focus:border-slate-600"
+                          }`}
                         id="address"
-                        placeholder="Địa chỉ"
+                        placeholder={t("address")}
                       />
                       {errors?.address?.message && (
                         <span className="font-sans text-sm font-normal text-red-500">
@@ -343,23 +341,22 @@ const PaymentConfirm = () => {
                       htmlFor="address"
                       className="text-[16px] font-sans font-normal"
                     >
-                      Tỉnh/Thành
+                      {t("city")}
                     </label>
                     <div className="">
                       <div
-                        className={`relative px-4 py-2 rounded-md w-full outline-none ${
-                          errors?.cityCode?.message
-                            ? "focus:ring-2 focus:ring-red-300 border border-red-500"
-                            : "border border-slate-400 focus:border-slate-600"
-                        }`}
+                        className={`relative px-4 py-2 rounded-md w-full outline-none ${errors?.cityCode?.message
+                          ? "focus:ring-2 focus:ring-red-300 border border-red-500"
+                          : "border border-slate-400 focus:border-slate-600"
+                          }`}
                         onClick={() => setActive(!active)}
                       >
                         <span className="text-[16px] font-sans font-normal">
                           {idCityCode.name
                             ? idCityCode.name
                             : information?.cityCode?.name
-                            ? information?.cityCode?.name
-                            : "Tỉnh/Thành"}
+                              ? information?.cityCode?.name
+                              : "Tỉnh/Thành"}
                         </span>
                         <span className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2">
                           <svg
@@ -409,24 +406,23 @@ const PaymentConfirm = () => {
                       htmlFor="address"
                       className="text-[16px] font-sans font-normal"
                     >
-                      Quận/Huyện
+                      {t("district")}
                     </label>
                     <div className="relative">
                       <div className="">
                         <div
-                          className={`relative px-4 py-2 rounded-md w-full outline-none ${
-                            errors?.districtCode?.message
-                              ? "focus:ring-2 focus:ring-red-300 border border-red-500"
-                              : "border border-slate-400 focus:border-slate-600"
-                          }`}
+                          className={`relative px-4 py-2 rounded-md w-full outline-none ${errors?.districtCode?.message
+                            ? "focus:ring-2 focus:ring-red-300 border border-red-500"
+                            : "border border-slate-400 focus:border-slate-600"
+                            }`}
                           onClick={() => setActiveDistric(!activeDistric)}
                         >
                           <span className="text-[16px] font-sans font-normal">
                             {idDistrictCode.name
                               ? idDistrictCode.name
                               : information?.districtCode?.name
-                              ? information?.districtCode?.name
-                              : "Quận/Huyện"}
+                                ? information?.districtCode?.name
+                                : "Quận/Huyện"}
                           </span>
                           <span className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2">
                             <svg
@@ -484,24 +480,23 @@ const PaymentConfirm = () => {
                       htmlFor="address"
                       className="text-[16px] font-sans font-normal"
                     >
-                      Phường/Xã
+                      {t("ward")}
                     </label>
                     <div className="relative">
                       <div className="">
                         <div
-                          className={`relative px-4 py-2 rounded-md w-full outline-none ${
-                            errors?.wardCode?.message
-                              ? "focus:ring-2 focus:ring-red-300 border border-red-500"
-                              : "border border-slate-400 focus:border-slate-600"
-                          }`}
+                          className={`relative px-4 py-2 rounded-md w-full outline-none ${errors?.wardCode?.message
+                            ? "focus:ring-2 focus:ring-red-300 border border-red-500"
+                            : "border border-slate-400 focus:border-slate-600"
+                            }`}
                           onClick={() => setActiveWard(!activeWard)}
                         >
                           <span className="text-[16px] font-sans font-normal">
                             {idWardCode.name
                               ? idWardCode.name
                               : information?.wardCode?.name
-                              ? information?.wardCode?.name
-                              : "Phường/Xã"}
+                                ? information?.wardCode?.name
+                                : "Phường/Xã"}
                           </span>
                           <span className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2">
                             <svg
@@ -559,18 +554,17 @@ const PaymentConfirm = () => {
                       htmlFor="address"
                       className="text-[16px] font-sans font-normal"
                     >
-                      ID giới thiệu
+                      {t("referral_id")}
                     </label>
                     <div className="relative">
                       <input
                         {...register("referralCode")}
-                        className={`px-4 py-2 rounded-md w-full outline-none ${
-                          errors?.referralCode?.message
-                            ? "focus:ring-2 focus:ring-red-300 border border-red-500"
-                            : "border border-slate-400 focus:border-slate-600"
-                        }`}
+                        className={`px-4 py-2 rounded-md w-full outline-none ${errors?.referralCode?.message
+                          ? "focus:ring-2 focus:ring-red-300 border border-red-500"
+                          : "border border-slate-400 focus:border-slate-600"
+                          }`}
                         id="address"
-                        placeholder="ID giới thiệu"
+                        placeholder={t("referral_id")}
                       />
 
                       {errors?.referralCode?.message && (
@@ -624,5 +618,15 @@ const PaymentConfirm = () => {
     </>
   );
 };
+
+export async function getStaticProps({ locale }) {
+  console.log(locale)
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'], null, ['vi', 'en'])),
+      // Will be passed to the page component as props
+    },
+  }
+}
 
 export default PaymentConfirm;

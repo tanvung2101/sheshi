@@ -14,8 +14,10 @@ import Compressor from 'compressorjs';
 import commonApis from '@/apis/commonApis'
 import imageCompression from 'browser-image-compression';
 import { useRouter } from 'next/router'
+import { useTranslation } from 'react-i18next'
 
 const NavbarUser = ({ bgPageProfile, bgPageMyOrder, bgPageMyBonus, children }) => {
+    const { t } = useTranslation('transitions');
     const { token, info } = useSelector((state) => state.account);
     const router = useRouter()
 
