@@ -2,7 +2,8 @@
 
 const PUBLIC_FILE = /\.(.*)$/
 
-export async function middleware(req) {
+export async function middleware(req, res) {
+    console.log(res)
     // if (
     //     req.nextUrl.pathname.startsWith('/_next') ||
     //     req.nextUrl.pathname.includes('/api/') ||

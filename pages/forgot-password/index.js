@@ -131,8 +131,8 @@ const PageForgotPassword = () => {
         }
     }, [countdownEmail])
     return (
-        <div className='bg-[#fdf2ec] flex items-center justify-center px-16'>
-            <div className='w-[32%] flex flex-col items-start justify-center gap-4 my-12 px-8 bg-white'>
+        <div className='bg-[#fdf2ec] flex items-center justify-center px-16 max-md:px-0'>
+            <div className='w-[32%] flex flex-col items-start justify-center gap-4 my-12 px-8 bg-white max-md:w-[80%] max-sm:px-8 max-sm:w-[90%]'>
                 <div className='mt-8'>
                     <h3 className='text-[26px] pb-2'>Quên mật khẩu</h3>
                 </div>

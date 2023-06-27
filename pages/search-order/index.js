@@ -13,6 +13,7 @@ import { useLocation } from "@/hook/useLocation";
 import axios from "axios";
 import OrderContent from "@/components/OrderContent";
 import moment from "moment/moment";
+import Swal from "sweetalert2";
 
 async function fetchMasterCapacity(params) {
   const res = await axios.get(`http://localhost:3001/api/master`, {
@@ -121,7 +122,7 @@ const PageSearchOrder = () => {
           .then(() => { })
           .catch((err) => toast.error(err.mesage))
           .finally(() => {
-            // getCartItemsInfo()
+            getCartItemsInfo()
           });
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
       }
@@ -165,7 +166,7 @@ const PageSearchOrder = () => {
         )}
       </div>
       {!!orderSearchItem ? (
-        <div className="flex flex-col py-8 px-44">
+        <div className="flex flex-col py-8 px-44 max-lg:px-28">
           <div className="flex items-center justify-between">
             <div className="flex flex-col items-start justify-center gap-4 mb-14">
               <span>
@@ -211,7 +212,7 @@ const PageSearchOrder = () => {
                   <p className="uppercase text-[15px] font-normal">Hình</p>
                 </div>
               </div>
-              <div className="flex flex-col w-[45%]">
+              <div className="flex flex-col w-[40%]">
                 <div className="bg-[#fdf2ec] pt-2 pb-4 w-full">
                   <p className="uppercase text-[15px] font-normal">sản phẩm</p>
                 </div>
@@ -228,7 +229,7 @@ const PageSearchOrder = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex flex-col w-[10%]">
+              <div className="flex flex-col w-[15%]">
                 <div className="bg-[#fdf2ec] pt-2 pr-2 pb-4">
                   <p className="uppercase text-[15px] font-normal float-right">
                     tạm tính
@@ -283,7 +284,7 @@ const PageSearchOrder = () => {
                   </div>
                   <div className="flex flex-col w-[25%]">
                     <div className="flex flex-col mt-3">
-                      <p className="text-lg text-center">
+                      <p className="text-lg text-center max-lg:text-base">
                         {item?.price?.toLocaleString("vi", {
                           style: "currency",
                           currency: "VND",
@@ -291,9 +292,9 @@ const PageSearchOrder = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="flex flex-col w-[10%]">
-                    <div className="flex flex-col px-2 mt-3 ">
-                      <p className="text-lg text-right">
+                  <div className="flex flex-col w-[15%]">
+                    <div className="flex flex-col px-2 mt-3 max-lg:px-0">
+                      <p className="text-lg text-right max-lg:text-base">
                         {item?.price?.toLocaleString("vi", {
                           style: "currency",
                           currency: "VND",

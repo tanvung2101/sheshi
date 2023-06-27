@@ -67,8 +67,6 @@ const PageLogin = () => {
     },
   });
 
-
-
   const onSubmit = (values) => {
     const { type, email, password } = values;
     console.log(values)
@@ -97,15 +95,18 @@ const PageLogin = () => {
         setLoading(false);
       });
   };
+  useEffect(() => {
+    if (token) return router.push('/', undefined, { shallow: true })
+  }, [router, token])
   return (
     <>
       <SEO title={t('login')}></SEO>
 
-      <div className="flex items-center my-20">
-        <div className="mx-auto min-w-[25%]">
+      {!token ? <div className="flex items-center my-20">
+        <div className="mx-auto min-w-[25%] max-md:min-w-[80%]">
           <h3 className="text-2xl">{t('login')}</h3>
           <form
-            className="inline-block w-full bg-white"
+            className="inline-block w-full bg-white max-md:block"
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="flex-col mt-4">
@@ -180,7 +181,7 @@ const PageLogin = () => {
             </div>
           </form>
         </div>
-      </div>
+      </div> : null}
     </>
   );
 };

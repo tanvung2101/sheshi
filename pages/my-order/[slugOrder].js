@@ -162,15 +162,15 @@ const PageSlugOrder = () => {
         <>
 
             <NavbarUser bgPageMyOrder={true}>
-                <div className="w-[75%] flex-col items-start">
+                <div className="w-[75%] flex-col items-start max-md:w-full">
                     <div className="flex flex-col items-center ">
                         <h4 className="text-[22px]">Chi tiết đơn hàng</h4>
                         {!!orderDetail ? (
-                            <div className="flex flex-col py-8 w-full">
-                                <div className="flex items-center justify-between">
+                            <div className="flex flex-col py-8 w-full ">
+                                <div className="flex items-center justify-between max-md:items-start">
                                     <div className="flex flex-col items-start justify-center gap-4 mb-14">
                                         <span>
-                                            Hóa đơn: {orderDetail && `#${orderDetail.orderCode}`}
+                                            Hóa đơn: <strong>{orderDetail && `#${orderDetail.orderCode}`}</strong>
                                         </span>
                                         <span>
                                             Đặt ngày{" "}
@@ -207,29 +207,29 @@ const PageSlugOrder = () => {
                                 ></OrderContent>
                                 <div className="w-full mt-10">
                                     <div className="flex w-full">
-                                        <div className="flex flex-col w-[15%]">
+                                        <div className="flex flex-col w-[15%] max-md:hidden">
                                             <div className="bg-[#fdf2ec] pt-2 pb-4 px-2 w-full">
                                                 <p className="uppercase text-[15px] font-normal">Hình</p>
                                             </div>
                                         </div>
-                                        <div className="flex flex-col w-[45%]">
-                                            <div className="bg-[#fdf2ec] pt-2 pb-4 w-full">
+                                        <div className="flex flex-col w-[40%] max-md:w-[85%]">
+                                            <div className="bg-[#fdf2ec] pt-2 pb-4 w-full max-md:pl-4">
                                                 <p className="uppercase text-[15px] font-normal">sản phẩm</p>
                                             </div>
                                         </div>
-                                        <div className="flex flex-col w-[5%]">
+                                        <div className="flex flex-col w-[5%] max-md:w-[15%]">
                                             <div className="bg-[#fdf2ec] pt-2 pb-4 pr-2 w-full">
                                                 <p className="uppercase text-[15px] font-normal">sl</p>
                                             </div>
                                         </div>
-                                        <div className="flex flex-col w-[25%]">
+                                        <div className="flex flex-col w-[25%] max-md:hidden">
                                             <div className="bg-[#fdf2ec] pt-2 pb-4 pr-2 w-full">
                                                 <p className="uppercase text-[15px] font-normal text-center">
                                                     giá
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="flex flex-col w-[10%]">
+                                        <div className="flex flex-col w-[15%] max-md:hidden">
                                             <div className="bg-[#fdf2ec] pt-2 pr-2 pb-4">
                                                 <p className="uppercase text-[15px] font-normal float-right">
                                                     tạm tính
@@ -243,7 +243,7 @@ const PageSlugOrder = () => {
                                                 key={index}
                                                 className="flex pb-3 w-full border-b-[1px] border-b-gray-300"
                                             >
-                                                <div className="flex flex-col w-[15%]">
+                                                <div className="flex flex-col w-[15%] max-md:hidden">
                                                     <div className="px-2 mt-3">
                                                         <Image
                                                             src={item?.product.productImage[0]?.image}
@@ -254,8 +254,8 @@ const PageSlugOrder = () => {
                                                         />
                                                     </div>
                                                 </div>
-                                                <div className="flex flex-col w-[45%]">
-                                                    <div className="flex flex-col mt-3">
+                                                <div className="flex flex-col w-[40%] max-md:w-[85%]">
+                                                    <div className="flex flex-col mt-3 max-md:pl-4">
                                                         <p className="text-lg text-regal-red hover:text-[#ecbe26]">
                                                             <Link href={`/san-pham/${item?.product.productSlug}`}>
                                                                 {item?.product.name}
@@ -282,7 +282,7 @@ const PageSlugOrder = () => {
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <div className="flex flex-col w-[25%]">
+                                                <div className="flex flex-col w-[25%] max-md:hidden">
                                                     <div className="flex flex-col mt-3">
                                                         <p className="text-lg text-center">
                                                             {item?.price?.toLocaleString("vi", {
@@ -292,7 +292,7 @@ const PageSlugOrder = () => {
                                                         </p>
                                                     </div>
                                                 </div>
-                                                <div className="flex flex-col w-[10%]">
+                                                <div className="flex flex-col w-[15%] max-md:hidden">
                                                     <div className="flex flex-col px-2 mt-3 ">
                                                         <p className="text-lg text-right">
                                                             {item?.price?.toLocaleString("vi", {
@@ -305,7 +305,7 @@ const PageSlugOrder = () => {
                                             </div>
                                         ))}
                                     <div className="w-full mt-2 mb-10">
-                                        <div className="flex flex-col w-[35%] float-right">
+                                        <div className="flex flex-col w-[33%] float-right max-md:w-[65%] max-sm:w-[90%]">
                                             <div className="flex items-center justify-between w-full pr-2">
                                                 <span className="text-lg font-normal text-right text-black">
                                                     Tạm tính

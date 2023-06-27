@@ -23,9 +23,9 @@ async function fetchMasterCapacity(params) {
   return res.data.rows;
 }
 
-function PagePaymentSucces({ orderCode }) {
+function PagePaymentSucces() {
   const { query } = useRouter();
-
+  console.log('fdfdfdfd0', query?.order)
   const [order, setOrder] = useState();
   const [masterCapacity, setMasterCapacity] = useState();
   const [masterUnit, setMasterUnit] = useState();
@@ -43,29 +43,39 @@ function PagePaymentSucces({ orderCode }) {
     setMasterCapacity(DataMasterCapacity);
     setMasterUnit(DataMasterUnit);
   };
+  // const getOrderCode = useCallback(async () => {
+  //   const orderCode = await orderApis.getOrderByOrderCode({
+  //     orderCode: query?.order,
+  //   });
+  //   setOrder(orderCode)
+  // }, [query?.order])
   useEffect(() => {
     fetchMasterData();
   }, []);
-  useEffect(() => {
-    setOrder(orderCode);
-  }, [orderCode]);
+  // useEffect(() => {
+  //   getOrderCode();
+  // }, [getOrderCode]);
 
   const getCartItemsInfo = useCallback(async () => {
     let cartItemsInfo = []
     const productOption = [];
-    if (order) {
-      await Promise.all(order?.orderItem.map(async (item) => {
-        const params = {
-          productId: item.productId,
-          id: item.subProductId,
-        };
-        const data = await axios.get(
-          "http://localhost:3001/api/product/get-capacity-product",
-          { params }
-        );
-        cartItemsInfo.push(data.data);
-      }))
-    }
+    const order = await orderApis.getOrderByOrderCode({
+      orderCode: query?.order,
+    });
+    setOrder(order)
+    if (!order) return
+    await Promise.all(order.orderItem.map(async (item) => {
+      const params = {
+        productId: item.productId,
+        id: item.subProductId,
+      };
+      const data = await axios.get(
+        "http://localhost:3001/api/product/get-capacity-product",
+        { params }
+      );
+      cartItemsInfo.push(data.data);
+    }))
+
     if (masterCapacity?.length > 0) {
       cartItemsInfo.map((e) => {
         // console.log("capacity", e);
@@ -83,45 +93,45 @@ function PagePaymentSucces({ orderCode }) {
         setProduct(productOption);
       });
     }
-  }, [masterCapacity, masterUnit, order]);
+  }, [masterCapacity, masterUnit, query]);
+  console.log('odderggg', order?.orderStatus)
   useEffect(() => {
     getCartItemsInfo();
   }, [getCartItemsInfo]);
   const cancelOrder = async () => {
     const body = {
       status: STATUS_ORDER.REJECT,
-      productDetail: order.orderItem,
-    }
-    Swal.fire({
-      title: 'Bạn thật sự',
+      productDetail: order?.orderItem,
+    };
+    return Swal.fire({
+      title: "Bạn thật sự",
       text: "muốn huỷ đơn hàng không ?",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        orderApis.cancelOrder(order.id, body)
+        orderApis
+          .cancelOrder(order.id, body)
           .then(() => { })
-          .catch(err => toast.error(err.mesage))
+          .catch((err) => toast.error(err.mesage))
           .finally(() => {
+            console.log('tahnhf công')
             getCartItemsInfo()
-          });
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        )
+          }
+          );
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
       }
-    })
+    });
     // return orderApis.cancelOrder(order.id, body)
-    // .then(() => toast.success('Bạn đã huỷ đơn hành thành công'))
-    // .catch(err => toast.error(err.mesage))
-    // .finally(() => {
-    //   getCartItemsInfo()
-    // });
-  }
+    //   .then(() => toast.success('Bạn đã huỷ đơn hành thành công'))
+    //   .catch(err => toast.error(err.mesage))
+    //   .finally(() => {
+    //     getCartItemsInfo()
+    //   });
+  };
   if (!order) {
     return <p>Loading ...</p>;
   }
@@ -318,10 +328,17 @@ function PagePaymentSucces({ orderCode }) {
               <Link href="/">Quay trở lại trang chủ</Link>
             </button>
             <button
-              disabled={order?.orderStatus !== STATUS_ORDER.WAITTING_CONFIRM}
-              onClick={() => cancelOrder()} className={`relative px-3 py-2 font-serif text-base font-light text-white border rounded-md bg-regal-red 
-                ${order?.orderStatus !== STATUS_ORDER.WAITTING_CONFIRM ? "cursor-not-allowed after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-slate-200 after:bg-opacity-30" : ''}`}>
-              <span >Hủy đơn hàng</span>
+              disabled={
+                order?.orderStatus !== STATUS_ORDER.WAITTING_CONFIRM
+              }
+              onClick={cancelOrder}
+              className={`relative px-3 py-2 font-serif text-base font-light text-white border rounded-md bg-regal-red 
+                ${order?.orderStatus !== STATUS_ORDER.WAITTING_CONFIRM
+                  ? "cursor-not-allowed after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-slate-200 after:bg-opacity-30"
+                  : ""
+                }`}
+            >
+              <span>Hủy đơn hàng</span>
             </button>
           </div>
         </div>
@@ -344,20 +361,20 @@ function PagePaymentSucces({ orderCode }) {
 //   };
 // }
 
-export async function getServerSideProps(context) {
-  const { order } = context.params;
-  if (!order) {
+// export async function getServerSideProps(context) {
+//   const { order } = context.params;
+//   if (!order) {
 
-  }
-  // console.log(order);
-  const params = order;
-  const orderCode = await axios.get(
-    `http://0.0.0.0:3001/api/order/search-order?orderCode=${params}`
-  );
-  // console.log(orderCode.data);
-  return {
-    props: { orderCode: orderCode.data },
-  };
-}
+//   }
+//   // console.log(order);
+//   const params = order;
+//   const orderCode = await axios.get(
+//     `http://0.0.0.0:3001/api/order/search-order?orderCode=${params}`
+//   );
+//   // console.log(orderCode.data);
+//   return {
+//     props: { orderCode: orderCode.data },
+//   };
+// }
 
 export default PagePaymentSucces;

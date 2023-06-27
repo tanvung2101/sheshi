@@ -17,7 +17,7 @@ const Search = ({ product }) => {
       <SEO title="tìm kiếm"></SEO>
       <h1 className="mt-20 mb-8 text-center text-4xl text-black">Tìm kiếm</h1>
       <p className="mt-4 text-center text-lg ">{`Kết quả tìm kiếm cho "${params}"`}</p>
-      <div className="px-8 grid grid-cols-4 mb-8">
+      <div className="px-8 grid grid-cols-4 my-8 max-md:grid-cols-2 max-[576]:grid-cols-1 max-[576]:px-2">
         {data.rows.length > 0 &&
           data.rows.map((item) => {
             console.log('ítemmm', item)

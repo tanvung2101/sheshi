@@ -205,20 +205,23 @@ const ItemSlide = ({ propProduct }) => {
   const renderContent = (
     <div
       className={`${active ? "" : "hidden"
-        } w-full h-full fixed top-0 left-1/2 -translate-x-1/2 flex items-center justify-center overflow-hidden bg-black bg-opacity-30`}
+        } fixed top-0 left-0 w-full h-full overflow-auto z-[101] pt-24 bg-black bg-opacity-30 opacity-1 visible`}
     >
       <div
-        className={`w-[900px] box-border flex items-center justify-center gap-6 bg-white p-8 relative transition-all ${active ? "" : "translate-y-0 transition-all"
-          }`}
+        className={`w-[900px] m-auto box-border bg-white p-8 transition-all ${active ? "" : "translate-y-0 transition-all"
+          } relative flex justify-between max-md:flex-col max-md:w-full`}
       >
         <span
           className={`absolute top-2 right-2 text-4xl hover:text-red-500 cursor-pointer`}
-          onClick={() => setActive(false)}
+          onClick={() => {
+            document.body.style = "overflow: scroll"
+            setActive(false)
+          }}
         >
           <AiOutlineClose className="text-slate-500" />
         </span>
-        <div className="w-[55%]">
-          <div className="box-border">
+        <div className="w-[50%] max-md:w-full">
+          <div className="box-border w-full">
             <Image
               src={product?.productImage[0]?.image}
               alt=""
@@ -228,8 +231,8 @@ const ItemSlide = ({ propProduct }) => {
             ></Image>
           </div>
         </div>
-        <div className="flex-col w-[45%]">
-          <div>
+        <div className="flex-col w-[45%] max-md:w-full max-md:mt-2">
+          <div className="max-md:flex max-md:flex-col max-md:items-center">
             <h4>{product?.name}</h4>
             <span className="block mt-4 font-sans text-3xl font-bold text-regal-red">
               {price?.toLocaleString("vi", {
@@ -237,11 +240,11 @@ const ItemSlide = ({ propProduct }) => {
                 currency: "VND",
               })}
             </span>
-            <div className="flex-col mt-4">
-              <span className="inline-block font-sans text-xl font-semibold">
+            <div className="flex flex-col mt-4 max-md:items-center max-sm:w-full">
+              <p className="font-sans text-xl font-semibold max-md:text-center max-md:mb-6">
                 Số lượng
-              </span>
-              <div className="flex text-2xl font-medium text-center ">
+              </p>
+              <div className="flex text-2xl font-medium text-center max-md:justify-center">
                 <div
                   className="w-12 h-12 flex items-center justify-center bg-[#faf9f5] cursor-pointer"
                   onClick={() => updateQuantity()}
@@ -263,7 +266,7 @@ const ItemSlide = ({ propProduct }) => {
                   +
                 </div>
               </div>
-              <div className="text-lg text-white uppercase mt-7">
+              <div className="text-lg text-white uppercase mt-7 ">
                 <div
                   className="flex gap-2 w-full"
                   onClick={(e) => {
@@ -307,16 +310,16 @@ const ItemSlide = ({ propProduct }) => {
                   )
                 })} */}
               </div>
-              <div className="flex items-start gap-5 mt-5 text-center">
-                <div>
-                  <button
+              <div className="flex items-start gap-5 mt-5 text-center max-sm:flex-col max-sm:w-full">
+                <div className="max-sm:w-full">
+                  <div
                     onClick={() => addCartItem()}
-                    className="px-6 py-2 uppercase border border-regal-red rounded-lg text-[#bc2029] font-bold hover:bg-regal-red hover:text-white transition-all"
+                    className="px-6 py-2 uppercase border border-regal-red rounded-lg text-[#bc2029] font-bold hover:bg-regal-red hover:text-white transition-all max-sm:w-ful"
                   >
                     Thêm vào giỏ
-                  </button>
+                  </div>
                 </div>
-                <div className="w-[]">
+                <div className="max-sm:w-full">
                   <Button
                     type="submit"
                     onClick={() => goToCart()}
@@ -334,7 +337,7 @@ const ItemSlide = ({ propProduct }) => {
   );
   return (
     <>
-      <div className="relative flex-col items-center justify-center p-5 mx-auto hover:text-regal-red group">
+      <div className="relative flex-col items-center justify-center p-5 mx-auto overflow-hidden hover:text-regal-red group max-[576px]:w-full max-[576px]:px-1">
         <div className="w-full mb-2">
           <Link href={`/san-pham/${product?.slug}`}>
             {product?.productImage && (
@@ -343,13 +346,16 @@ const ItemSlide = ({ propProduct }) => {
                 alt=""
                 width={200}
                 height={200}
-                className="w-full h-[300px] object-cover hover:scale-95 transition duration-150 ease-in-out"
+                className="w-full max-h-[300px] object-cover hover:scale-95 transition duration-150 ease-in-out max-md:max-h-[180px]"
               />
             )}
           </Link>
         </div>
         <div
-          onClick={() => setActive(true)}
+          onClick={() => {
+            document.body.style = "overflow: hidden"
+            setActive(true)
+          }}
           className="w-[45px] h-[45px] mx-auto border bg-regal-red rounded-full flex items-center justify-center opacity-0
         group-hover:opacity-100 active:border-black active:bg-light-pink cursor-pointer"
         >

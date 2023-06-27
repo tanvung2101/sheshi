@@ -52,7 +52,7 @@ const PageMyBonus = () => {
     return (
         <>
             <NavbarUser bgPageMyBonus={true}>
-                <div className="w-[75%] flex-col items-start">
+                <div className="w-[75%] flex-col items-start max-lg:w-full">
                     <h3 className='text-3xl mb-4'>Lịch sử thưởng</h3>
                     <table className='w-full'>
                         <thead>

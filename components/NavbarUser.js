@@ -150,8 +150,8 @@ const NavbarUser = ({ bgPageProfile, bgPageMyOrder, bgPageMyBonus, children }) =
 
     return (
         <>
-            <div className="flex items-start justify-center px-24 mt-8 mb-20">
-                <div className="flex flex-col items-center justify-center gap-5 w-[25%] px-4">
+            <div className="flex items-start justify-center gap-5 px-24 mt-8 mb-20 max-lg:px-8 max-md:flex-col max-md:px-3 max-sm:mb-8">
+                <div className="flex flex-col items-center justify-center gap-5 w-[25%] max-:w-full max-md:w-full">
                     <div className="w-full h-[200px] rounded-md bg-[#fdf2ec] flex flex-col items-center justify-start">
                         <div className="relative w-[120px] h-[120px] mt-4">
                             <Image
@@ -182,7 +182,7 @@ const NavbarUser = ({ bgPageProfile, bgPageMyOrder, bgPageMyBonus, children }) =
                         <span className="text-base font-bold text-red-700">{level}</span>
                     </div>
                     <ul className="flex flex-col items-center justify-center w-full gap-4">
-                        <li className={`w-full p-3 border-4 rounded-md transition-all ${bgPageProfile ? 'bg-regal-red text-white' : 'bg-white text-regal-red'} border-regal-red hover:bg-regal-red  hover:text-white`}>
+                        <li className={`w-full p-3 border-4 rounded-md transition-all ${bgPageProfile ? 'bg-regal-red text-white' : 'bg-white text-regal-red'} border-regal-red hover:bg-regal-red  hover:text-white max-lg:py-1`}>
                             <Link
                                 className="inline-block w-full text-base font-bold text-center"
                                 href="/profile"
@@ -190,7 +190,7 @@ const NavbarUser = ({ bgPageProfile, bgPageMyOrder, bgPageMyBonus, children }) =
                                 Trang cá nhân
                             </Link>
                         </li>
-                        <li className={`w-full p-3 border-4 rounded-md transition-all ${bgPageMyOrder ? 'bg-regal-red text-white' : 'bg-white text-regal-red'} border-regal-red hover:bg-regal-red  hover:text-white`}>
+                        <li className={`w-full p-3 border-4 rounded-md transition-all ${bgPageMyOrder ? 'bg-regal-red text-white' : 'bg-white text-regal-red'} border-regal-red hover:bg-regal-red  hover:text-white max-lg:py-1`}>
                             <Link
                                 className="inline-block w-full text-base font-bold text-center"
                                 href="/my-order"
@@ -198,7 +198,7 @@ const NavbarUser = ({ bgPageProfile, bgPageMyOrder, bgPageMyBonus, children }) =
                                 Đơn hàng của tôi
                             </Link>
                         </li>
-                        <li className={`w-full p-3 border-4 rounded-md transition-all ${bgPageMyBonus ? 'bg-regal-red text-white' : 'bg-white text-regal-red'} border-regal-red hover:bg-regal-red  hover:text-white`}>
+                        <li className={`w-full p-3 border-4 rounded-md transition-all ${bgPageMyBonus ? 'bg-regal-red text-white' : 'bg-white text-regal-red'} border-regal-red hover:bg-regal-red  hover:text-white max-lg:py-1`}>
                             <Link
                                 className="inline-block w-full text-base font-bold text-center"
                                 href="/my-bonus"

@@ -15,9 +15,13 @@ import { addInformation } from "@/redux/cartItemSlice";
 import { useRouter } from "next/router";
 import { SEO } from "@/components";
 
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
+import { useLocation } from "@/hook/useLocation";
+
 const schema = yup
   .object({
-    fullname: yup
+    fullName: yup
       .string()
       .required("Trường bắt buộc")
       .min(8, "Tối thiểu 8 kí thự")
@@ -40,32 +44,16 @@ const schema = yup
       .trim(),
     phoneCode: yup.string().min(9).max(20).nullable(),
     address: yup.string().max(255).trim().required().nullable(),
-    cityCode: yup
-      .object({
-        id: yup.number().required(),
-        name: yup.string().required(),
-      })
-      .required()
-      .nullable(),
-    districtCode: yup
-      .object({
-        id: yup.number().required(),
-        name: yup.string().required(),
-      })
-      .required()
-      .nullable(),
-    wardCode: yup
-      .object({
-        id: yup.number().required(),
-        name: yup.string().required(),
-      })
-      .required()
-      .nullable(),
+    cityCode: yup.number().integer().required().nullable(),
+    districtCode: yup.number().integer().required().nullable(),
+    wardCode: yup.number().integer().required().nullable(),
   })
   .required();
 
 const PaymentConfirm = () => {
   const { value } = useSelector((state) => state.cartItem);
+  const { info } = useSelector((state) => state.account);
+  console.log('infoooooo', info?.email)
   const { t } = useTranslation('common');
   const [totalPrice, setTotalPrice] = useState(0);
   const dispatch = useDispatch();
@@ -76,31 +64,68 @@ const PaymentConfirm = () => {
   const [activeDistric, setActiveDistric] = useState(false);
   const [activeWard, setActiveWard] = useState(false);
 
-  const [idCityCode, setIdCityCode] = useState({ id: 0, name: "" });
+  const [idCityCode, setIdCityCode] = useState(info?.userInformation?.cityCode);
   const [city, setCity] = useState();
-  const [idDistrictCode, setIdDistrictCode] = useState({ id: 0, name: "" });
+  const [idDistrictCode, setIdDistrictCode] = useState(info?.userInformation?.districtCode);
   const [district, setDistrict] = useState();
-  const [idWardCode, setIdWardCode] = useState({ id: 0, name: "" });
+  const [idWardCode, setIdWardCode] = useState(info?.userInformation?.wardCode);
   const [ward, setWard] = useState();
+
+  const address = useLocation(idCityCode, idDistrictCode, idWardCode)
 
   // console.log(city);
 
-  const handlerCityCode = (id, name) => {
-    setValue("cityCode", { id, name });
-    setIdCityCode({ id, name });
+  const handlerCityCode = (id) => {
+    setValue("cityCode", id, { shouldDirty: true });
+    setIdCityCode(id);
+    setValue("districtCode", null);
+    setValue("wardCode", null);
+    setIdDistrictCode(0)
+    setIdWardCode(0)
     setActive(false);
+    console.log('idDistrictCode', idDistrictCode)
   };
-  const handlerDistrictCode = (id, name) => {
-    setValue("districtCode", { id, name });
-    setIdDistrictCode({ id, name });
+  const handlerDistrictCode = (id) => {
+    setValue("districtCode", id);
+    setIdDistrictCode(id);
+    setValue("wardCode", null);
     setActiveDistric(false);
   };
-  const handlerWardCode = (id, name) => {
-    setValue("wardCode", { id, name });
-    setIdWardCode({ id, name });
+  const handlerWardCode = (id) => {
+    setValue("wardCode", id);
+    setIdWardCode(id);
     setActiveWard(false);
   };
-  // console.log("idWardCode", idWardCode);
+
+  useEffect(() => {
+    async function cityCode() {
+      const city = await import("../../components/locations/cities.json");
+      setCity(city.data);
+    }
+    cityCode();
+  }, [city, idCityCode]);
+
+  useEffect(() => {
+    async function districtCode() {
+      // console.log(idCityCode.id);
+      if (!idCityCode) return null
+      const district = await import(
+        `../../components/locations/districts/${idCityCode}.json`
+      );
+      setDistrict(district.data);
+    }
+    districtCode();
+  }, [idCityCode, idDistrictCode]);
+  useEffect(() => {
+    async function wardCodeCode() {
+      if (!idDistrictCode) return
+      const ward = await import(
+        `../../components/locations/wards/${idDistrictCode}.json`
+      );
+      setWard(ward.data);
+    }
+    wardCodeCode();
+  }, [idDistrictCode]);
 
   const {
     register,
@@ -113,14 +138,14 @@ const PaymentConfirm = () => {
     // mode: "onChange",
     resolver: yupResolver(schema),
     defaultValues: {
-      fullname: "",
-      email: "",
-      phoneCode: "",
-      address: "",
-      cityCode: "",
-      districtCode: "",
-      wardCode: "",
-      referralCode: "",
+      fullName: info?.userInformation?.fullName,
+      email: info?.email,
+      phoneCode: info?.phoneCode,
+      address: info?.userInformation?.address,
+      cityCode: info?.userInformation?.cityCode,
+      districtCode: info?.userInformation?.districtCode,
+      wardCode: info?.userInformation?.wardCode,
+      referralCode: info?.userReferral?.referrerCode,
     },
   });
   const onSubmit = async (data) => {
@@ -158,33 +183,6 @@ const PaymentConfirm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setValue, totalPrice, value]);
 
-  useEffect(() => {
-    async function ciyCode() {
-      const city = await import("../../components/locations/cities.json");
-      setCity(city.data);
-    }
-    ciyCode();
-  }, [city, idCityCode]);
-
-  useEffect(() => {
-    async function districtCode() {
-      const district = await import(
-        `../../components/locations/districts/${idCityCode.id}.json`
-      );
-      setDistrict(district.data);
-    }
-    districtCode();
-  }, [idCityCode, idDistrictCode]);
-  useEffect(() => {
-    async function wardCodeCode() {
-      const ward = await import(
-        `../../components/locations/wards/${idDistrictCode.id}.json`
-      );
-      setWard(ward.data);
-    }
-    wardCodeCode();
-  }, [idDistrictCode]);
-
   return (
     <>
       <SEO title="tìm kiếm"></SEO>
@@ -206,9 +204,7 @@ const PaymentConfirm = () => {
                     </label>
                     <div className="relative">
                       <input
-                        name="fullname"
-                        id="fullname"
-                        {...register("fullname")}
+                        {...register("fullName")}
                         type="text"
                         className={`px-4 py-2 rounded-md w-full outline-none ${errors?.fullname?.message
                           ? "focus:ring-2 focus:ring-red-300 border border-red-500"
@@ -217,9 +213,9 @@ const PaymentConfirm = () => {
                         placeholder={t("display_name")}
                       />
                       <span className="font-sans text-sm font-normal text-red-500">
-                        {errors?.fullname?.message}
+                        {errors?.fullName?.message}
                       </span>
-                      {errors?.fullname?.message && (
+                      {errors?.fullName?.message && (
                         <span className="absolute top-0 right-0 -translate-x-1/2 translate-y-1/2">
                           <BiErrorCircle className="text-lg text-red-500" />
                         </span>
@@ -235,13 +231,13 @@ const PaymentConfirm = () => {
                     </label>
                     <div className="relative">
                       <input
+                        placeholder={t("email")}
+                        {...register("email")}
+                        type="text"
                         className={`px-4 py-2 rounded-md w-full outline-none ${errors?.email?.message
                           ? "focus:ring-2 focus:ring-red-300 border border-red-500"
                           : "border border-slate-400 focus:border-slate-600"
                           }`}
-                        id="email"
-                        {...register("email")}
-                        placeholder={t("email")}
                       />
                       {errors?.email?.message && (
                         <span className="font-sans text-sm font-normal text-red-500">
@@ -317,12 +313,12 @@ const PaymentConfirm = () => {
                     <div className="relative">
                       <input
                         {...register("address")}
+                        placeholder={t("address")}
+                        type="text"
                         className={`px-4 py-2 rounded-md w-full outline-none ${errors?.address?.message
                           ? "focus:ring-2 focus:ring-red-300 border border-red-500"
                           : "border border-slate-400 focus:border-slate-600"
                           }`}
-                        id="address"
-                        placeholder={t("address")}
                       />
                       {errors?.address?.message && (
                         <span className="font-sans text-sm font-normal text-red-500">
@@ -336,27 +332,21 @@ const PaymentConfirm = () => {
                       )}
                     </div>
                   </div>
-                  <div className="flex flex-col mt-4 gap-y-2">
-                    <label
-                      htmlFor="address"
-                      className="text-[16px] font-sans font-normal"
-                    >
-                      {t("city")}
+
+                  <div className="flex-col w-full mt-4 ">
+                    <label className="inline-block mb-3 text-sm font-normal text-black">
+                      Tỉnh/Thành
                     </label>
                     <div className="">
                       <div
-                        className={`relative px-4 py-2 rounded-md w-full outline-none ${errors?.cityCode?.message
+                        className={`relative px-4 py-2 rounded-md w-full outline-none border border-slate-400 focus:border-slate-600 ${errors?.cityCode?.message
                           ? "focus:ring-2 focus:ring-red-300 border border-red-500"
                           : "border border-slate-400 focus:border-slate-600"
                           }`}
                         onClick={() => setActive(!active)}
                       >
                         <span className="text-[16px] font-sans font-normal">
-                          {idCityCode.name
-                            ? idCityCode.name
-                            : information?.cityCode?.name
-                              ? information?.cityCode?.name
-                              : "Tỉnh/Thành"}
+                          {address.addressCity || "Tỉnh / Thành"}
                         </span>
                         <span className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2">
                           <svg
@@ -380,11 +370,11 @@ const PaymentConfirm = () => {
                           className="h-[250px] p-1 overflow-y-auto mt-1 rounded-md border border-slate-300"
                           {...register("cityCode")}
                         >
-                          {city.length > 0 &&
-                            city.map((e) => {
+                          {city?.length > 0 &&
+                            city?.map((e) => {
                               return (
                                 <div
-                                  onClick={() => handlerCityCode(e.id, e.name)}
+                                  onClick={() => handlerCityCode(e.id)}
                                   className="px-4 py-2 text-base hover:bg-red-500"
                                   key={e.id}
                                 >
@@ -396,17 +386,18 @@ const PaymentConfirm = () => {
                       )}
                     </div>
                     {errors?.cityCode?.message && (
-                      <span className="font-sans text-sm font-normal text-red-500">
+                      <p className="mt-1 mb-4 font-sans text-sm font-normal text-red-500">
                         Trường bắt buộc
-                      </span>
+                      </p>
                     )}
                   </div>
-                  <div className="flex flex-col mt-4 gap-y-2">
+
+                  <div className="flex-col w-full mt-4 ">
                     <label
-                      htmlFor="address"
-                      className="text-[16px] font-sans font-normal"
+                      htmlFor=""
+                      className="inline-block mb-3 text-sm font-normal text-black"
                     >
-                      {t("district")}
+                      Quận/Huyện
                     </label>
                     <div className="relative">
                       <div className="">
@@ -418,11 +409,7 @@ const PaymentConfirm = () => {
                           onClick={() => setActiveDistric(!activeDistric)}
                         >
                           <span className="text-[16px] font-sans font-normal">
-                            {idDistrictCode.name
-                              ? idDistrictCode.name
-                              : information?.districtCode?.name
-                                ? information?.districtCode?.name
-                                : "Quận/Huyện"}
+                            {address?.addressDistrict || "Quận/Huyện"}
                           </span>
                           <span className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2">
                             <svg
@@ -451,7 +438,7 @@ const PaymentConfirm = () => {
                                 return (
                                   <div
                                     onClick={() =>
-                                      handlerDistrictCode(e.id, e.name)
+                                      handlerDistrictCode(e.id)
                                     }
                                     className="px-4 py-2 text-base hover:bg-red-500"
                                     key={e.id}
@@ -464,23 +451,19 @@ const PaymentConfirm = () => {
                         )}
                       </div>
                       {errors?.districtCode?.message && (
-                        <span className="font-sans text-sm font-normal text-red-500">
+                        <p className="mt-1 mb-4 font-sans text-sm font-normal text-red-500">
                           Trường bắt buộc
-                        </span>
-                      )}
-                      {errors?.districtCode?.message && (
-                        <span className="absolute top-0 right-0 -translate-x-1/2 translate-y-1/2">
-                          <BiErrorCircle className="text-lg text-red-500" />
-                        </span>
+                        </p>
                       )}
                     </div>
                   </div>
-                  <div className="flex flex-col mt-4 gap-y-2">
+
+                  <div className="flex-col w-full mt-4 ">
                     <label
-                      htmlFor="address"
-                      className="text-[16px] font-sans font-normal"
+                      htmlFor=""
+                      className="inline-block mb-3 text-sm font-normal text-black"
                     >
-                      {t("ward")}
+                      Phường/Xã
                     </label>
                     <div className="relative">
                       <div className="">
@@ -492,11 +475,7 @@ const PaymentConfirm = () => {
                           onClick={() => setActiveWard(!activeWard)}
                         >
                           <span className="text-[16px] font-sans font-normal">
-                            {idWardCode.name
-                              ? idWardCode.name
-                              : information?.wardCode?.name
-                                ? information?.wardCode?.name
-                                : "Phường/Xã"}
+                            {address?.addressWard || "Phường/Xã"}
                           </span>
                           <span className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2">
                             <svg
@@ -525,7 +504,7 @@ const PaymentConfirm = () => {
                                 return (
                                   <div
                                     onClick={() =>
-                                      handlerWardCode(e.id, e.name)
+                                      handlerWardCode(e.id)
                                     }
                                     className="px-4 py-2 text-base hover:bg-red-500"
                                     key={e.id}
@@ -538,14 +517,9 @@ const PaymentConfirm = () => {
                         )}
                       </div>
                       {errors?.wardCode?.message && (
-                        <span className="font-sans text-sm font-normal text-red-500">
+                        <p className="mt-1 mb-4 font-sans text-sm font-normal text-red-500">
                           Trường bắt buộc
-                        </span>
-                      )}
-                      {errors?.wardCode?.message && (
-                        <span className="absolute top-0 right-0 -translate-x-1/2 translate-y-1/2">
-                          <BiErrorCircle className="text-lg text-red-500" />
-                        </span>
+                        </p>
                       )}
                     </div>
                   </div>

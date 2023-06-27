@@ -258,9 +258,9 @@ const PageProfile = () => {
 
 
       {token && <NavbarUser bgPageProfile={true}>
-        <div className="w-[75%] flex-col items-start">
-          <section className="flex items-center justify-between px-4 mt-5">
-            <div className="flex flex-col items-start justify-between gap-2 w-[30%]">
+        <div className="w-[75%] flex-col items-start max-md:w-full max-md:mt-4">
+          <section className="flex items-start justify-between max-md:flex-col">
+            <div className="flex flex-col items-start justify-between gap-2 w-[30%] px-4 py-4 rounded-md bg-slate-200 max-md:w-full">
               <div className="flex items-center justify-between w-full mb-3">
                 <p className="text-lg font-bold text-regal-red">{myBuyOfMonth.toLocaleString("vi", {
                   style: "currency",
@@ -275,7 +275,7 @@ const PageProfile = () => {
               </div>
               <p className="text-sm">Doanh số trong tháng</p>
             </div>
-            <div className="flex flex-col items-start justify-between gap-2 w-[30%]">
+            <div className="flex flex-col items-start justify-between gap-2 w-[30%] px-4 py-4 rounded-md bg-slate-200 max-md:w-full max-md:mt-4">
               <div className="flex items-center justify-between w-full mb-3">
                 <p className="text-lg font-bold text-[#0dcaf0]">{refBuyOfMonth.toLocaleString("vi", {
                   style: "currency",
@@ -292,7 +292,7 @@ const PageProfile = () => {
               </div>
               <p className="text-sm">Doanh số người giới thiệu trong tháng</p>
             </div>
-            <div className="flex flex-col items-start justify-between gap-2 w-[30%]">
+            <div className="flex flex-col items-start justify-between gap-2 w-[30%] px-4 py-4 rounded-md bg-slate-200 max-md:w-full max-md:mt-4">
               <div className="flex items-center justify-between w-full mb-3">
                 <p className="text-lg font-bold text-yellow-300">{listReferrer.length}</p>
                 <span>
@@ -307,12 +307,12 @@ const PageProfile = () => {
               <p className="text-sm">Số lượng người giới thiệu</p>
             </div>
           </section>
-          <section className="px-1 pb-4 pt-14">
-            <h3 className="font-sans font-bold">Thông tin cá nhân</h3>
+          <section className="px-1 pb-4 pt-16">
+            <h3 className="font-sans font-bold text-3xl">Thông tin cá nhân</h3>
           </section>
           <form className="px-1" onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex items-start justify-between gap-8">
-              <div className="flex-col items-center justify-between gap-8 w-[50%]">
+            <div className="flex items-start justify-between gap-8 max-md:flex-col">
+              <div className="flex-col items-center justify-between gap-8 w-[50%] max-md:w-full">
                 <div className="flex-col w-full">
                   <label
                     className="inline-block mb-3 text-sm font-normal text-black"
@@ -401,7 +401,7 @@ const PageProfile = () => {
                   </span>
                 </div>
               </div>
-              <div className="flex-col items-center justify-between gap-8 w-[50%]">
+              <div className="flex-col items-center justify-between gap-8 w-[50%] max-md:w-full">
                 <div className="flex-col w-full">
                   <label
                     className="inline-block mb-3 text-sm font-normal text-black"

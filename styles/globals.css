@@ -326,13 +326,18 @@ input:focus{
   transform: scale(1);
 }
 
+.cart-slide .slick-prev,
 .center .slick-prev {
   left: 8px;
-  z-index: 100;
+  z-index: 50;
 }
-.center .slick-next {
+.cart-slide .slick-next,
+.center .slick-next{
   right: 18px;
-  z-index: 100;
+  z-index: 50;
+}
+.cart-slide .slick-slide{
+  padding: 15px;
 }
 /* pages/[slug].js */
 .pages__content__text div h3 {

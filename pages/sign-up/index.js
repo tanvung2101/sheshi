@@ -52,7 +52,7 @@ const schema = yup
   })
   .required();
 
-const Register = () => {
+const PageRegister = () => {
   const router = useRouter();
   const { t } = useTranslation('common');
 
@@ -86,7 +86,7 @@ const Register = () => {
     <>
       <SEO title={t("sign_up")}></SEO>
       <div className="flex items-center my-20">
-        <div className="mx-auto min-w-[30%]">
+        <div className="mx-auto min-w-[30%] max-md:min-w-[80%]">
           <h3 className="text-2xl">{t("sign_up")}</h3>
           <div>
             <form
@@ -240,7 +240,7 @@ const Register = () => {
                 <span className="text-xs text-center">
                   {t("already_account")}
                   <Link href='/login' className="ml-1 text-[14px] text-regal-red hover:text-yellow-400 cursor-pointer">
-                    {t("sign_up")}
+                    {t("login")}
                   </Link>
                 </span>
               </div>
@@ -263,4 +263,4 @@ export async function getStaticProps({ locale }) {
   }
 }
 
-export default Register;
+export default PageRegister;

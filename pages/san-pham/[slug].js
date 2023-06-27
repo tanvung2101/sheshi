@@ -459,7 +459,7 @@ const Item = ({ productDetail }, params) => {
 
 export async function getStaticPaths() {
   const params = {
-    size: 16,
+    size: 8,
   };
   const data = await axios.get("http://0.0.0.0:3001/api/product", { params });
   const allEvents = data.data.rows;
@@ -471,7 +471,10 @@ export async function getStaticPaths() {
     };
   });
   if (!allPaths) {
-    notFound();
+    return {
+      paths: [],
+      fallback: false,
+    };
   }
   return {
     paths: allPaths,
@@ -483,19 +486,19 @@ export async function getStaticProps(context) {
   const slug = context?.params?.slug;
   const data = await axios.get(`http://0.0.0.0:3001/api/product?size=6&productSlug=${slug}`);
   const params = {
-    size: 16,
+    size: 8,
     productSlug: slug,
   }
   const product1 = await axios.get(
     "http://0.0.0.0:3001/api/product/get-by-slug",
     { params }
   );
-  if (!product1) {
+  const productDetail = [data.data.rows, product1.data];
+  if (!productDetail) {
     return {
-      notFound: true,
+      props: {},
     }
   }
-  const productDetail = [data.data.rows, product1.data];
   return {
     props: { productDetail },
     revalidate: 100,

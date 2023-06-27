@@ -88,7 +88,7 @@ const Payment = () => {
         if (typePayment === "0") {
           dispatch(deleteAll());
           toast.success('Bạn đã thanh toán thành công')
-          router.replace(`/payment-success/${reponse?.order?.orderCode}`)
+          router.push(`/payment-success/${reponse?.order?.orderCode}`)
         } else if (typePayment === "1") {
           console.log('typePayment === "1"', reponse.order.orderCode)
           orderApis
@@ -101,7 +101,7 @@ const Payment = () => {
               extraData: "",
             })
             .then(() => {
-              router.replace(`/payment-success/${reponse.order.orderCode}`)
+              router.push(`/payment-success/${reponse.order.orderCode}`)
             })
             .catch((err) => console.log(err)).finally(() => {
               dispatch(deleteAll());
@@ -119,12 +119,14 @@ const Payment = () => {
             })
             .catch((err) => console.log(err)).finally(() => {
               dispatch(deleteAll());
-              router.replace('/payment')
+              router.push('/payment')
             });
         }
       })
       .catch((err) => console.log(err))
-      .finally(() => selectMethodPayment(false));
+      .finally(() => {
+        setLoadingSelectPayment(false)
+      });
   };
 
   useEffect(() => {
@@ -183,7 +185,7 @@ const Payment = () => {
       (district) =>
         !!district.NameExtension?.find(
           (e) => {
-            return (e.toLowerCase() === information?.districtCode?.name.toLowerCase())
+            return (e.toLowerCase() === information?.districtCode?.name?.toLowerCase())
           }
         )
     )?.DistrictID;

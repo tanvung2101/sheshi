@@ -20,14 +20,14 @@ const GioiThieu = ({ product }) => {
       "name": "Executive Anvil",
       "image": [
         ${content?.find(
-          (item) => item?.pageCode === CONTENT_PAGE.INTRODUCE_PAGE
-        ).image}
+        (item) => item?.pageCode === CONTENT_PAGE.INTRODUCE_PAGE
+      ).image}
         ${content?.find(
-          (item) => item?.pageCode === CONTENT_PAGE.INTRODUCE_PAGE
-        ).image},
+        (item) => item?.pageCode === CONTENT_PAGE.INTRODUCE_PAGE
+      ).image},
         ${content?.find(
-          (item) => item?.pageCode === CONTENT_PAGE.INTRODUCE_PAGE
-        ).image}
+        (item) => item?.pageCode === CONTENT_PAGE.INTRODUCE_PAGE
+      ).image}
        ],
       "description": "Sleeker than ACME's Classic Anvil, the Executive Anvil is perfect for the business traveler looking for something to drop from a height.",
       "sku": "0446310786",
@@ -41,25 +41,16 @@ const GioiThieu = ({ product }) => {
   }
   return (
     <>
-    <SEO title="GIỚI THIỆU SHESHI"></SEO>
-      {/* <Head>
-        <link rel="icon" href="/logosheshe.png" />
-        <title>GIỚI THIỆU SHESHI</title>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={addProductJsonLd()}
-          key="product-jsonld"
-        />
-      </Head> */}
-      <div className="bg-light-pink py-5">
+      <SEO title="GIỚI THIỆU SHESHI"></SEO>
+      <div className="bg-light-pink py-5 ">
         <Title className="text-3xl font-bold">giới thiệu</Title>
       </div>
-      <div className="px-40 mt-10">
-        <div className="flex justify-center gap-32">
+      <div className="px-40 mt-10 max-md:px-16 max-lg:px-20 max-sm:px-4 max-sm:mt-0">
+        <div className="flex justify-center gap-32 max-md:flex-col max-md:gap-8">
           <div className="mt-8">
-            <h3 className="uppercase text-3xl font-bold">
+            <h2 className="uppercase text-3xl font-bold max-md:mb-2 max-sm:text-2xl">
               giới thiệu về <span className="text-regal-red">sheshi</span>
-            </h3>
+            </h2>
             <span
               className="text-lg"
               dangerouslySetInnerHTML={{
@@ -69,7 +60,7 @@ const GioiThieu = ({ product }) => {
               }}
             ></span>
           </div>
-          <div>
+          <div className="pt-16 max-md:pt-2 max-lg:pt-16">
             {content && (
               <Image
                 src={
@@ -84,11 +75,11 @@ const GioiThieu = ({ product }) => {
             )}
           </div>
         </div>
-        <div className="flex flex-row-reverse justify-center gap-32 mt-10">
+        <div className="flex flex-row-reverse justify-center gap-32 max-md:flex-col max-md:gap-8">
           <div className="mt-8">
-            <h3 className="uppercase text-3xl font-bold">
+            <h2 className="uppercase text-3xl font-bold max-md:mb-2 max-sm:text-2xl">
               giới thiệu về <span className="text-regal-red">sheshi</span>
-            </h3>
+            </h2>
             <span
               className="text-lg"
               dangerouslySetInnerHTML={{
@@ -98,7 +89,7 @@ const GioiThieu = ({ product }) => {
               }}
             ></span>
           </div>
-          <div>
+          <div className="pt-16 max-md:pt-2 max-lg:pt-16">
             {content && (
               <Image
                 src={
@@ -113,11 +104,11 @@ const GioiThieu = ({ product }) => {
             )}
           </div>
         </div>
-        <div className="flex justify-center gap-32 mt-10 mb-16">
+        <div className="flex justify-center gap-32 mt-10 mb-16 max-md:flex-col max-md:gap-8">
           <div className="mt-8">
-            <h3 className="uppercase text-3xl font-bold">
+            <h2 className="uppercase text-3xl font-bold">
               giới thiệu về <span className="text-regal-red">sheshi</span>
-            </h3>
+            </h2>
             <span
               className="text-lg"
               dangerouslySetInnerHTML={{
@@ -127,7 +118,7 @@ const GioiThieu = ({ product }) => {
               }}
             ></span>
           </div>
-          <div>
+          <div className="pt-16 max-md:pt-2 max-lg:pt-16">
             {content && (
               <Image
                 src={

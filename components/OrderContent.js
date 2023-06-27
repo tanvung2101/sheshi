@@ -2,10 +2,10 @@ import { DELIVERY_METHOD_MAP, PAYMENT_METHOD_MAP } from "@/constants";
 import React from "react";
 
 const OrderContent = ({ orderSearchItem, address }) => {
-  console.log('orderSearchItem', orderSearchItem)
+  // console.log('orderSearchItem', orderSearchItem)
   return (
-    <div className="flex items-start justify-start flex-wrap">
-      <div className="flex flex-col w-[25%] text-center pr-3">
+    <div className="flex items-start justify-start flex-wrap max-md:flex-col">
+      <div className="flex flex-col w-[25%] text-center pr-3 max-md:w-full max-md:mt-4">
         <div className="py-2 border-b-[1px] border-b-gray-300">
           <span className="uppercase font-bold text-[16px]">
             địa chỉ nhận hàng
@@ -33,7 +33,7 @@ const OrderContent = ({ orderSearchItem, address }) => {
           // </div>
         )}
       </div >
-      <div className="flex flex-col w-[25%] text-center px-3">
+      <div className="flex flex-col w-[25%] text-center px-3 max-md:w-full max-md:mt-4">
         <div className="py-2 border-b-[1px] border-b-gray-300">
           <span className="uppercase font-bold text-[16px]">
             ĐƠN VỊ GIAO HÀNG
@@ -44,7 +44,7 @@ const OrderContent = ({ orderSearchItem, address }) => {
             DELIVERY_METHOD_MAP.find((e) => e.value === orderSearchItem.shipId)?.label}
         </p>
       </div>
-      <div className="flex flex-col w-[25%] text-center px-3">
+      <div className="flex flex-col w-[25%] text-center px-3 max-md:w-full max-md:mt-4">
         <div className="py-2 border-b-[1px] border-b-gray-300">
           <span className="uppercase font-medium text-[16px]">
             phương thức thanh toán
@@ -57,7 +57,7 @@ const OrderContent = ({ orderSearchItem, address }) => {
             )?.label}
         </p>
       </div>
-      <div className="flex flex-col w-[25%] text-center pl-3">
+      <div className="flex flex-col w-[25%] text-center pl-3 max-md:w-full max-md:mt-4">
         <div className="py-2 border-b-[1px] border-b-gray-300">
           <span className="uppercase font-bold text-[16px]">GHI CHÚ</span>
         </div>

@@ -11,16 +11,15 @@ const CheckBox = (props) => {
   return (
     <label className="flex items-center gap-3 group">
       <span
-        className={`${
-          inputRef.current?.checked === true ? "bg-regal-red" : ""
-        } block w-4 h-4 border border-slate-300`}
+        className={`${inputRef.current?.checked === true ? "bg-regal-red" : ""
+          } block w-4 h-4 border border-slate-300`}
       ></span>
       <input
         type="checkbox"
         ref={inputRef}
         onChange={onChange}
         checked={props.checked}
-        className="hidden"
+        className="hidden outline-2"
       />
       {props.label}
     </label>

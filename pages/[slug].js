@@ -17,8 +17,8 @@ const Pages = ({ data }) => {
       <div className="bg-light-pink py-5">
         <Title className="uppercase">{pageShow.display}</Title>
       </div>
-      <div className="px-24 my-10 text-base">
-        <div className="pages__content__text leading-8 font-sans" dangerouslySetInnerHTML={{__html: data[0].content}}></div>
+      <div className="px-24 my-10 text-base max-lg:px-10 max-sm:px-4">
+        <div className="pages__content__text leading-8 font-sans" dangerouslySetInnerHTML={{ __html: data[0].content }}></div>
       </div>
     </>
   );

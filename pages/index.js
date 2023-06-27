@@ -162,6 +162,38 @@ export default function Home({ data }) {
       },
     ],
   };
+  const setting = {
+    // dots: true,
+    infinite: false,
+    speed: 400,
+    className: "cart-slide",
+    slidesToShow: 3,
+    slidesToScroll: 3,
+    prevArrow: <SlickArrowLeft />,
+    nextArrow: <SlickArrowRight />,
+    responsive: [
+      {
+        breakpoint: 1198,
+        settings: {
+          infinite: true,
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          rows: 1,
+          dots: false,
+        },
+      },
+      {
+        breakpoint: 576,
+        settings: {
+          infinite: true,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          rows: 1,
+          dots: false,
+        },
+      },
+    ],
+  };
   const settingsSlideImage = {
     dots: false,
     infinite: false,
@@ -235,7 +267,7 @@ export default function Home({ data }) {
         />
       </Head>
       <div className="mx-auto">
-        <div>
+        {/* <div>
           <h1>{t('login')}</h1>
 
 
@@ -243,17 +275,17 @@ export default function Home({ data }) {
             About
           </Link>
           <br />
-        </div>
+        </div> */}
         <Slider {...settingsSlideImage}>
           {slideImageHome.map((item) => {
             return (
-              <div key={item.id} className="bg-light-pink">
-                <div className="h-[800px]">
+              <div key={item.id} className="bg-light-pink max-md:max-h-[650px]">
+                <div className="h-[800px] max-md:h-full">
                   <Image
                     src={item?.urlPc || ""}
                     alt=""
-                    width={500}
-                    height={0}
+                    width={300}
+                    height={300}
                     className="w-full h-[100%] object-cover"
                   ></Image>
                 </div>
@@ -264,7 +296,7 @@ export default function Home({ data }) {
       </div>
       {/* SẢN PHẨM NỔI BẬT */}
       <div className="pt-16 pb-16 bg-light-pink ">
-        <Title className="mb-5">sản phẩm nổi bật</Title>
+        <Title className="mb-5 max-md:mb-16">sản phẩm nổi bật</Title>
         <div className="my-10 px-14">
           <Slider {...settings}>
             {product?.length > 0 &&
@@ -286,44 +318,44 @@ export default function Home({ data }) {
         </Link>
       </div>
       {/* HỌC VIỆN ĐÀO TẠO SHESHI */}
-      <div className="mt-14 px-28 flex gap-10 h-[370px]">
+      <div className="mt-14 mb-10 px-28 flex gap-10 max-lg:px-5 max-lg:flex-col max-lg:h-auto max-md:items-center max-md:h-auto max-sm:px-2">
         {contents.length > 0 &&
           contents.map((item) => {
             // console.log("item", item);
             return (
-              <div key={item.id}>
-                <h3 className="mb-5 text-3xl font-bold uppercase text-regal-red">
+              <div className="max-w-[60%] max-sm:max-w-full" key={item.id}>
+                <h3 className="mb-5 text-3xl font-bold uppercase text-regal-red max-lg:text-center max-sm:block">
                   học viện đào tạo sheshi
                 </h3>
                 <div
-                  className="mb-5 font-sans text-lg font-normal"
+                  className="mb-5 font-sans text-lg font-normal max-lg:text-center"
                   dangerouslySetInnerHTML={{ __html: item?.content }}
                 ></div>
                 <Link
                   href="/hoc-vien-dao-tao-sheshi"
-                  className="text-lg font-bold uppercase text-regal-red hover:text-yellow-200"
+                  className="block text-lg font-bold uppercase text-regal-red hover:text-yellow-200 max-lg:text-center"
                 >
                   Xem chi tiết
                 </Link>
               </div>
             );
           })}
-        <div>
+        <div className="w-[40%] max-h-[500px] mt-5 max-lg:w-[90%] mb-14 h-[300px] max-sm:max-w-full max-sm:mb-2">
           <iframe
-            width="500"
-            height="400"
+            width="560"
+            height="314"
             src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Fsheshipharma%2Fvideos%2F709801732988589%2F&show_text=false&width=560&t=0"
             title="Học viện đào tạo Meta Group"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
-            className="h-[500px]"
+            className="h-full w-full block"
           ></iframe>
         </div>
       </div>
       {/* SHESHI CHUYỂN GIAO CÔNG NGHỆ CỦA TẬP ĐOÀN MỸ PHẨM ML.S HÀN QUỐC */}
-      <div className="py-14 bg-light-pink ">
-        <Title className="text-3xl mb-14">{slideImageAdvert[0]?.title}</Title>
+      <div className="py-14 bg-light-pink">
+        <Title className="text-3xl mb-14 max-lg:font-normal max-lg:text-xl max-lg:px-5">{slideImageAdvert[0]?.title}</Title>
         <Slider {...settings_news}>
           {slideImageAdvert.map((item) => (
             <div key={item.id} className="">
@@ -370,142 +402,114 @@ export default function Home({ data }) {
           <h2 className="mb-5 text-2xl font-bold text-center uppercase text-regal-red">
             cảm nhận khách hàng
           </h2>
-          <p className="text-center w-[800px] mx-auto">
+          <p className="text-center w-[800px] max-sm:max-w-full mx-auto max-sm:text-center">
             Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
             SHESHI. Bạn thì sao? Hãy cho chúng tôi biết cảm nhận của bạn về sản
             phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm sản phẩm.
           </p>
         </div>
 
-        <Swiper
-          modules={[Navigation, Pagination, Scrollbar, A11y, EffectCube]}
-          spaceBetween={50}
-          slidesPerView={1}
-          navigation
-          onSlideChange={() => console.log("slide change")}
-          onSwiper={(swiper) => swiper}
-        >
-          <SwiperSlide className="flex items-center mt-14">
-            <div className="flex items-center justify-between p-10">
-              <CartSlide
-                src={`${feed1.src}`}
-                width={50}
-                height={50}
-                name="mrs.m lê thúy"
-                comment="Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
+
+        <div className="mb-20">
+          <Slider {...setting}>
+            <CartSlide
+              src={`${feed1.src}`}
+              width={50}
+              height={50}
+              name="mrs.m lê thúy"
+              comment="Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
                   SHESHI. Bạn thì sao? Hãy cho chúng tôi biết cảm nhận của bạn
                   về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
                   sản phẩm."
-                face="facebook"
-                className="hover:shadow-md"
-              ></CartSlide>
-              <CartSlide
-                src={`${feed1.src}`}
-                width={50}
-                height={50}
-                name="mrs.m lê thúy"
-                comment="Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
+              face="facebook"
+              className="hover:shadow-md"
+            ></CartSlide>
+            <CartSlide
+              src={`${feed1.src}`}
+              width={50}
+              height={50}
+              name="mrs.m lê thúy"
+              comment="Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
                   SHESHI. Bạn thì sao? Hãy cho chúng tôi biết cảm nhận của bạn
                   về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
                   sản phẩm."
-                face="facebook"
-                className="hover:shadow-md"
-              ></CartSlide>
-              <CartSlide
-                src={`${feed1?.src}`}
-                width={50}
-                height={50}
-                name="mrs.m lê thúy"
-                comment="Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
+              face="facebook"
+              className="hover:shadow-md"
+            ></CartSlide>
+            <CartSlide
+              src={`${feed1?.src}`}
+              width={50}
+              height={50}
+              name="mrs.m lê thúy"
+              comment="Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
                   SHESHI. Bạn thì sao? Hãy cho chúng tôi biết cảm nhận của bạn
                   về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
                   sản phẩm."
-                face="facebook"
-                className="hover:shadow-md"
-              ></CartSlide>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide className="flex items-center mt-14">
-            <div className="flex items-center justify-between p-10">
-              <CartSlide
-                src={`${feed1.src}`}
-                width={50}
-                height={50}
-                name="mrs.m lê thúy"
-                comment="Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
+              face="facebook"
+              className="hover:shadow-md"
+            ></CartSlide>
+            <CartSlide
+              src={`${feed1?.src}`}
+              width={50}
+              height={50}
+              name="mrs.m lê thúy"
+              comment="Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
                   SHESHI. Bạn thì sao? Hãy cho chúng tôi biết cảm nhận của bạn
                   về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
                   sản phẩm."
-                face="facebook"
-                className="hover:shadow-md"
-              ></CartSlide>
-              <CartSlide
-                src={`${feed1.src}`}
-                width={50}
-                height={50}
-                name="mrs.m lê thúy"
-                comment="Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
+              face="facebook"
+              className="hover:shadow-md"
+            ></CartSlide>
+            <CartSlide
+              src={`${feed1?.src}`}
+              width={50}
+              height={50}
+              name="mrs.m lê thúy"
+              comment="Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
                   SHESHI. Bạn thì sao? Hãy cho chúng tôi biết cảm nhận của bạn
                   về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
                   sản phẩm."
-                face="facebook"
-                className="hover:shadow-md"
-              ></CartSlide>
-              <CartSlide
-                src={`${feed1.src}`}
-                width={50}
-                height={50}
-                name="mrs.m lê thúy"
-                comment="Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
+              face="facebook"
+              className="hover:shadow-md"
+            ></CartSlide>
+            <CartSlide
+              src={`${feed1?.src}`}
+              width={50}
+              height={50}
+              name="mrs.m lê thúy"
+              comment="Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
                   SHESHI. Bạn thì sao? Hãy cho chúng tôi biết cảm nhận của bạn
                   về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
                   sản phẩm."
-                face="facebook"
-                className="hover:shadow-md"
-              ></CartSlide>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide className="flex items-center mt-14">
-            <div className="flex items-center justify-between w-full p-10">
-              <CartSlide
-                src={`${feed1.src}`}
-                width={50}
-                height={50}
-                name="mrs.m lê thúy"
-                comment="Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
+              face="facebook"
+              className="hover:shadow-md"
+            ></CartSlide>
+            <CartSlide
+              src={`${feed1?.src}`}
+              width={50}
+              height={50}
+              name="mrs.m lê thúy"
+              comment="Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
                   SHESHI. Bạn thì sao? Hãy cho chúng tôi biết cảm nhận của bạn
                   về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
                   sản phẩm."
-                face="facebook"
-                className="hover:shadow-md"
-              ></CartSlide>
-              <CartSlide
-                src={`${feed1.src}`}
-                width={50}
-                height={50}
-                name="mrs.m lê thúy"
-                comment="Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
+              face="facebook"
+              className="hover:shadow-md"
+            ></CartSlide>
+            <CartSlide
+              src={`${feed1?.src}`}
+              width={50}
+              height={50}
+              name="mrs.m lê thúy"
+              comment="Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
                   SHESHI. Bạn thì sao? Hãy cho chúng tôi biết cảm nhận của bạn
                   về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
                   sản phẩm."
-                face="facebook"
-                className="hover:shadow-md"
-              ></CartSlide>
-              <CartSlide
-                src={`${feed1.src}`}
-                width={50}
-                height={50}
-                name="mrs.m lê thúy"
-                comment="Cảm nhận của khách hàng đã sử dụng sản phẩm và dịch vụ mỹ phẩm
-                  SHESHI. Bạn thì sao? Hãy cho chúng tôi biết cảm nhận của bạn
-                  về sản phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm
-                  sản phẩm."
-                face="facebook"
-                className="hover:shadow-md"
-              ></CartSlide>
-            </div>
-          </SwiperSlide>
-        </Swiper>
+              face="facebook"
+              className="hover:shadow-md"
+            ></CartSlide>
+          </Slider>
+        </div>
       </div>
     </>
   );

@@ -76,15 +76,15 @@ const LienHe = ({ contact }) => {
       <div className="py-5 mb-10 bg-light-pink">
         <Title className="text-3xl font-bold">liên hệ</Title>
       </div>
-      <div className="flex justify-center mx-auto my-14">
-        <div className="flex-col w-full px-24 mx-auto">
+      <div className="flex justify-center mx-auto my-14 max-md:flex-col">
+        <div className="flex-col w-full px-24 mx-auto max-lg:px-10 max-sm:px-2">
           <div className="mb-5">
             <span className="block text-[18px] font-medium font-sans">
               Nếu bạn có thắc mắc hãy liên hệ với chúng tôi qua địa chỉ
             </span>
           </div>
           <div className="flex mx-auto mb-4">
-            <p className="text-lg w-[40%]  font-sans">Điện thoại:</p>
+            <div className="text-lg w-[40%]  font-sans">Điện thoại:</div>
             <p className="font-sans text-lg">{contact.telephone}</p>
           </div>
           <div className="flex mx-auto mb-4">
@@ -102,28 +102,27 @@ const LienHe = ({ contact }) => {
             <p className="font-sans text-lg">{contact.timeWorking}</p>
           </div>
         </div>
-        <div className="w-full px-20">
-          <h3 className="mb-5 text-3xl font-bold">
+        <div className="w-full px-20 max-lg:px-10 max-sm:px-2">
+          <h3 className="mb-5 text-3xl font-bold max-sm:text-2xl max-sm:inline-block">
             Gửi thắc mắc cho chúng tôi
           </h3>
           <p className="mb-5 text-base font-bold leading-6 tracking-wider text-small-font-color">
             Nếu bạn có thắc mắc gì, có thể gửi yêu cầu cho chúng tôi và chúng
             tôi <br /> sẽ liên lạc với bạn sớm nhất có thể
           </p>
-          <div>
+          <div className="max-sm:px-2">
             <form className="text-base" onSubmit={handleSubmit(onSubmit)}>
-              <div className="flex items-start gap-8">
-                <div className="bg-transparent">
+              <div className="flex items-start gap-8 max-sm:flex-col">
+                <div className="bg-transparent max-sm:w-full">
                   <label className="relative top-0">
                     <input
                       text="text"
                       placeholder="Họ và tên"
                       {...register("fullName")}
-                      className={`py-3 pl-3 pr-20 rounded-md outline-none text-base border border-slate-300 ${
-                        errors?.fullName?.message
-                          ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
-                          : "border border-slate-300 hover:border hover:border-slate-500"
-                      }`}
+                      className={`py-3 pl-3 pr-20 rounded-md outline-none text-base border border-slate-300 ${errors?.fullName?.message
+                        ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
+                        : "border border-slate-300 hover:border hover:border-slate-500"
+                        }`}
                     />
                     {errors?.fullName?.message && (
                       <span className="absolute top-0 right-0 -translate-x-1/2">
@@ -132,20 +131,19 @@ const LienHe = ({ contact }) => {
                     )}
                   </label>
                   <span className="font-sans text-sm font-normal text-red-500">
-                    {errors?.fullName?.message} 
+                    {errors?.fullName?.message}
                   </span>
                 </div>
-                <div>
+                <div className="bg-transparent max-sm:w-full">
                   <label className="relative top-0">
                     <input
                       text="email"
                       placeholder="Nhập email của bạn"
                       {...register("email", { required: "This is required" })}
-                      className={`py-3 pl-3 pr-20 rounded-md outline-none text-base border border-slate-300 ${
-                        errors?.email?.message
-                          ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
-                          : "border border-slate-300 hover:border hover:border-slate-500"
-                      }`}
+                      className={`py-3 pl-3 pr-20 rounded-md outline-none text-base border border-slate-300 ${errors?.email?.message
+                        ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
+                        : "border border-slate-300 hover:border hover:border-slate-500"
+                        }`}
                     />
                     {errors.email && (
                       <span className="absolute top-0 right-0 -translate-x-1/2">
@@ -165,11 +163,10 @@ const LienHe = ({ contact }) => {
                     {...register("phoneNumber", {
                       required: "This is required",
                     })}
-                    className={`w-full py-3 px-4 rounded-md outline-none text-base border border-slate-300 ${
-                      errors?.phoneNumber?.message
-                        ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
-                        : "border border-slate-300 hover:border hover:border-slate-500"
-                    }`}
+                    className={`w-full py-3 px-4 rounded-md outline-none text-base border border-slate-300 ${errors?.phoneNumber?.message
+                      ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
+                      : "border border-slate-300 hover:border hover:border-slate-500"
+                      }`}
                   ></input>
                   {errors?.phoneNumber && (
                     <span className="absolute top-0 right-0 -translate-x-1/2">
@@ -204,7 +201,7 @@ const LienHe = ({ contact }) => {
       <div className="mb-10">
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13854.365253907554!2d105.755428!3d20.970836!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3134531e3271472f%3A0x2651fde14e086a84!2zMzQ2IFThu5EgSOG7r3UsIExhIEtow6osIEjDoCDEkMO0bmcsIEjDoCBO4buZaSwgVmnhu4d0IE5hbQ!5e1!3m2!1svi!2sus!4v1680057974036!5m2!1svi!2sus"
-          className="m-auto w-[1356px] h-[252px]"
+          className="m-auto w-[1356px] h-[252px] max-lg:w-[90%]"
           loading="lazy"
         ></iframe>
       </div>

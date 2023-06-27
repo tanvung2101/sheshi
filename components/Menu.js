@@ -25,37 +25,56 @@ import LocalStorage from "@/utils/storage";
 import { deleteAll } from "@/redux/cartItemSlice";
 import { STORAGE_KEY } from "@/constants/storage-key";
 import LocaleSwitcher from "./locale-switcher";
+import { AiOutlineClose } from "react-icons/ai";
+import MenuNavbar from "./MenuNavbar";
+import Sidebar from "./Sidebar";
+
 
 const menu = [
   {
     id: 1,
-    page: "trang chủ",
+    page: "Trang chủ",
     link: "/",
   },
   {
     id: 2,
-    page: "giới thiệu",
+    page: "Giới thiệu",
     link: "/gioi-thieu",
   },
   {
     id: 3,
-    page: "sản phẩm",
+    page: "Sản phẩm",
     link: "/san-pham",
   },
   {
     id: 4,
-    page: "học viện shishe",
+    page: "Học viện shishe",
     link: "/hoc-vien-dao-tao-sheshi",
   },
   {
     id: 5,
-    page: "tin tức",
+    page: "Tin tức",
     link: "/tin-tuc",
   },
   {
     id: 6,
-    page: "liên hệ",
+    page: "Liên hệ",
     link: "/lien-he",
+  },
+  {
+    id: 7,
+    page: "Giỏ hàng",
+    link: "/cart",
+  },
+  {
+    id: 8,
+    page: "Đăng nhập",
+    link: "/login",
+  },
+  {
+    id: 9,
+    page: "Đăng kí",
+    link: "/sign-up",
   },
 ];
 
@@ -122,37 +141,43 @@ const Menu = ({ children }) => {
       dispatch(setToken());
     }
   }, [dispatch]);
+
+  // console.log(window.pageYOffset)
   return (
     <>
-      <LocaleSwitcher />
-      <div className="px-25 w-full header flex items-center justify-center py-6 bg-[#ffffff]">
-        <div className="flex items-center h-full gap-x-14">
-          <div className="flex items-center gap-2">
-            <Image
-              src={`${logosheshe.src}`}
-              alt="logo"
-              width={30}
-              height={10}
-              className="cursor-pointer"
-            ></Image>
-            <Image
-              src={`${img.src}`}
-              alt="logo"
-              width={180}
-              height={33}
-              className="cursor-pointer"
-            ></Image>
+      {/* <LocaleSwitcher /> */}
+      <div className="w-full header flex items-center justify-evenly py-6 bg-[#ffffff] max-lg:justify-between">
+        <div className="flex items-center justify-evenly h-full mr-4 max-lg:w-full max-lg:justify-between max-lg:gap-x-3 max-lg:px-6 max-md:px-5 max-sm:px-3">
+          <div className="flex items-start max-sm:justify-center">
+            <MenuNavbar setShow={() => setIsShow(true)}></MenuNavbar>
+            <Link href='/' className="flex items-center gap-2 max-w-[150px] max-sm:w-[100px]">
+              <Image
+                src={`${logosheshe.src}`}
+                alt="logo"
+                width={30}
+                height={10}
+                className="cursor-pointer w-full h-full"
+              ></Image>
+              <Image
+                src={`${img.src}`}
+                alt="logo"
+                width={30}
+                height={33}
+                className="cursor-pointer w-full h-full"
+              ></Image>
+            </Link>
+            <Sidebar menu={menu} setIsShow={() => setIsShow(false)} isShow={isShow}></Sidebar>
           </div>
-          <div className="">
-            <ul className="flex gap-10 font-semibold uppercase item-center">
+          <div className="flex flex-grow justify-end box-content max-lg:hidden max-md:hidden">
+            <ul className="font-semibold uppercase">
               {menu.length > 0 &&
-                menu.map((item) => (
-                  <li key={item.id} className="cursor-pointer">
+                menu.slice(0, 6).map((item) => (
+                  <li key={item.id} className="cursor-pointer inline">
                     <Link
-                      className={`${item.link === String(router.pathname)
+                      className={` ${item.link === String(router.pathname)
                         ? "text-regal-red"
                         : "text-[#33333e]"
-                        } text-[16px] hover:text-regal-red font-bold`}
+                        } text-[16px] hover:text-regal-red font-bold ml-6`}
                       href={`${item.link}`}
                     >
                       {item.page}
@@ -161,9 +186,9 @@ const Menu = ({ children }) => {
                 ))}
             </ul>
           </div>
-          <div className="flex items-center justify-center gap-8 ml-16">
+          <div className="flex items-center justify-evenly">
             {/* tìm kiếm sản phẩm*/}
-            <div className="dropdown dropdown-end searchIcon">
+            <div className="dropdown dropdown-end searchIcon mr-5">
               <span tabIndex={0}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -203,7 +228,7 @@ const Menu = ({ children }) => {
               </div>
             </div>
             {/* tìm kiếm đơn hàng */}
-            <div className="dropdown dropdown-end eysIcon">
+            <div className="dropdown dropdown-end eysIcon mr-5">
               <span tabIndex={0}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -252,7 +277,7 @@ const Menu = ({ children }) => {
               </div>
             </div>
             {/* giỏ hàng */}
-            <div className="relative dropdown dropdown-end bagIcon">
+            <div className="relative dropdown dropdown-end bagIcon mr-5">
               <Link href="/cart">
                 <span tabIndex={0}>
                   <svg
@@ -379,6 +404,8 @@ const Menu = ({ children }) => {
             )}
           </div>
         </div>
+
+        {/* màn hình lg và */}
       </div>
 
       {children}
