@@ -1,7 +1,5 @@
 import InputCopy from "@/components/InputCopy";
 import PhoneInput from "@/components/PhoneInput";
-import Image from "next/image";
-import Link from "next/link";
 import React, { useState, useEffect, useCallback } from "react";
 import { BiErrorCircle } from "react-icons/bi";
 import {
@@ -16,7 +14,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import AuthApis from "@/apis/authApis";
 import { useRouter } from "next/navigation";
-import RequireAuth from "@/components/RequireAuth";
 import { setProfileAuth } from "@/redux/accountSlice";
 import NavbarUser from "@/components/NavbarUser";
 import accountApis from "@/apis/accountApi";

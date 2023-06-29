@@ -14,6 +14,7 @@ import axios from "axios";
 import OrderContent from "@/components/OrderContent";
 import moment from "moment/moment";
 import Swal from "sweetalert2";
+import OrderDetailsRow from "@/components/OrderDetailsRow";
 
 async function fetchMasterCapacity(params) {
   const res = await axios.get(`http://localhost:3001/api/master`, {
@@ -149,7 +150,7 @@ const PageSearchOrder = () => {
       <div className="flex flex-col items-center justify-center gap-5 mt-10 mb-10">
         <h1 className="font-sans text-4xl font-medium">Tìm kiếm</h1>
         {!!orderSearchItem && (
-          <p>
+          <p className="text-center">
             Kết quả tìm kiếm cho{" "}
             <strong className="font-bold">
               email={query?.email || ""} và orderCode={query?.orderCode || ""}
@@ -157,7 +158,7 @@ const PageSearchOrder = () => {
           </p>
         )}
         {!orderSearchItem && (
-          <p>
+          <p className="text-center">
             Không tìm thấy đơn hàng nào nào với{" "}
             <strong className="font-bold">
               email={query?.email || ""} và orderCode={query?.orderCode || ""}
@@ -166,8 +167,8 @@ const PageSearchOrder = () => {
         )}
       </div>
       {!!orderSearchItem ? (
-        <div className="flex flex-col py-8 px-44 max-lg:px-28">
-          <div className="flex items-center justify-between">
+        <div className="flex flex-col py-8 px-44 w-full max-lg:px-28 max-md:px-14 max-sm:px-10">
+          <div className="flex items-center justify-between max-sm:items-start">
             <div className="flex flex-col items-start justify-center gap-4 mb-14">
               <span>
                 Hóa đơn: {orderSearchItem && `#${orderSearchItem.orderCode}`}
@@ -206,44 +207,14 @@ const PageSearchOrder = () => {
             address={address}
           ></OrderContent>
           <div className="w-full mt-10">
-            <div className="flex w-full">
-              <div className="flex flex-col w-[15%]">
-                <div className="bg-[#fdf2ec] pt-2 pb-4 px-2 w-full">
-                  <p className="uppercase text-[15px] font-normal">Hình</p>
-                </div>
-              </div>
-              <div className="flex flex-col w-[40%]">
-                <div className="bg-[#fdf2ec] pt-2 pb-4 w-full">
-                  <p className="uppercase text-[15px] font-normal">sản phẩm</p>
-                </div>
-              </div>
-              <div className="flex flex-col w-[5%]">
-                <div className="bg-[#fdf2ec] pt-2 pb-4 pr-2 w-full">
-                  <p className="uppercase text-[15px] font-normal">sl</p>
-                </div>
-              </div>
-              <div className="flex flex-col w-[25%]">
-                <div className="bg-[#fdf2ec] pt-2 pb-4 pr-2 w-full">
-                  <p className="uppercase text-[15px] font-normal text-center">
-                    giá
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col w-[15%]">
-                <div className="bg-[#fdf2ec] pt-2 pr-2 pb-4">
-                  <p className="uppercase text-[15px] font-normal float-right">
-                    tạm tính
-                  </p>
-                </div>
-              </div>
-            </div>
+            <OrderDetailsRow></OrderDetailsRow>
             {orderSearchItem &&
               orderSearchItem.orderItem?.map((item, index) => (
                 <div
                   key={index}
                   className="flex pb-3 w-full border-b-[1px] border-b-gray-300"
                 >
-                  <div className="flex flex-col w-[15%]">
+                  <div className="flex flex-col w-[15%] max-md:hidden">
                     <div className="px-2 mt-3">
                       <Image
                         src={item?.product.productImage[0]?.image}
@@ -254,8 +225,8 @@ const PageSearchOrder = () => {
                       />
                     </div>
                   </div>
-                  <div className="flex flex-col w-[45%]">
-                    <div className="flex flex-col mt-3">
+                  <div className="flex flex-col w-[40%] max-md:w-[85%]">
+                    <div className="flex flex-col mt-3 max-md:pl-4">
                       <p className="text-lg text-regal-red hover:text-[#ecbe26]">
                         <Link href={`/san-pham/${item?.product.productSlug}`}>
                           {item?.product.name}
@@ -282,7 +253,7 @@ const PageSearchOrder = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="flex flex-col w-[25%]">
+                  <div className="flex flex-colw-[25%] max-md:hidden">
                     <div className="flex flex-col mt-3">
                       <p className="text-lg text-center max-lg:text-base">
                         {item?.price?.toLocaleString("vi", {
@@ -292,7 +263,7 @@ const PageSearchOrder = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="flex flex-col w-[15%]">
+                  <div className="flex flex-col w-[15%] max-md:hidden">
                     <div className="flex flex-col px-2 mt-3 max-lg:px-0">
                       <p className="text-lg text-right max-lg:text-base">
                         {item?.price?.toLocaleString("vi", {
@@ -305,7 +276,7 @@ const PageSearchOrder = () => {
                 </div>
               ))}
             <div className="w-full mt-2 mb-10">
-              <div className="flex flex-col w-[25%] float-right">
+              <div className="flex flex-col w-[33%] float-right max-md:w-[65%] max-sm:w-[90%]">
                 <div className="flex items-center justify-between w-full pr-2">
                   <span className="text-lg font-normal text-right text-black">
                     Tạm tính

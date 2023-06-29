@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import Swal from 'sweetalert2'
 import { useLocation } from "@/hook/useLocation";
 import OrderContent from "@/components/OrderContent";
+import OrderDetailsRow from "@/components/OrderDetailsRow";
 
 // SHESHI000351
 
@@ -63,8 +64,8 @@ function PagePaymentSucces() {
       orderCode: query?.order,
     });
     setOrder(order)
-    if (!order) return
-    await Promise.all(order.orderItem.map(async (item) => {
+    if (!order) return null
+    await Promise.all(order.orderItem?.map(async (item) => {
       const params = {
         productId: item.productId,
         id: item.subProductId,
@@ -138,7 +139,7 @@ function PagePaymentSucces() {
   return (
     <>
       {order && (
-        <div className="px-40 mt-10">
+        <div className="px-40 mt-10 max-lg:px-20 max-md:px-10">
           <div className="flex flex-col items-center">
             <div className="w-28 h-28 bg-[#f6f6f6] rounded-full flex items-center justify-center">
               <svg
@@ -167,20 +168,20 @@ function PagePaymentSucces() {
                 ORDER: <strong>{query.order}</strong>
               </span>
               <span>Chúng tôi đã xác nhận đơn hàng của bạn.</span>
-              <span>
+              <span className="text-center">
                 Nếu có bất kỳ thắc mắc về đơn hàng của bạn, vui lòng liên hệ với
                 chúng tôi hoặc dùng chức năng theo dõi đơn hàng
               </span>
             </div>
           </div>
-          <div className="flex flex-col items-center my-14 ">
+          <div className="flex flex-col items-center my-14 w-full">
             <h4 className="text-[22px]">Chi tiết đơn hàng</h4>
             <OrderContent
               orderSearchItem={order}
               address={address}
             ></OrderContent>
             <div className="mt-10 w-full border-b-[1px] border-b-gray-300">
-              <div className="flex w-full">
+              {/* <div className="flex w-full">
                 <div className="flex flex-col w-[15%]">
                   <div className="bg-[#fdf2ec] pt-2 pb-4 px-2 w-full">
                     <span className="uppercase text-[15px] font-normal">
@@ -215,14 +216,15 @@ function PagePaymentSucces() {
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> */}
+              <OrderDetailsRow></OrderDetailsRow>
               {order &&
                 order.orderItem?.map((item, index) => (
                   <div
                     key={index}
                     className="flex w-full pb-2"
                   >
-                    <div className="flex flex-col w-[15%]">
+                    <div className="flex flex-col w-[15%] max-md:hidden">
                       <div className="px-2 mt-3">
                         <Image
                           src={item?.product.productImage[0]?.image}
@@ -233,8 +235,8 @@ function PagePaymentSucces() {
                         />
                       </div>
                     </div>
-                    <div className="flex flex-col w-[45%]">
-                      <div className="flex flex-col mt-3">
+                    <div className="flex flex-col w-[40%] max-md:w-[85%]">
+                      <div className="flex flex-col mt-3 max-md:pl-4">
                         <p className="text-lg text-regal-red hover:text-[#ecbe26]">
                           <Link href={`/san-pham/${item?.product.productSlug}`}>
                             {item?.product.name}
@@ -261,7 +263,7 @@ function PagePaymentSucces() {
                         </span>
                       </div>
                     </div>
-                    <div className="flex flex-col w-[25%]">
+                    <div className="flex flex-col w-[25%] max-md:hidden">
                       <div className="flex flex-col mt-3">
                         <p className="text-lg text-center">
                           {item?.price?.toLocaleString("vi", {
@@ -271,7 +273,7 @@ function PagePaymentSucces() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex flex-col w-[10%]">
+                    <div className="flex flex-col w-[15%] max-md:hidden">
                       <div className="flex flex-col px-2 mt-3 ">
                         <p className="text-lg text-right">
                           {item?.price?.toLocaleString("vi", {
@@ -285,13 +287,13 @@ function PagePaymentSucces() {
                 ))}
             </div>
             <div className="w-full mt-2">
-              <div className="flex flex-col w-[25%] float-right">
+              <div className="flex flex-col w-[33%] float-right max-md:w-[65%] max-sm:w-[90%]">
                 <div className="flex items-center justify-between w-full pr-2">
                   <span className="text-lg font-normal text-right text-black">
                     Tạm tính
                   </span>
                   <span className="text-lg font-normal text-black">
-                    {order?.totalBeforeFee.toLocaleString("vi", {
+                    {!!order && order?.totalBeforeFee?.toLocaleString("vi", {
                       style: "currency",
                       currency: "VND",
                     })}
@@ -313,7 +315,7 @@ function PagePaymentSucces() {
                     Thành tiền
                   </span>
                   <span className="text-lg font-medium no-underline text-regal-red">
-                    {order?.total.toLocaleString("vi", {
+                    {order?.total?.toLocaleString("vi", {
                       style: "currency",
                       currency: "VND",
                     })}
@@ -323,7 +325,7 @@ function PagePaymentSucces() {
             </div>
           </div>
 
-          <div className="flex items-center justify-center gap-8 mb-14">
+          <div className="flex items-center justify-center gap-8 mb-14 max-sm:flex-col">
             <button className="px-3 py-2 font-serif text-base font-light text-white border rounded-md border-regal-red bg-regal-red">
               <Link href="/">Quay trở lại trang chủ</Link>
             </button>

@@ -8,7 +8,7 @@ const Input = ({ className, ...props }, ref) => {
       <input
         {...props}
         ref={ref}
-        className={`px-4 py-2 rounded-md w-full outline-none text-sm ${props.errors
+        className={`h-[45px] px-4 py-2 rounded-md w-full outline-none text-sm ${props.errors
           ? "focus:ring-[4px] focus:ring-red-300 border-[1px] focus:border-red-500 border-red-500"
           : "border border-slate-400 focus:border-slate-600 hover:border-slate-600"
           } ${className} ${props.disabled ? disabledaAllowed : ''}`}

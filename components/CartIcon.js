@@ -1,10 +1,10 @@
 import React, { useRef } from "react";
 
-const CartIcon =({className,children}) => {
- 
+const CartIcon = ({ className = '', children }) => {
+
   return (
     <>
-      <div className={`flex flex-col w-[300px] absolute top-7 right-0  p-4 bg-white shadow-lg rounded-lg ${className}`}>
+      <div className={`flex flex-col w-[300px] p-4 bg-white shadow-lg rounded-lg ${className}`}>
         {/* <span className="mb-2 inline-block text-[#808080]">
           Tìm kiếm sản phẩm
         </span>

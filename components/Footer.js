@@ -22,7 +22,7 @@ const Footer = () => {
 
   return (
     <>
-      <div className="relative bottom-0 left-0 right-0">
+      <div className="relative bottom-0 left-0 right-0 pb-9">
         <div className="z-0 pt-10 pb-10 text-white bg-regal-red">
           <div className="flex items-start justify-around max-lg:flex-col max-lg:items-center max-sm:flex-col max-sm:items-center">
             <div className="flex items-center justify-between gap-20 max-lg:flex-col max-lg:gap-4 max-sm:flex-col max-sm:gap-4">
@@ -68,7 +68,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="hidden max-[990px]:block">
+      <div className="hidden max-lg:inline-block">
         <div className="fixed bottom-0 right-0 left-0 z-[100] bg-[#f8f9fa] shadow-md">
           <ul className="flex items-center justify-around py-2">
             <li>

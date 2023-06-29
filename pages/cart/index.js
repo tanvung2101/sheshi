@@ -26,11 +26,11 @@ const Cart = ({ data }) => {
       {value?.length > 0 && (
         <>
           <CartTabs tabs={1} />
-          <div className="flex mb-10">
+          <div className="flex mb-10 max-lg:flex-col max-lg:px-12 max-md:px-4">
             <div>
               {value?.map((item, index) => {
                 return (
-                  <CartItemPayment key={item.id} item={item} value={value.length || 0} index={index}/>
+                  <CartItemPayment key={item.id} item={item} value={value.length || 0} index={index} />
                 );
               })}
             </div>
@@ -50,11 +50,11 @@ const Cart = ({ data }) => {
                     })}
                   </span>
                 </div>
-                <div className="flex items-center justify-center gap-5">
-                  <button className="py-2 px-3 rounded-md bg-white text-regal-red border border-regal-red text-base font-light font-serif hover:bg-regal-red transition-all hover:text-white">
+                <div className="flex items-center justify-center gap-5 px-2 max-lg:flex-col">
+                  <button className="py-2 px-3 rounded-md bg-white text-regal-red border border-regal-red text-base font-light font-serif hover:bg-regal-red transition-all hover:text-white max-lg:w-full">
                     <Link href="/san-pham">Tiếp tục mua hàng</Link>
                   </button>
-                  <button className="py-2 px-3 rounded-md bg-regal-red text-white text-base font-light font-serif">
+                  <button className="py-2 px-3 rounded-md bg-regal-red text-white text-base font-light font-serif max-lg:w-full">
                     <Link href="/payment-confirm">Đặt hàng</Link>
                   </button>
                 </div>

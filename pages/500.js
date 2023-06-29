@@ -1,11 +1,3 @@
-import React from 'react'
-
-const Error = () => {
-  return (
-    <div>
-      
-    </div>
-  )
+export default function Custom500() {
+  return <h1>500 - Server-side error occurred</h1>
 }
-
-export default Error

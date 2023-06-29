@@ -131,6 +131,7 @@ const ItemSlide = ({ propProduct }) => {
     }
   };
   const addCartItem = () => {
+    if (+quantity < 1) return false;
     let newItem = {
       slug: product.slug,
       product: product,
@@ -143,10 +144,9 @@ const ItemSlide = ({ propProduct }) => {
     };
     if (+quantity > detailProductQuantity) {
       setQuantity(detailProductQuantity);
-      toast.error(
+      return toast.error(
         `Sản phẩm hiện tại không đủ, chỉ còn ${detailProductQuantity} trong kho`
       );
-      return
     }
     const item = value.find(
       (e) =>
@@ -156,16 +156,16 @@ const ItemSlide = ({ propProduct }) => {
     );
     if (item) {
       if (item.quantity + quantity > detailProductQuantity) {
-        toast.error(
+        return toast.error(
           `Sản phẩm hiện tại không đủ, chỉ còn ${detailProductQuantity} trong kho`
         );
-        return
       }
     }
     dispatch(addItem(newItem));
     toast.success("Sản phẩm đã thêm vào vỏ hàng");
   };
   const goToCart = () => {
+    if (+quantity < 1) return false;
     let newItem = {
       slug: product.slug,
       product: product,
@@ -178,10 +178,9 @@ const ItemSlide = ({ propProduct }) => {
     };
     if (+quantity > detailProductQuantity) {
       setQuantity(detailProductQuantity);
-      toast.error(
+      return toast.error(
         `Sản phẩm hiện tại không đủ, chỉ còn ${detailProductQuantity} trong kho`
       );
-      return
     }
     const item = value.find(
       (e) =>
@@ -191,13 +190,15 @@ const ItemSlide = ({ propProduct }) => {
     );
     if (item) {
       if (+item.quantity + +quantity > detailProductQuantity) {
-        toast.error(
+        return toast.error(
           `Sản phẩm hiện tại không đủ, chỉ còn ${detailProductQuantity} trong kho`
         );
-        return
       }
     }
-    dispatch(addItem(newItem))
+    // if(dispatch(addItem(newItem))){
+
+    //   dispatch(r)
+    // }
     router.push('/cart')
     toast.success("Sản phẩm đã thêm vào vỏ hàng");
 

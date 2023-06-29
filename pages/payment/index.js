@@ -61,19 +61,19 @@ const Payment = () => {
     console.log('selectBank', typePayment)
     const body = {
       address: information?.address,
-      cityCode: information?.cityCode.id,
+      cityCode: information?.cityCode,
       deliveryMethod,
       paymentMethod: typePayment,
       note: notes,
       fee: fee,
       listProduct: value,
       userId: null,
-      telephone: `+${information?.phoneCode}`,
+      telephone: `+${information?.phoneCode} ${information?.phoneNumber}`,
       email: information?.email,
       referralCode: information?.referralCode,
       fullName: information?.fullname,
-      districtCode: information?.districtCode.id,
-      wardCode: information?.wardCode.id,
+      districtCode: information?.districtCode,
+      wardCode: information?.wardCode,
       districtAndCity: {
         city: information?.cityCode.name,
         district: information?.districtCode.name,
@@ -105,7 +105,7 @@ const Payment = () => {
             })
             .catch((err) => console.log(err)).finally(() => {
               dispatch(deleteAll());
-              router.replace('/payment')
+              // router.replace('/payment')
             });
         } else if (typePayment === "2") {
           orderApis
@@ -119,7 +119,7 @@ const Payment = () => {
             })
             .catch((err) => console.log(err)).finally(() => {
               dispatch(deleteAll());
-              router.push('/payment')
+              // router.push('/payment')
             });
         }
       })
@@ -230,69 +230,71 @@ const Payment = () => {
     <>
       <SEO title="Thanh toán"></SEO>
       {value?.length === 0 && <CartEmpty></CartEmpty>}
-      {value?.length > 0 && <div className="px-20 mb-16">
+      {value?.length > 0 && <div className="px-20 mb-16 max-lg:px-10 max-md:px-3">
         <CartTabs className="pt-12" tabs={3} />
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex items-start justify-start gap-8">
-            <div className="w-[70%]">
+          <div className="flex items-start justify-start gap-8 max-lg:flex-col">
+            <div className="w-[70%] max-lg:w-[80%]">
               <div
-                className="flex flex-col"
+                className="flex flex-col border border-gray-300 rounded-md max-lg:mb-5 "
                 {...register("deliveryMethod")}
                 onChange={handlerDeliveryMethod}
               >
-                <div className="px-3 pt-1 pb-3 bg-gray-100 border border-b-0 border-gray-300 rounded-t-md">
-                  <span className="text-[18px] font-medium">
+                <div className="px-3 pt-1 pb-3 bg-gray-100 rounded-t-md">
+                  <span className="text-[18px] font-medium max-md:text-[16px]">
                     Phương thức giao hàng
                   </span>
                 </div>
-                <label className="flex items-center justify-start gap-5 pt-6 pb-3 pl-4 border border-b-0 border-gray-300 cursor-pointer">
-                  <div id="">
-                    <input
-                      className="w-5 h-5 radio checked:bg-blue-500"
-                      name="ship"
-                      type="radio"
-                      value={1}
-                    />
-                  </div>
-                  <div>
-                    <Image
-                      src="https://play-lh.googleusercontent.com/Q874CkbeX3wp72FaPE-MxGhvkiPOVrpQwNSlYA4za6_WmftSHi4arWI--s5zHF7oejE"
-                      alt=""
-                      width="100"
-                      height="100"
-                      className="w-[75px] h-[75px]"
-                    />
-                  </div>
-                  <div>
-                    <strong className="text-[18px]">Giao hàng nhanh</strong>
-                  </div>
-                </label>
-                <label className="flex items-center justify-start gap-5 pt-6 pb-3 pl-4 border border-gray-300 cursor-pointer">
-                  <div id="">
-                    <input
-                      className="w-5 h-5 radio checked:bg-blue-500"
-                      name="ship"
-                      type="radio"
-                      value={2}
-                    />
-                  </div>
-                  <div>
-                    <Image
-                      src="https://play-lh.googleusercontent.com/Q874CkbeX3wp72FaPE-MxGhvkiPOVrpQwNSlYA4za6_WmftSHi4arWI--s5zHF7oejE"
-                      alt=""
-                      width="100"
-                      height="100"
-                      className="w-[75px] h-[75px]"
-                    />
-                  </div>
-                  <div>
-                    <strong className="text-[18px]">Giao hàng tiết kiệm</strong>
-                  </div>
-                </label>
+                <div className="px-3">
+                  <label className="flex items-center justify-start gap-5 pt-6 pb-3 pl-4 border-b-[1px] border-gray-200 cursor-pointer">
+                    <div id="">
+                      <input
+                        className="w-5 h-5 radio checked:bg-blue-500"
+                        name="ship"
+                        type="radio"
+                        value={1}
+                      />
+                    </div>
+                    <div className="w-[75px] h-[75px] max-sm:h-[45px]">
+                      <Image
+                        src="https://play-lh.googleusercontent.com/Q874CkbeX3wp72FaPE-MxGhvkiPOVrpQwNSlYA4za6_WmftSHi4arWI--s5zHF7oejE"
+                        alt=""
+                        width="100"
+                        height="100"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <strong className="text-[18px] max-md:text-[16px]">Giao hàng nhanh</strong>
+                    </div>
+                  </label>
+                  <label className="flex items-center justify-start gap-5 pt-6 pb-3 pl-4  cursor-pointer max-md:text-[16px]">
+                    <div id="">
+                      <input
+                        className="w-5 h-5 radio checked:bg-blue-500"
+                        name="ship"
+                        type="radio"
+                        value={2}
+                      />
+                    </div>
+                    <div className="w-[75px] h-[75px] max-sm:h-[45px]">
+                      <Image
+                        src="https://play-lh.googleusercontent.com/Q874CkbeX3wp72FaPE-MxGhvkiPOVrpQwNSlYA4za6_WmftSHi4arWI--s5zHF7oejE"
+                        alt=""
+                        width="100"
+                        height="100"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <strong className="text-[18px] max-md:text-[16px]">Giao hàng tiết kiệm</strong>
+                    </div>
+                  </label>
+                </div>
               </div>
               <div className="flex flex-col">
                 <div className="px-3 pt-1 pb-3 bg-gray-100 border border-b-0 border-gray-300 rounded-t-md">
-                  <span className="text-[18px] font-medium">
+                  <span className="text-[18px] font-normal max-md:text-[16px]">
                     Phương thức giao hàng
                   </span>
                 </div>
@@ -310,9 +312,9 @@ const Payment = () => {
                       />
                     </div>
                     <div>
-                      <strong className="text-[18px]">
+                      <p className="text-[16px]">
                         Nhận hàng trả tiền
-                      </strong>
+                      </p>
                     </div>
                   </label>
                   <div>
@@ -329,13 +331,13 @@ const Payment = () => {
                         />
                       </div>
                       <div>
-                        <strong className="text-[18px]">Chuyển khoản</strong>
+                        <p className="text-[16px]">Chuyển khoản</p>
                       </div>
                     </label>
                   </div>
                   {selectMethodPayment == 1 && (
                     <div>
-                      <div className="flex items-start justify-start gap-5 pt-6 pb-3 pl-4 cursor-pointer">
+                      <div className="flex items-start justify-start gap-5 pt-6 pb-3 pl-4 cursor-pointer max-sm:gap-2">
                         <div className="self-center">
                           <input
                             className="w-5 h-5 radio checked:bg-blue-500"
@@ -346,13 +348,13 @@ const Payment = () => {
                             onChange={handlerSelectBank}
                           />
                         </div>
-                        <div>
+                        <div className="w-[75px] h-[75px] rounded-md max-sm:h-[45px]">
                           <Image
                             src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png"
                             alt=""
                             width="100"
                             height="100"
-                            className="w-[75px] h-[75px]"
+                            className="w-full h-full object-contain"
                           />
                         </div>
                         <div className="flex flex-col">
@@ -362,7 +364,7 @@ const Payment = () => {
                           </span>
                         </div>
                       </div>
-                      <div className="flex items-start justify-start gap-5 pt-6 pb-3 pl-4 cursor-pointer">
+                      <div className="flex items-start justify-start gap-5 pt-6 pb-3 pl-4 cursor-pointer max-sm:gap-2">
                         <div className="self-center">
                           <input
                             className="w-5 h-5 radio checked:bg-blue-500"
@@ -374,13 +376,13 @@ const Payment = () => {
                             value={2}
                           />
                         </div>
-                        <div>
+                        <div className="w-[75px] h-[75px] rounded-md max-sm:h-[45px]">
                           <Image
                             src="https://news.khangz.com/wp-content/uploads/2021/07/VNPAY-la-gi-1.jpg"
                             alt=""
                             width="100"
                             height="100"
-                            className="w-[75px] h-[75px] rounded-md object-cover"
+                            className="w-full h-full object-contain"
                           />
                         </div>
                         <div className="flex flex-col">
@@ -403,14 +405,14 @@ const Payment = () => {
                 </div>
               </div>
             </div>
-            <div className="w-[30%]">
+            <div className="w-[30%] max-lg:w-full">
               <div className="mt-0">
-                <div className="px-4 py-6 flex flex-col gap-8 shadow-md max-h-[450px]">
+                <div className="px-4 py-6 flex flex-col gap-8 shadow-md max-h-full max-lg:max-h-full">
                   <p className="font-sans text-xl font-normal">
                     Bạn đang 1 có sản phẩm trong giỏ hàng
                   </p>
                   <div className="flex items-center justify-between">
-                    <span className="font-sans text-2xl font-normal">
+                    <span className="font-sans text-lg font-normal">
                       Thành Tiền:
                     </span>
                     <span className="font-sans text-3xl font-bold text-regal-red">
@@ -421,7 +423,7 @@ const Payment = () => {
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="font-sans text-2xl font-normal">
+                    <span className="font-sans text-lg font-normal">
                       Phí giao hàng:
                     </span>
                     <span className="font-sans text-3xl font-bold text-regal-red">
@@ -432,7 +434,7 @@ const Payment = () => {
                     </span>
                   </div>
                   {commission && <div className="flex items-center justify-between">
-                    <span className="font-sans text-2xl font-normal">
+                    <span className="font-sans text-lg font-normal">
                       Hoa hồng cấp ({commission}%)
                     </span>
                     <span className="font-sans text-3xl font-bold text-regal-red">
@@ -443,7 +445,7 @@ const Payment = () => {
                     </span>
                   </div>}
                   <div className="flex items-center justify-between">
-                    <span className="font-sans text-2xl font-normal">
+                    <span className="font-sans text-lg font-normal">
                       Tổng:
                     </span>
                     <span className="font-sans text-3xl font-bold text-regal-red">
@@ -453,11 +455,11 @@ const Payment = () => {
                       })}
                     </span>
                   </div>
-                  <div className="flex items-center justify-center gap-5">
-                    <button className="px-3 py-2 font-serif text-base font-light transition-all bg-white border rounded-md text-regal-red border-regal-red hover:bg-regal-red hover:text-white">
+                  <div className="flex items-center justify-center gap-5 max-lg:flex-col">
+                    <div className="px-3 py-2 font-serif text-base font-light text-center cursor-pointer transition-all bg-white border rounded-md text-regal-red border-regal-red hover:bg-regal-red hover:text-white max-lg:w-full">
                       <Link href="/payment-confirm">Trở về nhập địa chỉ</Link>
-                    </button>
-                    <div>
+                    </div>
+                    <div className="max-lg:w-full">
                       <Button
                         loading={loading}
                         disabled={loadingSelectPayment}

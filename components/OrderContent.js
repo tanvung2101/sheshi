@@ -4,7 +4,7 @@ import React from "react";
 const OrderContent = ({ orderSearchItem, address }) => {
   // console.log('orderSearchItem', orderSearchItem)
   return (
-    <div className="flex items-start justify-start flex-wrap max-md:flex-col">
+    <div className="flex items-start justify-start w-full flex-wrap max-md:flex-col">
       <div className="flex flex-col w-[25%] text-center pr-3 max-md:w-full max-md:mt-4">
         <div className="py-2 border-b-[1px] border-b-gray-300">
           <span className="uppercase font-bold text-[16px]">

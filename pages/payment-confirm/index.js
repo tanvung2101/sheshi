@@ -3,9 +3,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { BiErrorCircle } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import CartEmpty from "@/components/CartEmpty";
@@ -13,14 +11,25 @@ import accountApi from "@/apis/accountApi";
 import { toast } from "react-toastify";
 import { addInformation } from "@/redux/cartItemSlice";
 import { useRouter } from "next/router";
-import { SEO } from "@/components";
+import { Input, SEO } from "@/components";
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { useLocation } from "@/hook/useLocation";
+import PhoneInput from "@/components/PhoneInput";
 
 const schema = yup
   .object({
+    email: yup
+      .string()
+      .email()
+      .required("Trường bắt buộc")
+      .max(255)
+      .matches(
+        /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+        "Vui long nhap email hop le"
+      )
+      .trim(),
     fullName: yup
       .string()
       .required("Trường bắt buộc")
@@ -32,17 +41,8 @@ const schema = yup
       .notRequired()
       .nullable()
       .matches(/(^\s*$|(^SS)[0-9]{6}$)/),
-    email: yup
-      .string()
-      .email()
-      .required()
-      .max(255)
-      .matches(
-        /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
-        "Vui long nhap email hop le"
-      )
-      .trim(),
-    phoneCode: yup.string().min(9).max(20).nullable(),
+    phoneCode: yup.string().max(5).trim().required().nullable(),
+    phoneNumber: yup.string().min(9).max(20).trim().required().nullable(),
     address: yup.string().max(255).trim().required().nullable(),
     cityCode: yup.number().integer().required().nullable(),
     districtCode: yup.number().integer().required().nullable(),
@@ -53,11 +53,11 @@ const schema = yup
 const PaymentConfirm = () => {
   const { value } = useSelector((state) => state.cartItem);
   const { info } = useSelector((state) => state.account);
-  console.log('infoooooo', info?.email)
   const { t } = useTranslation('common');
   const [totalPrice, setTotalPrice] = useState(0);
   const dispatch = useDispatch();
   const { information } = useSelector((state) => state.cartItem);
+  console.log('infoooooo', information)
   const router = useRouter();
 
   const [active, setActive] = useState(false);
@@ -135,19 +135,24 @@ const PaymentConfirm = () => {
     watch,
     setValue,
   } = useForm({
-    // mode: "onChange",
     resolver: yupResolver(schema),
     defaultValues: {
-      fullName: info?.userInformation?.fullName,
       email: info?.email,
-      phoneCode: info?.phoneCode,
+      fullName: info?.userInformation?.fullName,
+      phoneCode: info?.phoneCode || "84",
+      phoneNumber: info?.phoneNumber,
       address: info?.userInformation?.address,
       cityCode: info?.userInformation?.cityCode,
       districtCode: info?.userInformation?.districtCode,
       wardCode: info?.userInformation?.wardCode,
       referralCode: info?.userReferral?.referrerCode,
     },
+    mode: "onChange",
   });
+  const { phoneCode, phoneNumber, userCode, cityCode, districtCode, wardCode } =
+    useWatch({
+      control,
+    });
   const onSubmit = async (data) => {
     // console.log(data)
     if (!isValid) return;
@@ -160,7 +165,7 @@ const PaymentConfirm = () => {
       }
     }
     dispatch(addInformation(data));
-    router.replace("/payment");
+    router.push("/payment");
   };
   // console.log(watch('fullname'))
   useEffect(() => {
@@ -170,18 +175,19 @@ const PaymentConfirm = () => {
       }, 0)
     );
 
-    if (information) {
-      setValue("fullname", information.fullname);
+    if (!Object.values(information).length === 0) {
       setValue("email", information.email);
+      setValue("fullName", information.fullName);
       setValue("phoneCode", information.phoneCode);
+      setValue("phoneNumber", information.phoneNumber);
       setValue("address", information.address);
       setValue("cityCode", information.cityCode);
       setValue("districtCode", information.districtCode);
       setValue("wardCode", information.wardCode);
+      setValue("referralCode", information.referralCode);
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setValue, totalPrice, value]);
+  }, [information, setValue, totalPrice, value]);
 
   return (
     <>
@@ -191,10 +197,10 @@ const PaymentConfirm = () => {
       ) : (
         <>
           <CartTabs className="pt-12" tabs={2} />
-          <div className="px-36 mb-28">
+          <div className="px-36 mb-28 max-lg:px-8 max-md:px-4">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="flex items-start justify-center gap-x-24">
-                <div className="w-[65%] mt-0">
+              <div className="flex items-start justify-center gap-x-24 max-lg:flex-col">
+                <div className="w-[65%] mt-0 max-lg:w-full max-lg:mb-10">
                   <div className="flex flex-col gap-y-2">
                     <label
                       htmlFor="fullname"
@@ -203,13 +209,14 @@ const PaymentConfirm = () => {
                       {t("display_name")}
                     </label>
                     <div className="relative">
-                      <input
+                      <Input
                         {...register("fullName")}
                         type="text"
-                        className={`px-4 py-2 rounded-md w-full outline-none ${errors?.fullname?.message
-                          ? "focus:ring-2 focus:ring-red-300 border border-red-500"
-                          : "border border-slate-400 focus:border-slate-600"
-                          }`}
+                        // className={`px-4 py-2 rounded-md w-full outline-none ${errors?.fullname?.message
+                        //   ? "focus:ring-2 focus:ring-red-300 border border-red-500"
+                        //   : "border border-slate-400 focus:border-slate-600"
+                        //   }`}
+                        errors={errors?.fullName?.message}
                         placeholder={t("display_name")}
                       />
                       <span className="font-sans text-sm font-normal text-red-500">
@@ -230,14 +237,16 @@ const PaymentConfirm = () => {
                       {t("email")}
                     </label>
                     <div className="relative">
-                      <input
-                        placeholder={t("email")}
+                      <Input
                         {...register("email")}
-                        type="text"
-                        className={`px-4 py-2 rounded-md w-full outline-none ${errors?.email?.message
-                          ? "focus:ring-2 focus:ring-red-300 border border-red-500"
-                          : "border border-slate-400 focus:border-slate-600"
-                          }`}
+                        type="email"
+                        // className={`px-4 py-2 rounded-md w-full outline-none ${errors?.email?.message
+                        //   ? "focus:ring-2 focus:ring-red-300 border border-red-500"
+                        //   : "border border-slate-400 focus:border-slate-600"
+                        //   }`}
+                        errors={errors?.email?.message}
+                        placeholder={t("email")}
+                        autoComplete="off"
                       />
                       {errors?.email?.message && (
                         <span className="font-sans text-sm font-normal text-red-500">
@@ -251,57 +260,35 @@ const PaymentConfirm = () => {
                       )}
                     </div>
                   </div>
-                  <div className="w-full mt-4">
-                    <label className="text-[16px] font-sans font-normal">
-                      {t("phone")}
+                  <div className="flex-col w-full mt-4">
+                    <label
+                      className="inline-block mb-3 text-sm font-normal text-black"
+                      htmlFor=""
+                    >
+                      Số điện thoại
                     </label>
-                    <Controller
-                      render={({ field: { onChange, onBlur, value, ref } }) => {
-                        return (
-                          <PhoneInput
-                            country={"vn"}
-                            placeholder="Số điện thoại"
-                            inputRef={register}
-                            inputStyle={{
-                              width: "100%",
-                              height: "40px",
-                              fontSize: "15px",
-                              paddingLeft: "60px",
-                              borderRadius: "5px",
-                            }}
-                            inputProps={{
-                              name: "phoneCode",
-                              required: true,
-                              autoFocus: true,
-                            }}
-                            id="phoneCode"
-                            specialLabel="Telephone"
-                            name="phoneCode"
-                            autoComplete="phoneCoder"
-                            onChange={onChange}
-                            error={!!errors.phoneCode}
-                            helperText={
-                              errors.phoneCode &&
-                              "Un numéro valide est obligatoire"
-                            }
-                          />
-                        );
+                    <PhoneInput
+                      phoneCode={phoneCode?.toString() || "84"}
+                      onChangePhoneNumber={(newValue) => {
+                        // console.log(newValue);
+                        setValue("phoneNumber", +newValue, {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                        });
                       }}
-                      defaultValue=""
-                      name="phoneCode"
-                      control={control}
-                      rules={{ required: true }}
-                    />
-                    {errors?.phoneCode?.message && (
-                      <span className="font-sans text-sm font-normal text-red-500">
-                        Trường bắt buộc
-                      </span>
-                    )}
-                    {errors?.phoneCode?.message && (
-                      <span className="absolute top-0 right-0 -translate-x-1/2 translate-y-1/2">
-                        <BiErrorCircle className="text-lg text-red-500" />
-                      </span>
-                    )}
+                      onChangePhoneCode={(newValue) => {
+                        setValue("phoneCode", +newValue, {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                        });
+                      }}
+                      namePhoneCode="phoneCode"
+                      namePhoneNumber="phoneNumber"
+                      register={register}
+                    ></PhoneInput>
+                    <span className="font-sans text-sm font-normal text-red-500">
+                      {errors?.phoneNumber?.message}
+                    </span>
                   </div>
                   <div className="flex flex-col mt-4 gap-y-2">
                     <label
@@ -311,14 +298,15 @@ const PaymentConfirm = () => {
                       {t("address")}
                     </label>
                     <div className="relative">
-                      <input
+                      <Input
                         {...register("address")}
                         placeholder={t("address")}
                         type="text"
-                        className={`px-4 py-2 rounded-md w-full outline-none ${errors?.address?.message
-                          ? "focus:ring-2 focus:ring-red-300 border border-red-500"
-                          : "border border-slate-400 focus:border-slate-600"
-                          }`}
+                        // className={`px-4 py-2 rounded-md w-full outline-none ${errors?.address?.message
+                        //   ? "focus:ring-2 focus:ring-red-300 border border-red-500"
+                        //   : "border border-slate-400 focus:border-slate-600"
+                        //   }`}
+                        errors={errors?.address?.message}
                       />
                       {errors?.address?.message && (
                         <span className="font-sans text-sm font-normal text-red-500">
@@ -554,7 +542,7 @@ const PaymentConfirm = () => {
                     </div>
                   </div>
                 </div>
-                <div className="w-[35%] mt-0">
+                <div className="w-[35%] mt-0 max-lg:w-full">
                   <div className="p-4 flex flex-col gap-5 shadow-md max-h-[300px]">
                     <p className="font-sans text-xl font-normal">
                       Bạn đang có sản phẩm trong giỏ hàng
@@ -570,14 +558,14 @@ const PaymentConfirm = () => {
                         })}
                       </span>
                     </div>
-                    <div className="flex items-center justify-center gap-5">
-                      <div className="px-3 py-2 font-serif text-base font-light transition-all bg-white border rounded-md text-regal-red border-regal-red hover:bg-regal-red hover:text-white">
+                    <div className="flex items-center justify-center gap-5 max-lg:flex-col">
+                      <div className="px-3 py-2 font-serif text-base font-light text-center transition-all bg-white border rounded-md text-regal-red border-regal-red hover:bg-regal-red hover:text-white max-lg:w-full">
                         <Link href="/cart">Trở về giỏ hàng</Link>
                       </div>
                       <button
                         type="submit"
-                        // disabled={isSubmitting}
-                        className="px-3 py-2 font-serif text-base font-light text-white rounded-md bg-regal-red"
+                        disabled={isSubmitting}
+                        className="px-3 py-2 font-serif text-base font-light text-white rounded-md bg-regal-red max-lg:w-full"
                       >
                         Tiến hàng thanh toán
                       </button>

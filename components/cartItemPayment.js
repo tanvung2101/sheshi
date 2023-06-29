@@ -24,7 +24,7 @@ const CartItemPayment = ({ item, value, index }) => {
       toast.error("Sản phẩm đã hết");
       return
     }
-    dispath(updateItem({ ...item, quantity: quantity +1 }));
+    dispath(updateItem({ ...item, quantity: quantity + 1 }));
   };
   const reduceQuantity = () => {
     if (+quantity - 1 === 0) {
@@ -33,28 +33,29 @@ const CartItemPayment = ({ item, value, index }) => {
     } else {
       setQuantity(+quantity - 1)
       console.log("quantity", quantity);
-      dispath(updateItem({ ...item, quantity: +quantity - 1}));
+      dispath(updateItem({ ...item, quantity: +quantity - 1 }));
     }
   };
   return (
-    <div className="px-32 flex items-center justify-start gap-8 mt-4">
+    <div className="px-32 flex items-center justify-start gap-8 mt-4 max-lg:px-0">
       <div
-        className={`flex items-center justify-between gap-5 relative max-h-[300px] pb-4 ${
-          value === index + 1 ? "" : "border-b-2 border-gray-400"
-        }`}
+        className={`flex items-center justify-start gap-5 relative max-h-[300px] pb-4 ${value === index + 1 ? "" : "border-b-2 border-gray-400"
+          } max-lg:w-full `}
       >
-        <div className="">
+        <div className="w-[180px] h-[150px]">
           <Image
             src={item?.product?.productImage[0]?.image}
             alt=""
             width="100"
             height="100"
-            className="w-[180px] h-[190px] object-cover"
+            className="w-full h-full object-fill"
+            sizes="(max-width: 768px) 50vw, 50vw"
+          // fill={true}
           ></Image>
         </div>
-        <div className="flex items-center justify-center gap-5">
+        <div className="flex items-center justify-center gap-5 max-md:flex-col">
           <div className="w-40">
-            <p className="text-black text-2xl font-extrabold text-left mt-1/2 hover:text-[#ecbe26]">
+            <p className="text-black text-xl font-extrabold text-left mt-1/2 hover:text-[#ecbe26]">
               {item?.product?.name + " - " + item?.capacity}
             </p>
           </div>

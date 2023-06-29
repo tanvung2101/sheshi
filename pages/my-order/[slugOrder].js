@@ -2,6 +2,7 @@ import commissionApis from '@/apis/commissionApis'
 import orderApis from '@/apis/orderApis'
 import NavbarUser from '@/components/NavbarUser'
 import OrderContent from '@/components/OrderContent'
+import OrderDetailsRow from '@/components/OrderDetailsRow'
 import { COMMISSION_TYPE, MASTER_DATA_NAME, STATUS_ORDER } from '@/constants'
 import { useLocation } from '@/hook/useLocation'
 import axios from 'axios'
@@ -206,37 +207,7 @@ const PageSlugOrder = () => {
                                     address={address}
                                 ></OrderContent>
                                 <div className="w-full mt-10">
-                                    <div className="flex w-full">
-                                        <div className="flex flex-col w-[15%] max-md:hidden">
-                                            <div className="bg-[#fdf2ec] pt-2 pb-4 px-2 w-full">
-                                                <p className="uppercase text-[15px] font-normal">Hình</p>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col w-[40%] max-md:w-[85%]">
-                                            <div className="bg-[#fdf2ec] pt-2 pb-4 w-full max-md:pl-4">
-                                                <p className="uppercase text-[15px] font-normal">sản phẩm</p>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col w-[5%] max-md:w-[15%]">
-                                            <div className="bg-[#fdf2ec] pt-2 pb-4 pr-2 w-full">
-                                                <p className="uppercase text-[15px] font-normal">sl</p>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col w-[25%] max-md:hidden">
-                                            <div className="bg-[#fdf2ec] pt-2 pb-4 pr-2 w-full">
-                                                <p className="uppercase text-[15px] font-normal text-center">
-                                                    giá
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col w-[15%] max-md:hidden">
-                                            <div className="bg-[#fdf2ec] pt-2 pr-2 pb-4">
-                                                <p className="uppercase text-[15px] font-normal float-right">
-                                                    tạm tính
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <OrderDetailsRow></OrderDetailsRow>
                                     {orderDetail &&
                                         orderDetail.orderItem?.map((item, index) => (
                                             <div
@@ -293,7 +264,7 @@ const PageSlugOrder = () => {
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-col w-[15%] max-md:hidden">
-                                                    <div className="flex flex-col px-2 mt-3 ">
+                                                    <div className="flex flex-col px-2 mt-3 max-lg:px-0">
                                                         <p className="text-lg text-right">
                                                             {item?.price?.toLocaleString("vi", {
                                                                 style: "currency",
@@ -350,7 +321,7 @@ const PageSlugOrder = () => {
                                                     })}
                                                 </span>
                                             </div>}
-                                            <div className="flex items-center justify-between w-full pr-2 mt-5">
+                                            <div className="flex items-center justify-between w-full pr-2 mt-5 max-sm:text-right">
                                                 <span className="text-lg font-medium text-regal-red">
                                                     Thành tiền
                                                 </span>

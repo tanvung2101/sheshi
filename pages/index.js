@@ -28,6 +28,7 @@ import LocaleSwitcher from "@/components/locale-switcher";
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
+import newsApis from "@/apis/newApis";
 
 
 const OUTSTANDING_PRODUCTS = 1;
@@ -37,12 +38,14 @@ export default function Home({ data }) {
   const { locale, locales, defaultLocale } = router;
   const { t } = useTranslation('common');
 
+
   const { contents, slideImageHome, slideImageAdvert } = data;
   // console.log("slideImageAdvert", slideImageAdvert);
   const [product, setProduct] = useState();
   // console.log('product', product)
   // console.log('product',product)
   const [productNew, setProductNew] = useState();
+  const [news, setNews] = useState([]);
   const getOutstandingProducts = async () => {
     const params = {
       size: 5,
@@ -237,6 +240,47 @@ export default function Home({ data }) {
       },
     ],
   };
+  const get_news = {
+    dots: true,
+    infinite: false,
+    className: "get_news",
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    prevArrow: <SlickArrowLeft />,
+    nextArrow: <SlickArrowRight />,
+    responsive: [
+      {
+        breakpoint: 1198,
+        settings: {
+          infinite: true,
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          rows: 1,
+          dots: false,
+        },
+      },
+      {
+        breakpoint: 576,
+        settings: {
+          infinite: true,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          rows: 1,
+          dots: false,
+        },
+      },
+    ],
+  };
+
+  const fetchGetNew = async () => {
+    const result = await newsApis.getNews()
+    setNews(result.rows)
+  }
+
+  useEffect(() => {
+    fetchGetNew()
+  }, [])
 
   return (
     <>
@@ -398,6 +442,40 @@ export default function Home({ data }) {
             xem thêm
           </Link>
         </div>
+        <section className="py-10 bg-[#fdf2ec]">
+          <h3 className="uppercase text-center text-2xl text-regal-red">tin tức</h3>
+          <div className="my-10 px-14">
+            <div className="my-10 px-14">
+              <Slider {...get_news}>
+                {news.length > 0 && news.map((item) => {
+                  console.log(item.thumbnail)
+                  return (
+                    <div key={item.id}>
+                      <div className="flex flex-col items-center justify-center gap-3 px-4 rounded-lg border-[1px] border-slate-300 max-sm:w-full">
+                        <div className="w-full min-h-[350px]">
+                          <Image
+                            src={item.thumbnail}
+                            alt={item.title}
+                            width={300}
+                            height={300}
+                            className="w-full h-full object-cover rounded-t-lg"
+                          />
+                        </div>
+                        <p className="text-center">{item.title}</p>
+                        <p className="text-center">{item.description.length > 200 ? item.description.substring(0, 200) : item.description + "..."}</p>
+                        <div className="w-28 mb-4 mx-auto">
+                          <Button>
+                            <Link href={`/tin-tuc/${item.slug}`}>Xem thêm</Link>
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </Slider>
+            </div>
+          </div>
+        </section>
         <div className="mt-20">
           <h2 className="mb-5 text-2xl font-bold text-center uppercase text-regal-red">
             cảm nhận khách hàng
@@ -408,8 +486,6 @@ export default function Home({ data }) {
             phẩm hoặc đến với chúng tôi để cảm nhận và trải nghiệm sản phẩm.
           </p>
         </div>
-
-
         <div className="mb-20">
           <Slider {...setting}>
             <CartSlide

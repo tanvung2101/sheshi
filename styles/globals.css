@@ -339,6 +339,12 @@ input:focus{
 .cart-slide .slick-slide{
   padding: 15px;
 }
+.get_news .slick-list .slick-track .slick-slide div{
+  margin: 10px;
+}
+
+
+
 /* pages/[slug].js */
 .pages__content__text div h3 {
   font-size: 20px;

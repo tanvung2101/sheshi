@@ -148,27 +148,31 @@ const Menu = ({ children }) => {
       {/* <LocaleSwitcher /> */}
       <div className="w-full header flex items-center justify-evenly py-6 bg-[#ffffff] max-lg:justify-between">
         <div className="flex items-center justify-evenly h-full mr-4 max-lg:w-full max-lg:justify-between max-lg:gap-x-3 max-lg:px-6 max-md:px-5 max-sm:px-3">
-          <div className="flex items-start max-sm:justify-center">
+          <div className="flex items-start max-lg:items-center max-sm:justify-center">
             <MenuNavbar setShow={() => setIsShow(true)}></MenuNavbar>
             <Link href='/' className="flex items-center gap-2 max-w-[150px] max-sm:w-[100px]">
-              <Image
-                src={`${logosheshe.src}`}
-                alt="logo"
-                width={30}
-                height={10}
-                className="cursor-pointer w-full h-full"
-              ></Image>
-              <Image
-                src={`${img.src}`}
-                alt="logo"
-                width={30}
-                height={33}
-                className="cursor-pointer w-full h-full"
-              ></Image>
+              <div className="w-14 h-14 max-md:w-7 max-md:h-7">
+                <Image
+                  src={`${logosheshe.src}`}
+                  alt="logo"
+                  width={30}
+                  height={30}
+                  className="cursor-pointer w-full h-full"
+                ></Image>
+              </div>
+              <div className="w-32 h-11 max-md:w-16 max-md:h-7">
+                <Image
+                  src={`${img.src}`}
+                  alt="logo"
+                  width={60}
+                  height={30}
+                  className="cursor-pointer w-full h-full"
+                ></Image>
+              </div>
             </Link>
             <Sidebar menu={menu} setIsShow={() => setIsShow(false)} isShow={isShow}></Sidebar>
           </div>
-          <div className="flex flex-grow justify-end box-content max-lg:hidden max-md:hidden">
+          <div className="flex flex-grow justify-end box-content mr-5 max-lg:hidden max-md:hidden">
             <ul className="font-semibold uppercase">
               {menu.length > 0 &&
                 menu.slice(0, 6).map((item) => (
@@ -207,7 +211,7 @@ const Menu = ({ children }) => {
               </span>
               <div
                 tabIndex={0}
-                className="shadow dropdown-content menu bg-base-100 rounded-box"
+                className="shadow dropdown-content bg-base-100 rounded-box"
               >
                 <CartIcon>
                   <Span>Tìm kiếm sản phẩm</Span>
@@ -227,6 +231,8 @@ const Menu = ({ children }) => {
                 </CartIcon>
               </div>
             </div>
+
+
             {/* tìm kiếm đơn hàng */}
             <div className="dropdown dropdown-end eysIcon mr-5">
               <span tabIndex={0}>
@@ -404,8 +410,6 @@ const Menu = ({ children }) => {
             )}
           </div>
         </div>
-
-        {/* màn hình lg và */}
       </div>
 
       {children}
