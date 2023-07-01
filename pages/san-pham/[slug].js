@@ -12,6 +12,7 @@ import { IMAGE_TYPE, MASTER_DATA_NAME } from "@/constants";
 import { toast } from "react-toastify";
 import { addItem } from "@/redux/cartItemSlice";
 import { notFound } from 'next/navigation';
+import productsApis from "@/apis/productApis";
 
 const introduce = [
   {
@@ -42,8 +43,8 @@ async function fetchMasterCapacity(params) {
 }
 
 const Item = ({ productDetail }, params) => {
-  // console.log(productDetail)
-  const [productItem, itemSlug] = productDetail;
+  // console.log("productDetail", productDetail)
+  // const [productItem, itemSlug] = productDetail;
   const [productIt, setProductIt] = useState();
   console.log("itemSlug", productIt);
   const { value } = useSelector((state) => state.cartItem);
@@ -57,11 +58,13 @@ const Item = ({ productDetail }, params) => {
   const [quantity, setQuantity] = useState(1);
   const [detailProductQuantity, setDetailProductQuantity] = useState();
   const [productDetailOption, setProductDetailOption] = useState();
+  const [relatedProducts, setRelatedProducts] = useState([]);
+
 
   const [hidden, setHidden] = useState(1);
   useEffect(() => {
-    setProductIt(itemSlug);
-  }, [itemSlug]);
+    setProductIt(productDetail);
+  }, [productDetail]);
   const updateQuantity = (type) => {
     if (type === "plus") {
       if (+quantity === 999) return;
@@ -90,7 +93,7 @@ const Item = ({ productDetail }, params) => {
   useEffect(() => {
     const productDetailOption = [];
     if (masterCapacity?.length > 0) {
-      itemSlug?.productDetail?.map((e) => {
+      productIt?.productDetail?.map((e) => {
         const capacity = masterCapacity?.find((cap) => cap.id === e.capacityId);
         const unit = masterUnit?.find((un) => un.id === e.unitId);
 
@@ -133,7 +136,7 @@ const Item = ({ productDetail }, params) => {
       productDetailOption[0]?.capacityId + "-" + productDetailOption[0]?.unitId
     );
     setProductDetailOption(productDetailOption)
-  }, [productIt, masterCapacity, masterUnit, itemSlug,]);
+  }, [productIt, masterCapacity, masterUnit,]);
   const addCartItem = () => {
     let newItem = {
       slug: productIt.productSlug,
@@ -205,6 +208,19 @@ const Item = ({ productDetail }, params) => {
     router.push('/cart')
     toast.success("Sản phẩm đẫ thêm vào vỏ hàng");
   };
+
+  const getProductRelated = async () => {
+    const params = {
+      size: 8,
+      status: GLOBAL_STATUS.ACTIVE
+    };
+
+    const result = await productsApis.getAllProductsClient(params);
+    setRelatedProducts(result.rows);
+  };
+  useEffect(() => {
+    getProductRelated()
+  }, [])
   // --------------------------------------
   const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
     <div {...props}>
@@ -328,7 +344,7 @@ const Item = ({ productDetail }, params) => {
                 </div>
                 <input
                   type="text"
-                  className="w-12 h-12 text-center bg-white outline-none"
+                  className="w-12 h-12 text-center bg-white outline-none border-none"
                   value={quantity}
                   readOnly
                 />
@@ -442,8 +458,8 @@ const Item = ({ productDetail }, params) => {
         {/* slider bar */}
         <div className="my-10 px-14">
           <Slider {...settings}>
-            {productItem?.length > 0 &&
-              productItem?.map((item) => {
+            {relatedProducts?.length > 0 &&
+              relatedProducts?.map((item) => {
                 return (
                   <div key={item.id}>
                     <ItemSlide propProduct={item}></ItemSlide>
@@ -459,9 +475,9 @@ const Item = ({ productDetail }, params) => {
 
 export async function getStaticPaths() {
   const params = {
-    size: 8,
+    size: 15,
   };
-  const data = await axios.get("http://0.0.0.0:3001/api/product", { params });
+  const data = await productsApis.getAllProducts(params);
   const allEvents = data.data.rows;
   const allPaths = allEvents?.map((path) => {
     return {
@@ -470,11 +486,11 @@ export async function getStaticPaths() {
       },
     };
   });
+  console.log(allPaths)
   if (!allPaths) {
     return {
-      paths: [],
-      fallback: false,
-    };
+      notFound: true,
+    }
   }
   return {
     paths: allPaths,
@@ -484,24 +500,21 @@ export async function getStaticPaths() {
 
 export async function getStaticProps(context) {
   const slug = context?.params?.slug;
-  const data = await axios.get(`http://0.0.0.0:3001/api/product?size=6&productSlug=${slug}`);
+  console.log(slug)
+  // const data = await axios.get(`http://0.0.0.0:3001/api/product?size=6&productSlug=${slug}`);
   const params = {
-    size: 8,
     productSlug: slug,
   }
-  const product1 = await axios.get(
-    "http://0.0.0.0:3001/api/product/get-by-slug",
-    { params }
-  );
-  const productDetail = [data.data.rows, product1.data];
+  const product1 = await productsApis.getProducts(params)
+  const productDetail = product1.data;
   if (!productDetail) {
     return {
-      props: {},
+      notFound: true,
     }
   }
   return {
     props: { productDetail },
-    revalidate: 100,
+    // revalidate: 100,
   };
 }
 

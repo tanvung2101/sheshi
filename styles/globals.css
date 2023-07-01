@@ -339,9 +339,9 @@ input:focus{
 .cart-slide .slick-slide{
   padding: 15px;
 }
-.get_news .slick-list .slick-track .slick-slide div{
-  margin: 10px;
-}
+/* .get_news .slick-list .slick-track .slick-slide div{
+  margin-right: 15px;
+} */
 
 
 

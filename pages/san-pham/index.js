@@ -155,10 +155,11 @@ const PageProduct = ({ data }) => {
 export async function getStaticProps() {
   // const category = await categoryApis.getAllCategory();
   const params = {
+    size: 14,
     getMainImage: true,
     status: GLOBAL_STATUS.ACTIVE,
   };
-  const product = await productsApis.getAllProducts({ params });
+  const product = await productsApis.getAllProducts(params);
   const data = {
     // category: category.data,
     product: product.data

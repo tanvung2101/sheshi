@@ -1,4 +1,5 @@
 import axios from "axios";
+import axiosClient from "./axiosClient";
 // import axiosClient from "./axiosClient";
 const productsApis = {
   getAllProducts: (params) =>
@@ -9,6 +10,8 @@ const productsApis = {
     axios.get("http://0.0.0.0:3001/api/product/get-capacity-product", {
       params,
     }),
+  getAllProductsClient: (params) =>
+    axiosClient.get("/api/product", { params }),
 };
 
 export default productsApis;

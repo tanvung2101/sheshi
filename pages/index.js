@@ -442,31 +442,31 @@ export default function Home({ data }) {
             xem thêm
           </Link>
         </div>
-        <section className="py-10 bg-[#fdf2ec]">
+        <section className="py-10 bg-[#fdf2ec] mt-16">
           <h3 className="uppercase text-center text-2xl text-regal-red">tin tức</h3>
           <div className="my-10 px-14">
-            <div className="my-10 px-14">
+            <div className="my-10">
               <Slider {...get_news}>
                 {news.length > 0 && news.map((item) => {
                   console.log(item.thumbnail)
                   return (
-                    <div key={item.id}>
-                      <div className="flex flex-col items-center justify-center gap-3 px-4 rounded-lg border-[1px] border-slate-300 max-sm:w-full">
-                        <div className="w-full min-h-[350px]">
+                    <div key={item.id} >
+                      <div className="w-[90%] flex flex-col items-center justify-center gap-3 px-6 pt-5 pb-8 rounded-xl border-[1px] border-slate-300 bg-white active:bg-red-400 max-sm:w-full">
+                        <div className="w-full h-[250px] max-md:h-[150px]">
                           <Image
                             src={item.thumbnail}
                             alt={item.title}
-                            width={300}
+                            width={200}
                             height={300}
                             className="w-full h-full object-cover rounded-t-lg"
                           />
                         </div>
-                        <p className="text-center">{item.title}</p>
-                        <p className="text-center">{item.description.length > 200 ? item.description.substring(0, 200) : item.description + "..."}</p>
-                        <div className="w-28 mb-4 mx-auto">
-                          <Button>
+                        <p className="text-center text-lg font-bold">{item.title}</p>
+                        <p className="text-center font-medium">{item.description.length > 200 ? item.description.substring(0, 200) : item.description + "..."}</p>
+                        <div className="w-28 mb-10">
+                          <button className="px-3 py-2 bg-regal-red rounded-md text-white">
                             <Link href={`/tin-tuc/${item.slug}`}>Xem thêm</Link>
-                          </Button>
+                          </button>
                         </div>
                       </div>
                     </div>

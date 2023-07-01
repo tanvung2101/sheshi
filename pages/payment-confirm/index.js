@@ -12,11 +12,13 @@ import { toast } from "react-toastify";
 import { addInformation } from "@/redux/cartItemSlice";
 import { useRouter } from "next/router";
 import { Input, SEO } from "@/components";
+import Select from 'react-select';
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { useLocation } from "@/hook/useLocation";
 import PhoneInput from "@/components/PhoneInput";
+import useLocationForm from "@/components/location-vn";
 
 const schema = yup
   .object({
@@ -57,7 +59,7 @@ const PaymentConfirm = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const dispatch = useDispatch();
   const { information } = useSelector((state) => state.cartItem);
-  console.log('infoooooo', information)
+  console.log('infoooooo', info)
   const router = useRouter();
 
   const [active, setActive] = useState(false);
@@ -153,6 +155,21 @@ const PaymentConfirm = () => {
     useWatch({
       control,
     });
+  const { state, onCitySelect, onDistrictSelect, onWardSelect } =
+    useLocationForm(
+      info || information ? true : false,
+      information ? information : info?.userInformation
+    );
+
+  const {
+    cityOptions,
+    districtOptions,
+    wardOptions,
+    selectedCity,
+    selectedDistrict,
+    selectedWard,
+  } = state;
+  console.log(state)
   const onSubmit = async (data) => {
     // console.log(data)
     if (!isValid) return;
@@ -321,7 +338,7 @@ const PaymentConfirm = () => {
                     </div>
                   </div>
 
-                  <div className="flex-col w-full mt-4 ">
+                  {/* <div className="flex-col w-full mt-4 ">
                     <label className="inline-block mb-3 text-sm font-normal text-black">
                       Tỉnh/Thành
                     </label>
@@ -358,15 +375,17 @@ const PaymentConfirm = () => {
                           className="h-[250px] p-1 overflow-y-auto mt-1 rounded-md border border-slate-300"
                           {...register("cityCode")}
                         >
-                          {city?.length > 0 &&
-                            city?.map((e) => {
+                          {cityOptions?.length > 0 &&
+                            cityOptions?.map((e) => {
                               return (
                                 <div
-                                  onClick={() => handlerCityCode(e.id)}
+                                  onClick={(e) => {
+
+                                  }}
                                   className="px-4 py-2 text-base hover:bg-red-500"
-                                  key={e.id}
+                                  key={e.value}
                                 >
-                                  {e.name}
+                                  {e.label}
                                 </div>
                               );
                             })}
@@ -378,7 +397,17 @@ const PaymentConfirm = () => {
                         Trường bắt buộc
                       </p>
                     )}
-                  </div>
+                  </div> */}
+                  <Controller
+                    name="cityCode"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={cityOptions}
+                      />
+                    )}
+                  />
 
                   <div className="flex-col w-full mt-4 ">
                     <label

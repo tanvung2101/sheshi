@@ -16,6 +16,19 @@ const nextConfig = {
   //     },
   //   ],
   // },
+  async headers() {
+    return [
+      {
+        source: '/san-pham/slug',
+        headers: [
+          {
+            key: '/',
+            value: '404',
+          },
+        ],
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

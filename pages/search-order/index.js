@@ -253,7 +253,7 @@ const PageSearchOrder = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="flex flex-colw-[25%] max-md:hidden">
+                  <div className="flex flex-col w-[25%] max-md:hidden">
                     <div className="flex flex-col mt-3">
                       <p className="text-lg text-center max-lg:text-base">
                         {item?.price?.toLocaleString("vi", {

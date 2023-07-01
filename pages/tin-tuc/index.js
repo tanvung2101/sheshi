@@ -31,7 +31,7 @@ const TinTuc = () => {
           console.log(item.thumbnail)
           return (
             <div key={item.id} className="w-96 flex flex-col items-center justify-center gap-3 px-4 rounded-lg border-[1px] border-slate-300 max-sm:w-full">
-              <div className="w-full min-h-[350px]">
+              <div className="w-full h-[350px] max-sm:h-[150px]">
                 <Image
                   src={item.thumbnail}
                   alt={item.title}
