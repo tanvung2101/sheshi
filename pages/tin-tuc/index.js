@@ -1,6 +1,15 @@
 import newsApis from "@/apis/newApis";
-import { Button, SEO, Title } from "@/components";
-import Head from "next/head";
+// import { Button, SEO, Title } from "@/components";
+import dynamic from 'next/dynamic'
+const Button = dynamic(() => import('../../components/Button'), {
+  ssr: false,
+})
+const SEO = dynamic(() => import('../../components/SEO/index'), {
+  ssr: false,
+})
+const Title = dynamic(() => import('../../components/Title'), {
+  ssr: false,
+})
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";

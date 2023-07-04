@@ -1,15 +1,17 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Footer, Menu } from "@/components";
+import dynamic from 'next/dynamic'
+// import { Footer, Menu } from "@/components";
+const HeaderUser = dynamic(() => import('./../components/HeaderUser'), { ssr: false })
+const Footer = dynamic(() => import('./../components/Footer'), { ssr: false })
 import "@/styles/globals.css";
 import '@/styles/promotions.css'
 import { ToastContainer, Zoom } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { store } from "@/store";
-import { STORAGE_KEY } from "@/constants/storage-key";
-import { setToken } from "@/redux/accountSlice";
-
+// import { STORAGE_KEY } from "@/constants/storage-key";
+// import { setToken } from "@/redux/accountSlice";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 
@@ -36,9 +38,9 @@ function App({ Component, pageProps }) {
             theme="dark"
           />
           {/* Same as */}
-          <Menu>
-            <Component {...pageProps} />
-          </Menu>
+          <HeaderUser>
+          </HeaderUser>
+          <Component {...pageProps} />
           <Footer></Footer>
         </PersistGate>
       </Provider>

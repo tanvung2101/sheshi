@@ -12,6 +12,8 @@ const productsApis = {
     }),
   getAllProductsClient: (params) =>
     axiosClient.get("/api/product", { params }),
+  getProductsClient: (params) =>
+    axiosClient.get("/api/product/get-by-slug", { params }),
 };
 
 export default productsApis;

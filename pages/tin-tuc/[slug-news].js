@@ -1,4 +1,6 @@
-import { Title } from '@/components';
+import dynamic from 'next/dynamic'
+const Title = dynamic(() => import('../../components/Title'),)
+// import { Title } from '@/components';
 import axios from 'axios';
 import React, { useState } from 'react'
 

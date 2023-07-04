@@ -1,5 +1,8 @@
 import productsApis from "@/apis/productApis";
-import { ItemSlide, SEO } from "@/components";
+import dynamic from 'next/dynamic'
+const ItemSlide = dynamic(() => import('../../components/ItemSlide'), { ssr: false })
+const SEO = dynamic(() => import('../../components/SEO/index'), { ssr: false })
+// import { ItemSlide, SEO } from "@/components";
 import { GLOBAL_STATUS } from "@/constants";
 import { useRouter } from "next/router";
 import React from "react";

@@ -9,7 +9,7 @@ import {
   BsPeople,
 } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { useForm, useWatch } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import AuthApis from "@/apis/authApis";
@@ -22,7 +22,9 @@ import { MASTER_DATA_NAME, STATUS_ORDER } from "@/constants";
 import orderApis from "@/apis/orderApis";
 import { useLocation } from "@/hook/useLocation";
 import { toast } from "react-toastify";
-import { Button } from "@/components";
+import { Button, SelectCustom } from "@/components";
+import useLocationForm from "@/components/location-vn";
+import Select from 'react-select'
 
 const schema = yup.object({
   fullName: yup.string().required().min(3).max(50).trim(),
@@ -46,19 +48,6 @@ const PageProfile = () => {
   const [myBuyOfMonth, setMyBuyOfMonth] = useState(0);
   const [refBuyOfMonth, setRefBuyOfMonth] = useState(0);
   const [loadingUpdateProfile, setLoadingUpdateProfile] = useState(false)
-
-
-  const [active, setActive] = useState(false);
-  const [activeDistric, setActiveDistric] = useState(false);
-  const [activeWard, setActiveWard] = useState(false);
-
-  const [idCityCode, setIdCityCode] = useState(info?.userInformation?.cityCode);
-  const [city, setCity] = useState();
-  const [idDistrictCode, setIdDistrictCode] = useState(info?.userInformation?.districtCode);
-  const [district, setDistrict] = useState();
-  const [idWardCode, setIdWardCode] = useState(info?.userInformation?.wardCode);
-  const [ward, setWard] = useState();
-  const address = useLocation(idCityCode, idDistrictCode, idWardCode)
   // console.log(address)
 
 
@@ -136,6 +125,19 @@ const PageProfile = () => {
     useWatch({
       control,
     });
+  const { state, onCitySelect, onDistrictSelect, onWardSelect } =
+    useLocationForm(
+      true,
+      info?.userInformation
+    );
+  const {
+    cityOptions,
+    districtOptions,
+    wardOptions,
+    selectedCity,
+    selectedDistrict,
+    selectedWard,
+  } = state;
   const onSubmit = (data) => {
     const {
       fullName,
@@ -187,57 +189,6 @@ const PageProfile = () => {
       });
   };
 
-  const handlerCityCode = (id) => {
-    setValue("cityCode", id, { shouldDirty: true });
-    setIdCityCode(id);
-    setValue("districtCode", null);
-    setValue("wardCode", null);
-    setIdDistrictCode(0)
-    setIdWardCode(0)
-    setActive(false);
-    console.log('idDistrictCode', idDistrictCode)
-  };
-  const handlerDistrictCode = (id) => {
-    setValue("districtCode", id);
-    setIdDistrictCode(id);
-    setValue("wardCode", null);
-    setActiveDistric(false);
-  };
-  const handlerWardCode = (id) => {
-    setValue("wardCode", id);
-    setIdWardCode(id);
-    setActiveWard(false);
-  };
-
-  useEffect(() => {
-    async function cityCode() {
-      const city = await import("../../components/locations/cities.json");
-      setCity(city.data);
-    }
-    cityCode();
-  }, [city, idCityCode]);
-
-  useEffect(() => {
-    async function districtCode() {
-      // console.log(idCityCode.id);
-      if (!idCityCode) return null
-      const district = await import(
-        `../../components/locations/districts/${idCityCode}.json`
-      );
-      setDistrict(district.data);
-    }
-    districtCode();
-  }, [idCityCode, idDistrictCode]);
-  useEffect(() => {
-    async function wardCodeCode() {
-      if (!idDistrictCode) return
-      const ward = await import(
-        `../../components/locations/wards/${idDistrictCode}.json`
-      );
-      setWard(ward.data);
-    }
-    wardCodeCode();
-  }, [idDistrictCode]);
 
   useEffect(() => {
     AuthApis.getProfile()
@@ -431,54 +382,35 @@ const PageProfile = () => {
                   <label className="inline-block mb-3 text-sm font-normal text-black">
                     Tỉnh/Thành
                   </label>
-                  <div className="">
-                    <div
-                      className={`relative px-4 py-2 rounded-md w-full outline-none border border-slate-400 focus:border-slate-600 ${errors?.cityCode?.message
-                        ? "focus:ring-2 focus:ring-red-300 border border-red-500"
-                        : "border border-slate-400 focus:border-slate-600"
-                        }`}
-                      onClick={() => setActive(!active)}
-                    >
-                      <span className="text-[16px] font-sans font-normal">
-                        {address.addressCity || "Tỉnh / Thành"}
-                      </span>
-                      <span className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-4 h-4 hover:text-black"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                          />
-                        </svg>
-                      </span>
-                    </div>
-                    {active && (
-                      <div
-                        className="h-[250px] p-1 overflow-y-auto mt-1 rounded-md border border-slate-300"
+                  <Controller
+                    name="cityCode"
+                    control={control}
+                    render={({ field }) => (
+                      <SelectCustom
+                        {...field}
                         {...register("cityCode")}
-                      >
-                        {city?.length > 0 &&
-                          city?.map((e) => {
-                            return (
-                              <div
-                                onClick={() => handlerCityCode(e.id)}
-                                className="px-4 py-2 text-base hover:bg-red-500"
-                                key={e.id}
-                              >
-                                {e.name}
-                              </div>
-                            );
-                          })}
-                      </div>
+                        isDisabled={cityOptions.length === 0}
+                        options={cityOptions}
+                        onChange={(option) => {
+                          option.value !== selectedCity?.value && onCitySelect(option);
+                          option.value === 0 && setValue("cityCode", undefined, {
+                            shouldDirty: true,
+                          });
+                          setValue("wardCode", undefined)
+                          setValue("districtCode", undefined)
+                          option.value !== 0 && setValue('cityCode', option.value, {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                          })
+                        }}
+                        placeholder='Tinh'
+                        // value={cityOptions.find((itemOption) => itemOption.value === cityCode)}
+                        // value={selectedCity}
+                        className="select-custom"
+                        classNamePrefix="select-custom"
+                      />
                     )}
-                  </div>
+                  />
                   {errors?.cityCode?.message && (
                     <p className="mt-1 mb-4 font-sans text-sm font-normal text-red-500">
                       Trường bắt buộc
@@ -493,56 +425,30 @@ const PageProfile = () => {
                     Quận/Huyện
                   </label>
                   <div className="relative">
-                    <div className="">
-                      <div
-                        className={`relative px-4 py-2 rounded-md w-full outline-none ${errors?.districtCode?.message
-                          ? "focus:ring-2 focus:ring-red-300 border border-red-500"
-                          : "border border-slate-400 focus:border-slate-600"
-                          }`}
-                        onClick={() => setActiveDistric(!activeDistric)}
-                      >
-                        <span className="text-[16px] font-sans font-normal">
-                          {address?.addressDistrict || "Quận/Huyện"}
-                        </span>
-                        <span className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-4 h-4 hover:text-black"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                            />
-                          </svg>
-                        </span>
-                      </div>
-                      {activeDistric && (
-                        <div
-                          className="h-[250px] p-1 overflow-y-auto mt-1 rounded-md border border-slate-300"
-                          {...register("districtCode")}
-                        >
-                          {district?.length > 0 &&
-                            district.map((e) => {
-                              return (
-                                <div
-                                  onClick={() =>
-                                    handlerDistrictCode(e.id)
-                                  }
-                                  className="px-4 py-2 text-base hover:bg-red-500"
-                                  key={e.id}
-                                >
-                                  {e.name}
-                                </div>
-                              );
-                            })}
-                        </div>
+                    <Controller
+                      name="districtCode"
+                      control={control}
+                      render={({ field }) => (
+                        <SelectCustom
+                          {...field}
+                          isDisabled={districtOptions.length === 0}
+                          options={districtOptions}
+                          onChange={(option) => {
+                            console.log('fdssdgshs', option)
+                            option.value !== selectedDistrict?.value && onDistrictSelect(option);
+                            setValue("districtCode", option.value, {
+                              shouldValidate: true,
+                              shouldDirty: true
+                            })
+                          }}
+                          placeholder='Quan/huyen'
+                          // value={districtOptions?.find((itemOption) => itemOption.value === districtCode)}
+                          // value={selectedDistrict}
+                          className="select-custom"
+                          classNamePrefix="select-custom"
+                        />
                       )}
-                    </div>
+                    />
                     {errors?.districtCode?.message && (
                       <p className="mt-1 mb-4 font-sans text-sm font-normal text-red-500">
                         Trường bắt buộc
@@ -558,56 +464,29 @@ const PageProfile = () => {
                     Phường/Xã
                   </label>
                   <div className="relative">
-                    <div className="">
-                      <div
-                        className={`relative px-4 py-2 rounded-md w-full outline-none ${errors?.wardCode?.message
-                          ? "focus:ring-2 focus:ring-red-300 border border-red-500"
-                          : "border border-slate-400 focus:border-slate-600"
-                          }`}
-                        onClick={() => setActiveWard(!activeWard)}
-                      >
-                        <span className="text-[16px] font-sans font-normal">
-                          {address?.addressWard || "Phường/Xã"}
-                        </span>
-                        <span className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-4 h-4 hover:text-black"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                            />
-                          </svg>
-                        </span>
-                      </div>
-                      {activeWard && (
-                        <div
-                          className="h-[250px] p-1 overflow-y-auto mt-1 rounded-md border border-slate-300"
-                          {...register("wardCode")}
-                        >
-                          {ward?.length > 0 &&
-                            ward.map((e) => {
-                              return (
-                                <div
-                                  onClick={() =>
-                                    handlerWardCode(e.id)
-                                  }
-                                  className="px-4 py-2 text-base hover:bg-red-500"
-                                  key={e.id}
-                                >
-                                  {e.name}
-                                </div>
-                              );
-                            })}
-                        </div>
+                    <Controller
+                      name="wardCode"
+                      control={control}
+                      render={({ field }) => (
+                        <SelectCustom
+                          {...field}
+                          isDisabled={wardOptions.length === 0}
+                          options={wardOptions}
+                          onChange={(option) => {
+                            onWardSelect(option);
+                            setValue('wardCode', option.value, {
+                              shouldValidate: true,
+                              shouldDirty: true,
+                            })
+                          }}
+                          placeholder='Phường/Xã'
+                          // value={wardOptions.find((itemOption) => itemOption.value === wardCode)}
+                          // value={selectedWard}
+                          className="select-custom"
+                          classNamePrefix="select-custom"
+                        />
                       )}
-                    </div>
+                    />
                     {errors?.wardCode?.message && (
                       <p className="mt-1 mb-4 font-sans text-sm font-normal text-red-500">
                         Trường bắt buộc
@@ -623,7 +502,7 @@ const PageProfile = () => {
                   >
                     Cập nhật thông tin
                   </button> */}
-                  <Button className='!w-[200px]' hiddent={true} type={'submit'} disabled={!isDirty} loading={loadingUpdateProfile}>Cập nhật thông tin</Button>
+                  <Button className='!w-[200px]' hiddent={true} type={'submit'} disabled={!isDirty} loading={loadingUpdateProfile || !isDirty}>Cập nhật thông tin</Button>
                 </div>
               </div>
             </div>

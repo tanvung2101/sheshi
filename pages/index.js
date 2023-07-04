@@ -1,22 +1,21 @@
 import Head from "next/head";
 import Image from "next/image";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Scrollbar, A11y, EffectCube } from "swiper";
-import "swiper/swiper-bundle.min.css";
-import "swiper/css";
 import feed1 from "../public/feed1.jpg";
+import dynamic from 'next/dynamic'
 import Slider from "react-slick";
 import { GrPrevious, GrNext } from "react-icons/gr";
-
+import { lazy } from 'react';
 import {
-  Button,
-  CartSlide,
-  Footer,
-  ItemSlide,
-  Menu,
-  SEO,
   Title,
 } from "@/components";
+const ItemSlide = dynamic(() => import('./../components/ItemSlide'), {
+  ssr: false,
+  loading: () => <p>Loading...</p>,
+})
+const CartSlide = dynamic(() => import('./../components/CartSlide'), {
+  ssr: false,
+  loading: () => <p>Loading...</p>,
+})
 import logosheshe from "../public/logosheshe.png";
 import { useRouter } from "next/router";
 import axios from "axios";

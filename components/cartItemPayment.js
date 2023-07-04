@@ -1,11 +1,13 @@
 import { removeItem, updateItem } from "@/redux/cartItemSlice";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 const CartItemPayment = ({ item, value, index }) => {
+  console.log(item.product.productInventory.slug)
   const [quantity, setQuantity] = useState(+item.quantity);
   const [totalItem, setTotalItem] = useState(item.totalQuantity)
   const dispath = useDispatch();
@@ -55,11 +57,11 @@ const CartItemPayment = ({ item, value, index }) => {
         </div>
         <div className="flex items-center justify-center gap-5 max-md:flex-col">
           <div className="w-40">
-            <p className="text-black text-xl font-extrabold text-left mt-1/2 hover:text-[#ecbe26]">
+            <Link href={`/san-pham/${item.product.slug}`} className="text-black text-2xl font-bold text-left mt-1/2 hover:text-[#ecbe26] cursor-pointer">
               {item?.product?.name + " - " + item?.capacity}
-            </p>
+            </Link>
           </div>
-          <p className="text-regal-red text-2xl font-extrabold text-center mt-1/2">
+          <p className="text-regal-red text-2xl font-bold text-center mt-1/2">
             {item?.price?.toLocaleString("vi", {
               style: "currency",
               currency: "VND",
@@ -96,7 +98,7 @@ const CartItemPayment = ({ item, value, index }) => {
           className="absolute top-0 right-0 cursor-pointer"
           onClick={() => dispath(removeItem(item))}
         >
-          <AiFillCloseCircle className="ml-auto text-3xl"></AiFillCloseCircle>
+          <AiFillCloseCircle className="ml-auto text-3xl transition-all hover:text-red-600"></AiFillCloseCircle>
         </div>
       </div>
     </div>

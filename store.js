@@ -6,12 +6,14 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import thunk from 'redux-thunk';
 import accountSlice from './redux/accountSlice';
+import productModalSlice from './redux/productModalSlice';
 
 
 
 const reducer = combineReducers({
   cartItem: cartItemSlice,
-  account: accountSlice
+  account: accountSlice,
+  productMadal: productModalSlice
 })
 
 

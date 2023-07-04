@@ -58,7 +58,7 @@ export async function getLocation(cityCode, districtCode, wardCode) {
     };
 }
 
-async function FetchInitialData(userInformation) {
+async function fetchInitialData(userInformation) {
     const { cityCode, districtCode, wardCode } = userInformation;
     const [cities, districts, wards] = await Promise.all([
         fetchLocationOptions(FETCH_TYPES.CITIES),
@@ -78,6 +78,7 @@ async function FetchInitialData(userInformation) {
 
 
 function LocationVietNam(shouldFetchInitialLocation, userInformation) {
+    console.log('userInformation', userInformation)
     const [state, setState] = useState({
         cityOptions: [],
         districtOptions: [],
@@ -92,15 +93,14 @@ function LocationVietNam(shouldFetchInitialLocation, userInformation) {
     useEffect(() => {
         (async function () {
             if (shouldFetchInitialLocation) {
-                const initialData = await FetchInitialData(userInformation);
+                const initialData = await fetchInitialData(userInformation);
                 setState(initialData);
             } else {
                 const options = await fetchLocationOptions(FETCH_TYPES.CITIES);
                 setState({ ...state, cityOptions: options });
             }
         })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [userInformation]);
 
     useEffect(() => {
         (async function () {
@@ -111,7 +111,6 @@ function LocationVietNam(shouldFetchInitialLocation, userInformation) {
             );
             setState({ ...state, districtOptions: options });
         })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedCity]);
 
     useEffect(() => {
@@ -123,7 +122,6 @@ function LocationVietNam(shouldFetchInitialLocation, userInformation) {
             );
             setState({ ...state, wardOptions: options });
         })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedDistrict]);
 
     function onCitySelect(option) {

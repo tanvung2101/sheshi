@@ -1,5 +1,8 @@
 import orderApis from "@/apis/orderApis";
 import React, { useCallback, useEffect, useState } from "react";
+import dynamic from 'next/dynamic'
+const OrderContent = dynamic(() => import('../../components/OrderContent'), { ssr: false })
+const OrderDetailsRow = dynamic(() => import('../../components/OrderDetailsRow'), { ssr: false })
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,10 +14,10 @@ import {
 } from "@/constants";
 import { useLocation } from "@/hook/useLocation";
 import axios from "axios";
-import OrderContent from "@/components/OrderContent";
+// import OrderContent from "@/components/OrderContent";
 import moment from "moment/moment";
 import Swal from "sweetalert2";
-import OrderDetailsRow from "@/components/OrderDetailsRow";
+// import OrderDetailsRow from "@/components/OrderDetailsRow";
 
 async function fetchMasterCapacity(params) {
   const res = await axios.get(`http://localhost:3001/api/master`, {

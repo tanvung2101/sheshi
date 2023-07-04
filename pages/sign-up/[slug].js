@@ -1,4 +1,7 @@
-import { Input, SEO } from "@/components";
+import dynamic from 'next/dynamic'
+// import { Input, SEO } from "@/components";
+const Input = dynamic(() => import('../../components/Input'), { ssr: false })
+const SEO = dynamic(() => import('../../components/SEO/index'), { ssr: false })
 import React, { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { BiErrorCircle } from "react-icons/bi";
@@ -105,6 +108,7 @@ const PageRegister = ({ slug }) => {
                             <form
                                 className="inline-block w-full bg-white"
                                 onSubmit={handleSubmit(onSubmit)}
+
                             >
                                 <div className="flex-col mt-4">
                                     <label
@@ -114,14 +118,16 @@ const PageRegister = ({ slug }) => {
                                         {t("display_name")}
                                     </label>
                                     <div className="relative">
-                                        <input
+                                        <Input
                                             {...register("fullName")}
                                             placeholder={t("display_name")}
                                             type="text"
-                                            className={` w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.fullName?.message
-                                                ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
-                                                : "border border-slate-300 hover:border hover:border-slate-500"
-                                                }`}
+                                            // className={` w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.fullName?.message
+                                            //     ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
+                                            //     : "border border-slate-300 hover:border hover:border-slate-500"
+                                            //     }`}
+                                            errors={errors?.fullName?.message}
+                                            autoComplete="off"
                                         />
                                         {errors?.fullName?.message && (
                                             <span className="absolute top-0 right-0 -translate-x-1/2 translate-y-1/2">
@@ -141,14 +147,16 @@ const PageRegister = ({ slug }) => {
                                         {t("email")}
                                     </label>
                                     <div className="relative">
-                                        <input
+                                        <Input
                                             {...register("email")}
                                             placeholder={t("email")}
                                             type="text"
-                                            className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm${errors?.email?.message
-                                                ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
-                                                : "border border-slate-300 hover:border hover:border-slate-500"
-                                                }`}
+                                            // className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm${errors?.email?.message
+                                            //     ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
+                                            //     : "border border-slate-300 hover:border hover:border-slate-500"
+                                            //     }`}
+                                            errors={errors?.email?.message}
+                                            autoComplete="off"
                                         />
                                         {errors?.email?.message && (
                                             <span className="absolute top-0 right-0 -translate-x-1/2 translate-y-1/2">
@@ -168,14 +176,16 @@ const PageRegister = ({ slug }) => {
                                         {t("password")}
                                     </label>
                                     <div className="relative">
-                                        <input
+                                        <Input
                                             {...register("password")}
                                             placeholder={t("password")}
                                             type={hiddentPass ? "password" : "text"}
-                                            className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.password?.message
-                                                ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
-                                                : "border border-slate-300 hover:border hover:border-slate-500"
-                                                }`}
+                                            // className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.password?.message
+                                            //     ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
+                                            //     : "border border-slate-300 hover:border hover:border-slate-500"
+                                            //     }`}
+                                            errors={errors?.password?.message}
+                                            autoComplete="off"
                                         />
                                         <span
                                             className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2"
@@ -200,14 +210,16 @@ const PageRegister = ({ slug }) => {
                                         {t("confirm_password")}
                                     </label>
                                     <div className="relative">
-                                        <input
+                                        <Input
                                             {...register("confirmPass")}
                                             placeholder={t("confirm_password")}
                                             type={hiddentConfirmPass ? "password" : "text"}
-                                            className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.confirmPass?.message
-                                                ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
-                                                : "border border-slate-300 hover:border hover:border-slate-500"
-                                                }`}
+                                            // className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.confirmPass?.message
+                                            //     ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
+                                            //     : "border border-slate-300 hover:border hover:border-slate-500"
+                                            //     }`}
+                                            errors={errors?.confirmPass?.message}
+                                            autoComplete="off"
                                         />
                                         <span
                                             className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2"
@@ -238,10 +250,11 @@ const PageRegister = ({ slug }) => {
                                             type="referralCode"
                                             errors={errors?.referralCode?.message}
                                             disabled={slug}
-                                        // className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.referralCode?.message
-                                        //     ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
-                                        //     : "border border-slate-300 hover:border hover:border-slate-500"
-                                        //     }`}
+                                            // className={`inline-block w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.referralCode?.message
+                                            //     ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
+                                            //     : "border border-slate-300 hover:border hover:border-slate-500"
+                                            //     }`}
+                                            autoComplete="off"
                                         />
                                     </div>
                                     <span className="font-sans text-sm font-normal text-red-500">

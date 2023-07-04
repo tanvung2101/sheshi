@@ -24,10 +24,9 @@ const Sidebar = ({ menu, isShow, setIsShow }) => {
                             <li key={item.id} className="cursor-pointer">
                                 <Link
                                     onClick={setIsShow}
-                                    className={`${item.link === String(router.pathname)
-                                        ? "text-regal-red"
-                                        : "text-[#33333e]"
-                                        } text-[16px] font-medium`}
+                                    className={`text-[16px] ${item.link === String(router.pathname)
+                                        ? "font-bold" : 'font-medium'
+                                        } `}
                                     href={`${item.link}`}
                                 >
                                     {item.page}

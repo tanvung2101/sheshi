@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addItem, removeItem, updateItem } from "@/redux/cartItemSlice";
 import { useRouter } from "next/router";
 import useTrans from "@/page/hooks/useTrans";
+import { remove } from "@/redux/productModalSlice";
 
 
 async function fetchMasterCapacity(params) {
@@ -195,10 +196,8 @@ const ItemSlide = ({ propProduct }) => {
         );
       }
     }
-    // if(dispatch(addItem(newItem))){
-
-    //   dispatch(r)
-    // }
+    dispatch(addItem(newItem))
+    dispatch(remove())
     router.push('/cart')
     toast.success("Sản phẩm đã thêm vào vỏ hàng");
 

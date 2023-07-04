@@ -1,5 +1,8 @@
-import { SEO } from "@/components";
-import React, { useState } from "react";
+import dynamic from 'next/dynamic'
+// import { Input, SEO } from "@/components";
+const Input = dynamic(() => import('../../components/Input'), { ssr: false })
+const SEO = dynamic(() => import('../../components/SEO/index'), { ssr: false })
+import React, { useMemo, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { BiErrorCircle } from "react-icons/bi";
 import { useForm } from "react-hook-form";
@@ -13,44 +16,7 @@ import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 
-const schema = yup
-  .object()
-  .shape({
-    referralCode: yup
-      .string()
-      .notRequired()
-      .nullable()
-      .matches(/(^\s*$|(^SS)[0-9]{6}$)/, "ID giới thiệu không đúng định dạng"),
-    email: yup
-      .string()
-      .email("Email không hợp lệ")
-      .required("Trường bắt buộc")
-      .max(255)
-      .matches(
-        /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
-        "Vui long nhap email hop le"
-      )
-      .trim(),
-    fullName: yup
-      .string()
-      .required("Trường bắt buộc")
-      .min(3, "Tối thiểu 3 kí tự")
-      .max(50, "Tối đa 50 kí tự")
-      .trim(),
-    password: yup.string().required("Trường bắt buộc").min(6, 'Tối thiểu 6 kí tự').max(30, 'Tối đa 30 kí tự').trim(),
-    confirmPass: yup
-      .string()
-      .when("password", {
-        is: (val) => (val && val.length > 0 ? true : false),
-        then: () =>
-          yup
-            .string()
-            .oneOf([yup.ref("password")], "Mật khẩu không giống nhau"),
-      })
-      .required("Trường bắt buộc")
-      .trim(),
-  })
-  .required();
+
 
 const PageRegister = () => {
   const router = useRouter();
@@ -58,6 +24,44 @@ const PageRegister = () => {
 
   const [hiddentPass, setHiddentPass] = useState(true);
   const [hiddentConfirmPass, setHiddentConfirmPass] = useState(true);
+  const schema = useMemo(() => yup
+    .object()
+    .shape({
+      referralCode: yup
+        .string()
+        .notRequired()
+        .nullable()
+        .matches(/(^\s*$|(^SS)[0-9]{6}$)/, "ID giới thiệu không đúng định dạng"),
+      email: yup
+        .string()
+        .email("Email không hợp lệ")
+        .required("Trường bắt buộc")
+        .max(255)
+        .matches(
+          /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+          "Vui long nhap email hop le"
+        )
+        .trim(),
+      fullName: yup
+        .string()
+        .required("Trường bắt buộc")
+        .min(3, "Tối thiểu 3 kí tự")
+        .max(50, "Tối đa 50 kí tự")
+        .trim(),
+      password: yup.string().required("Trường bắt buộc").min(6, 'Tối thiểu 6 kí tự').max(30, 'Tối đa 30 kí tự').trim(),
+      confirmPass: yup
+        .string()
+        .when("password", {
+          is: (val) => (val && val.length > 0 ? true : false),
+          then: () =>
+            yup
+              .string()
+              .oneOf([yup.ref("password")], "Mật khẩu không giống nhau"),
+        })
+        .required("Trường bắt buộc")
+        .trim(),
+    })
+    .required(), [])
   const {
     register,
     handleSubmit,
@@ -101,14 +105,15 @@ const PageRegister = () => {
                   {t("display_name")}
                 </label>
                 <div className="relative">
-                  <input
+                  <Input
                     {...register("fullName")}
                     placeholder={t("display_name")}
                     type="text"
-                    className={` w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.fullName?.message
-                      ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
-                      : "border border-slate-300 hover:border hover:border-slate-500"
-                      }`}
+                    // className={` w-full py-2 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.fullName?.message
+                    //   ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
+                    //   : "border border-slate-300 hover:border hover:border-slate-500"
+                    //   }`}
+                    errors={errors?.fullName?.message}
                   />
                   {errors?.fullName?.message && (
                     <span className="absolute top-0 right-0 -translate-x-1/2 translate-y-1/2">

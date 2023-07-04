@@ -1,10 +1,13 @@
-import { Button, ItemSlide, SEO } from "@/components";
+import dynamic from 'next/dynamic'
+const ItemSlide = dynamic(() => import('../../components/ItemSlide'), { ssr: false })
+const SEO = dynamic(() => import('../../components/SEO/index'), { ssr: false })
+import { Button } from "@/components";
 import { GLOBAL_STATUS } from "@/constants";
 import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import Slider from "react-slick";
 import { useDispatch, useSelector } from "react-redux";
@@ -49,7 +52,7 @@ const Item = ({ productDetail }, params) => {
   console.log("itemSlug", productIt);
   const { value } = useSelector((state) => state.cartItem);
   const dispatch = useDispatch();
-  const router = useRouter();
+  const { query } = useRouter();
   const [product, setProduct] = useState();
   const [masterCapacity, setMasterCapacity] = useState();
   const [masterUnit, setMasterUnit] = useState();
@@ -59,12 +62,25 @@ const Item = ({ productDetail }, params) => {
   const [detailProductQuantity, setDetailProductQuantity] = useState();
   const [productDetailOption, setProductDetailOption] = useState();
   const [relatedProducts, setRelatedProducts] = useState([]);
+  console.log('kjlhkjhkhkjh', query)
 
 
   const [hidden, setHidden] = useState(1);
+  const getProductSlug = useCallback(async () => {
+    if (!query.slug) return setProductIt()
+    const params = {
+      productSlug: query.slug,
+    }
+    const product = await productsApis.getProductsClient(params)
+    setProductIt(product)
+    console.log('productproduct', product)
+  }, [query.slug])
   useEffect(() => {
-    setProductIt(productDetail);
-  }, [productDetail]);
+    getProductSlug()
+  }, [getProductSlug])
+  // useEffect(() => {
+  //   setProductIt(productDetail);
+  // }, [productDetail]);
   const updateQuantity = (type) => {
     if (type === "plus") {
       if (+quantity === 999) return;
@@ -89,7 +105,7 @@ const Item = ({ productDetail }, params) => {
   useEffect(() => {
     fetchMasterData();
   }, []);
-  console.log('detailProductQuantity', detailProductQuantity)
+  // console.log('detailProductQuantity', detailProductQuantity)
   useEffect(() => {
     const productDetailOption = [];
     if (masterCapacity?.length > 0) {
@@ -360,7 +376,7 @@ const Item = ({ productDetail }, params) => {
               <div
                 className="flex gap-2 w-full max-lg:items-center"
                 onClick={(e) => {
-                  console.log('hellllo', e.target.htmlFor)
+                  // console.log('hellllo', e.target.htmlFor)
                   if (!e.target.htmlFor) return
                   setDetailProductQuantity(product?.productDetailOption.find(
                     (prDetail) => prDetail.value === e.target.htmlFor
@@ -371,7 +387,7 @@ const Item = ({ productDetail }, params) => {
                   setCapcity(e.target.htmlFor)
                 }}>
                 {product && product.productDetailOption?.map((optionCapcity) => {
-                  console.log('optionCapcity', optionCapcity)
+                  // console.log('optionCapcity', optionCapcity)
                   return (
                     <div key={optionCapcity.value} className="max-lg:mx-auto">
                       <input
@@ -473,49 +489,49 @@ const Item = ({ productDetail }, params) => {
   );
 };
 
-export async function getStaticPaths() {
-  const params = {
-    size: 15,
-  };
-  const data = await productsApis.getAllProducts(params);
-  const allEvents = data.data.rows;
-  const allPaths = allEvents?.map((path) => {
-    return {
-      params: {
-        slug: path.productSlug,
-      },
-    };
-  });
-  console.log(allPaths)
-  if (!allPaths) {
-    return {
-      notFound: true,
-    }
-  }
-  return {
-    paths: allPaths,
-    fallback: false,
-  };
-}
+// export async function getStaticPaths() {
+//   const params = {
+//     size: 15,
+//   };
+//   const data = await productsApis.getAllProducts(params);
+//   const allEvents = data.data.rows;
+//   const allPaths = allEvents?.map((path) => {
+//     return {
+//       params: {
+//         slug: path.productSlug,
+//       },
+//     };
+//   });
+//   console.log(allPaths)
+//   if (!allPaths) {
+//     return {
+//       notFound: true,
+//     }
+//   }
+//   return {
+//     paths: allPaths,
+//     fallback: false,
+//   };
+// }
 
-export async function getStaticProps(context) {
-  const slug = context?.params?.slug;
-  console.log(slug)
-  // const data = await axios.get(`http://0.0.0.0:3001/api/product?size=6&productSlug=${slug}`);
-  const params = {
-    productSlug: slug,
-  }
-  const product1 = await productsApis.getProducts(params)
-  const productDetail = product1.data;
-  if (!productDetail) {
-    return {
-      notFound: true,
-    }
-  }
-  return {
-    props: { productDetail },
-    // revalidate: 100,
-  };
-}
+// export async function getStaticProps(context) {
+//   const slug = context?.params?.slug;
+//   console.log(slug)
+//   // const data = await axios.get(`http://0.0.0.0:3001/api/product?size=6&productSlug=${slug}`);
+//   const params = {
+//     productSlug: slug,
+//   }
+//   const product1 = await productsApis.getProducts(params)
+//   const productDetail = product1.data;
+//   if (!productDetail) {
+//     return {
+//       notFound: true,
+//     }
+//   }
+//   return {
+//     props: { productDetail },
+//     // revalidate: 100,
+//   };
+// }
 
 export default Item;
