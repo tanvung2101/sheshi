@@ -244,7 +244,7 @@ const PageRegister = () => {
               <div className="flex items-center justify-center mt-5">
                 <span className="text-xs text-center">
                   {t("already_account")}
-                  <Link href='/login' className="ml-1 text-[14px] text-regal-red hover:text-yellow-400 cursor-pointer">
+                  <Link href='/login' prefetch={true} className="ml-1 text-[14px] text-regal-red hover:text-yellow-400 cursor-pointer">
                     {t("login")}
                   </Link>
                 </span>

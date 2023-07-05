@@ -1,13 +1,11 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import cartItemSlice from './redux/cartItemSlice';
 import logger from 'redux-logger'
-
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import thunk from 'redux-thunk';
 import accountSlice from './redux/accountSlice';
 import productModalSlice from './redux/productModalSlice';
-
 
 
 const reducer = combineReducers({
@@ -18,10 +16,6 @@ const reducer = combineReducers({
 
 
 const loggerMiddleware = (store) => (next) => (action) => {
-  // your code here
-  // console.log(action)
-  console.log(store)
-  // action.payload = 10
   next(action)
 }
 
@@ -33,8 +27,8 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, reducer);
 
 export const store = configureStore({
+  middleware: (gDM) => gDM({ serializableCheck: false, }).concat(logger, loggerMiddleware),
   reducer: persistedReducer,
   devTools: process.env.NODE_ENV !== 'production',
   // middleware: [thunk],
-  middleware: (gDM) => gDM().concat(logger, loggerMiddleware)
 })

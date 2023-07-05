@@ -17,8 +17,8 @@ import { persistStore } from "redux-persist";
 
 import { appWithTranslation } from 'next-i18next';
 
-let persistor = persistStore(store);
 
+let persistor = persistStore(store);
 function App({ Component, pageProps }) {
   return (
     <>

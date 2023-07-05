@@ -287,19 +287,8 @@ export default function Home({ data }) {
 
   return (
     <>
-      <Head>
-        <SEO></SEO>
-      </Head>
+      <SEO></SEO>
       <div className="mx-auto">
-        {/* <div>
-          <h1>{t('login')}</h1>
-
-
-          <Link href="/san-pham" locale={locale}>
-            About
-          </Link>
-          <br />
-        </div> */}
         <Slider {...settingsSlideImage}>
           {slideImageHome.map((item) => {
             return (
@@ -336,6 +325,7 @@ export default function Home({ data }) {
         </div>
         <Link
           href='/san-pham'
+          prefetch={true}
           className="block max-w-[100px] p-2 mx-auto rounded-lg bg-regal-red text-center text-light-pink"
         >
           xem thêm
@@ -357,6 +347,7 @@ export default function Home({ data }) {
                 ></div>
                 <Link
                   href="/hoc-vien-dao-tao-sheshi"
+                  prefetch={true}
                   className="block text-lg font-bold uppercase text-regal-red hover:text-yellow-200 max-lg:text-center"
                 >
                   Xem chi tiết
@@ -417,6 +408,7 @@ export default function Home({ data }) {
           </div>
           <Link
             href='/san-pham'
+            replace
             className="block max-w-[100px] p-2 mx-auto rounded-lg bg-regal-red text-center text-light-pink"
           >
             xem thêm
@@ -445,7 +437,7 @@ export default function Home({ data }) {
                         <p className="text-center font-medium">{item.description.length > 200 ? item.description.substring(0, 200) : item.description + "..."}</p>
                         <div className="w-28 mb-10">
                           <button className="px-3 py-2 bg-regal-red rounded-md text-white">
-                            <Link href={`/tin-tuc/${item.slug}`}>Xem thêm</Link>
+                            <Link href={`/tin-tuc/${item.slug}`} prefetch={true}>Xem thêm</Link>
                           </button>
                         </div>
                       </div>

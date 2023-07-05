@@ -57,7 +57,7 @@ const CartItemPayment = ({ item, value, index }) => {
         </div>
         <div className="flex items-center justify-center gap-5 max-md:flex-col">
           <div className="w-40">
-            <Link href={`/san-pham/${item.product.slug}`} className="text-black text-2xl font-bold text-left mt-1/2 hover:text-[#ecbe26] cursor-pointer">
+            <Link href={`/san-pham/${item.product.slug}`} prefetch={true} className="text-black text-2xl font-bold text-left mt-1/2 hover:text-[#ecbe26] cursor-pointer">
               {item?.product?.name + " - " + item?.capacity}
             </Link>
           </div>

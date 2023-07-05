@@ -457,7 +457,7 @@ const Payment = () => {
                   </div>
                   <div className="flex items-center justify-center gap-5 max-lg:flex-col">
                     <div className="px-3 py-2 font-serif text-base font-light text-center cursor-pointer transition-all bg-white border rounded-md text-regal-red border-regal-red hover:bg-regal-red hover:text-white max-lg:w-full">
-                      <Link href="/payment-confirm">Trở về nhập địa chỉ</Link>
+                      <Link href="/payment-confirm" prefetch={true}>Trở về nhập địa chỉ</Link>
                     </div>
                     <div className="max-lg:w-full">
                       <Button

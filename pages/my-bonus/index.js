@@ -78,7 +78,7 @@ const PageMyBonus = () => {
                                         <td className='text-base text-regal-red hover:text-yellow-400'>
                                             {
                                                 bonus.order ?
-                                                    <Link href={`/search-order?email=${bonus?.order?.email}&orderCode=${bonus?.order?.orderCode}`}>{bonus.order?.orderCode ? bonus.order?.orderCode : "-"}</Link>
+                                                    <Link href={`/search-order?email=${bonus?.order?.email}&orderCode=${bonus?.order?.orderCode}`} prefetch={true}>{bonus.order?.orderCode ? bonus.order?.orderCode : "-"}</Link>
                                                     : "-"
                                             }
                                         </td>

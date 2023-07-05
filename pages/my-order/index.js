@@ -59,7 +59,7 @@ const PageMyOrder = () => {
                                 <p className='font-normal font-serif'>Tình trạng: <span className='text-green-700'>{masterOrderStatus && masterOrderStatus.find((mas => mas.id === item.orderStatus))?.name}</span></p>
                             </div>
                             <div className='self-end flex items-end pr-28 max-sm:p-0 max-sm:self-start max-sm:mt-2'>
-                                <Link href={`my-order/${item?.orderCode}`} className='uppercase text-base font-bold text-regal-red transition-all hover:text-yellow-300'>Xem chi tiết</Link>
+                                <Link href={`my-order/${item?.orderCode}`} prefetch={true} className='uppercase text-base font-bold text-regal-red transition-all hover:text-yellow-300'>Xem chi tiết</Link>
                             </div>
                         </div>
                     )}

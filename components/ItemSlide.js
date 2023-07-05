@@ -314,7 +314,7 @@ const ItemSlide = ({ propProduct }) => {
                 <div className="max-sm:w-full">
                   <div
                     onClick={() => addCartItem()}
-                    className="px-6 py-2 uppercase border border-regal-red rounded-lg text-[#bc2029] font-bold hover:bg-regal-red hover:text-white transition-all max-sm:w-ful"
+                    className="px-6 py-2 uppercase border border-regal-red rounded-lg text-[#bc2029] font-bold cursor-pointer hover:bg-regal-red hover:text-white transition-all max-sm:w-ful"
                   >
                     Thêm vào giỏ
                   </div>
@@ -339,7 +339,7 @@ const ItemSlide = ({ propProduct }) => {
     <>
       <div className="relative flex-col items-center justify-center p-5 mx-auto overflow-hidden hover:text-regal-red group max-[576px]:w-full max-[576px]:px-1">
         <div className="w-full mb-2">
-          <Link href={`/san-pham/${product?.slug}`}>
+          <Link href={`/san-pham/${product?.slug}`} prefetch={true}>
             {product?.productImage && (
               <Image
                 src={product?.productImage[0]?.image}
@@ -363,7 +363,7 @@ const ItemSlide = ({ propProduct }) => {
         </div>
         <div className="flex-col items-center justify-center mt-6">
           <span className="block text-[20px] font-bold text-center text-span">
-            <Link href={`/san-pham/${product?.slug}`}>{product?.name}</Link>
+            <Link href={`/san-pham/${product?.slug}`} prefetch={true}>{product?.name}</Link>
           </span>
           <span className="block text-[20px] text-regal-red font-bold text-center">
             {price &&

@@ -192,7 +192,7 @@ const PageForgotPassword = () => {
                                 } label='Xác nhận mật khẩu' placeholder='Xác nhận mật khẩu' errors={errors?.rePassword?.message}></InputPassword>}
                             </div>
                             <Button type='submit' hiddent={true} loading={loading}>Tiếp tục</Button>
-                            <Link href='/login' className='flex items-center justify-start gap-2 mt-4 pb-8 text-regal-red hover:text-yellow-300'>
+                            <Link href='/login' prefetch={true} className='flex items-center justify-start gap-2 mt-4 pb-8 text-regal-red hover:text-yellow-300'>
                                 <BsArrowReturnLeft></BsArrowReturnLeft>
                                 <span className='text-base'>Trở lại đăng nhập</span>
                             </Link>

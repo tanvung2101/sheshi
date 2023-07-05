@@ -11,7 +11,7 @@ const Sidebar = ({ menu, isShow, setIsShow }) => {
         <div className={`fixed top-0 left-0 w-full h-[1000px] hidden bg-slate-700 bg-opacity-30 z-[99] max-lg:block transition-all duration-700 ease-in ${isShow ? '' : 'max-lg:hidden'}`}>
             <div className={`w-1/2 h-full pt-4 pl-5 z-[100] bg-white max-md:w-[65%] max-sm:w-full transition-all duration-700 ease-in ${isShow ? 'max-lg:translate-x-[0%]' : 'transition-all ease-in-out max-lg:translate-x-[-100%]'}`}>
                 <div className="flex items-center justify-between mb-10 ">
-                    <Link onClick={setIsShow} href='/' className="uppercase text-5xl font-normal text-regal-red cursor-pointer">sheshi</Link>
+                    <Link onClick={setIsShow} href='/' prefetch={true} className="uppercase text-5xl font-normal text-regal-red cursor-pointer">sheshi</Link>
                     <span
                         onClick={setIsShow}
                         className="p-[2px] rounded-lg border-[4px] border-transparent active:border-blue-200 cursor-pointer">
@@ -28,6 +28,7 @@ const Sidebar = ({ menu, isShow, setIsShow }) => {
                                         ? "font-bold" : 'font-medium'
                                         } `}
                                     href={`${item.link}`}
+                                    prefetch={true}
                                 >
                                     {item.page}
                                 </Link>

@@ -483,7 +483,7 @@ const PaymentConfirm = () => {
                     </div>
                     <div className="flex items-center justify-center gap-5 max-lg:flex-col">
                       <div className="px-3 py-2 font-serif text-base font-light text-center transition-all bg-white border rounded-md text-regal-red border-regal-red hover:bg-regal-red hover:text-white max-lg:w-full">
-                        <Link href="/cart">Trở về giỏ hàng</Link>
+                        <Link href="/cart" prefetch={true}>Trở về giỏ hàng</Link>
                       </div>
                       <button
                         type="submit"

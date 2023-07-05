@@ -234,7 +234,7 @@ const PageSearchOrder = () => {
                     <div className="flex flex-col w-[40%] max-md:w-[85%]">
                       <div className="flex flex-col mt-3 max-md:pl-4">
                         <p className="text-lg text-regal-red hover:text-[#ecbe26]">
-                          <Link href={`/san-pham/${item?.product.productSlug}`}>
+                          <Link href={`/san-pham/${item?.product.productSlug}`} prefetch={true}>
                             {item?.product.name}
                           </Link>
                         </p>

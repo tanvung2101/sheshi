@@ -11,7 +11,7 @@ const CartEmpty = () => {
       <p className="text-lg text-slate-600 font-sans max-lg:text-center">
         Chưa có sản phẩm nào trong giỏ hàng.
       </p>
-      <Link href="/san-pham">
+      <Link href="/san-pham" prefetch={true}>
         <button className="block mt-8 px-4 pt-1 pb-2 text-white rounded-md text-base bg-[#bc2029]">
           Quay trở lại cửa hàng
         </button>

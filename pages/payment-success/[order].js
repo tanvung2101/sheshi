@@ -240,7 +240,7 @@ function PagePaymentSucces() {
                     <div className="flex flex-col w-[40%] max-md:w-[85%]">
                       <div className="flex flex-col mt-3 max-md:pl-4">
                         <p className="text-lg text-regal-red hover:text-[#ecbe26]">
-                          <Link href={`/san-pham/${item?.product.productSlug}`}>
+                          <Link href={`/san-pham/${item?.product.productSlug}`} prefetch={true}>
                             {item?.product.name}
                           </Link>
                         </p>
@@ -329,7 +329,7 @@ function PagePaymentSucces() {
 
           <div className="flex items-center justify-center gap-8 mb-14 max-sm:flex-col">
             <button className="px-3 py-2 font-serif text-base font-light text-white border rounded-md border-regal-red bg-regal-red">
-              <Link href="/">Quay trở lại trang chủ</Link>
+              <Link href="/" prefetch={true}>Quay trở lại trang chủ</Link>
             </button>
             <button
               disabled={

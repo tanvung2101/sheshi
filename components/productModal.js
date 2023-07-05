@@ -16,7 +16,7 @@ async function fetchMasterCapacity(params) {
   return res.data.rows;
 }
 
-const Portal = ({ClassName = '',productInventory, productDetail}) => {
+const Portal = ({ ClassName = '', productInventory, productDetail }) => {
   console.log('productInventory', productInventory)
   const [active, setActive] = useState(false);
   const [masterCapacity, setMasterCapacity] = useState();
@@ -63,14 +63,12 @@ const Portal = ({ClassName = '',productInventory, productDetail}) => {
   const renderContent = (
     <div
       onClick={() => setActive(false)}
-      className={`${ClassName} ${
-        active ? "hidden" : ""
-      } w-full h-full fixed top-0 left-1/2 -translate-x-1/2 flex items-center justify-center overflow-hidden bg-black bg-opacity-30`}
+      className={`${ClassName} ${active ? "hidden" : ""
+        } w-full h-full fixed top-0 left-1/2 -translate-x-1/2 flex items-center justify-center overflow-hidden bg-black bg-opacity-30`}
     >
       <div
-        className={`box-border flex items-center justify-center gap-6 bg-white p-8 relative transition-all -translate-y-2/3 ${
-          active ? "" : "translate-y-0 transition-all"
-        }`}
+        className={`box-border flex items-center justify-center gap-6 bg-white p-8 relative transition-all -translate-y-2/3 ${active ? "" : "translate-y-0 transition-all"
+          }`}
       >
         <span
           onClick={onClick}
@@ -124,7 +122,7 @@ const Portal = ({ClassName = '',productInventory, productDetail}) => {
                   Thêm vào giỏ
                 </Button>
                 <Button className="py-3 px-8 uppercase bg-regal-red rounded-lg text-white font-bold">
-                  <Link href={"/cart"}>mua ngay</Link>
+                  <Link href={"/cart"} prefetch={true}>mua ngay</Link>
                 </Button>
               </div>
             </div>

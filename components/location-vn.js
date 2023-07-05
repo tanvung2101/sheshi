@@ -1,7 +1,5 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-// import city from './locations/districts'
-// 
+
 
 export const PATHS_LOCAL = {
     CITIES: "./locations/cities.json",
@@ -41,7 +39,6 @@ async function fetchLocationOptions(fetchType, locationId) {
         }
     }
     const locations = await import(`${url}`);
-    console.log('locations', locations.data)
     return locations?.data?.map(({ id, name }) => ({ value: id, label: name }));
 }
 
@@ -58,7 +55,7 @@ export async function getLocation(cityCode, districtCode, wardCode) {
     };
 }
 
-async function fetchInitialData(userInformation) {
+async function fetchInitialData(userInformation = {}) {
     const { cityCode, districtCode, wardCode } = userInformation;
     const [cities, districts, wards] = await Promise.all([
         fetchLocationOptions(FETCH_TYPES.CITIES),

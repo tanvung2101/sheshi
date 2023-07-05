@@ -18,6 +18,7 @@ const MenuHeader = ({ menu }) => {
                                     : "text-[#33333e]"
                                     } text-[16px] hover:text-regal-red font-bold ml-6`}
                                 href={`${item.link}`}
+                                prefetch={true}
                             >
                                 {item.page}
                             </Link>

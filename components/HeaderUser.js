@@ -120,7 +120,7 @@ const HeaderUser = ({ children }) => {
     dispatch(clearInfo());
     window.localStorage.clear();
     dispatch(setToken(null))
-    router.replace("/");
+    router.push("/");
   };
 
   const onGetAvatar = () => {
@@ -139,7 +139,7 @@ const HeaderUser = ({ children }) => {
     if (tokenLogin) {
       return dispatch(setToken(tokenLogin));
     } else {
-      dispatch(setToken());
+      return dispatch(setToken());
     }
   }, [dispatch]);
 
@@ -151,7 +151,7 @@ const HeaderUser = ({ children }) => {
         <div className="flex items-center justify-evenly h-full mr-4 max-lg:w-full max-lg:justify-between max-lg:gap-x-3 max-lg:px-6 max-md:px-5 max-sm:px-3">
           <div className="flex items-start max-lg:items-center max-sm:justify-center">
             <MenuNavbar setShow={() => setIsShow(true)}></MenuNavbar>
-            <Link href='/' className="flex items-center gap-2 max-w-[150px] max-sm:w-[100px]">
+            <Link href='/' replace className="flex items-center gap-2 max-w-[150px] max-sm:w-[100px]">
               <div className="w-14 h-14 max-md:w-7 max-md:h-7">
                 <Image
                   src={`${logosheshe.src}`}
@@ -207,6 +207,7 @@ const HeaderUser = ({ children }) => {
                     ></input>
                     <Link
                       href={`/search?keyword=${keyWord || ''}`}
+                      replace
                       className="absolute right-0 -translate-x-1/2 -translate-y-1/2 top-1/2"
                     >
                       <BsSearch />
@@ -268,7 +269,7 @@ const HeaderUser = ({ children }) => {
             </div>
             {/* giỏ hàng */}
             <div className="relative dropdown dropdown-end bagIcon mr-5">
-              <Link href="/cart">
+              <Link href="/cart" replace>
                 <span tabIndex={0}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -308,7 +309,7 @@ const HeaderUser = ({ children }) => {
                     className="dropdown-content absolute z-[99] right-0 flex flex-col items-start justify-center top-full min-w-[250px] px-3 py-4 bg-[#f6f6f6] rounded-md shadow-md"
                   >
                     <li className="w-full h-full px-3 py-3 rounded-md hover:bg-[#fdf2ec]">
-                      <Link href="/profile" className="flex items-center gap-4">
+                      <Link href="/profile" replace className="flex items-center gap-4">
                         <span>
                           <BsPersonBoundingBox></BsPersonBoundingBox>
                         </span>
@@ -316,7 +317,7 @@ const HeaderUser = ({ children }) => {
                       </Link>
                     </li>
                     <li className="w-full h-full px-3 py-3 rounded-md hover:bg-[#fdf2ec]">
-                      <Link href="/my-order" className="flex items-center gap-4">
+                      <Link href="/my-order" replace className="flex items-center gap-4">
                         <span>
                           <BsReceipt></BsReceipt>
                         </span>
@@ -329,7 +330,7 @@ const HeaderUser = ({ children }) => {
                       onClick={() => onLogoutAction()}
                       className="w-full h-full px-3 py-3 rounded-md hover:bg-[#fdf2ec]"
                     >
-                      <Link href="/" className="flex items-center gap-4">
+                      <Link href="/" replace className="flex items-center gap-4">
                         <span>
                           <BsBoxArrowRight></BsBoxArrowRight>
                         </span>
@@ -364,7 +365,7 @@ const HeaderUser = ({ children }) => {
                     className="shadow dropdown-content menu bg-base-100 rounded-box "
                   >
                     <CartIcon className="w-[250px]">
-                      <Link href="/login">
+                      <Link href="/login" replace>
                         <Span className="flex items-center gap-2 p-3 text-sm rounded-md hover:bg-[#fef9f2]">
                           <Image
                             src={`${signin.src}`}

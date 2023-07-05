@@ -2,7 +2,7 @@ import { Button, Input, SEO } from "@/components";
 import React, { useState, useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+
 import { BiErrorCircle } from "react-icons/bi";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { LOGIN_TYPE } from "@/constants";
@@ -19,34 +19,35 @@ import axios from "axios";
 import Link from "next/link";
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import yup from "@/utils/yup";
 
 // const Login = dynamic(() => import("./../../components/Login"), {
 //   ssr: false,
 // });
 
-const schema = yup
-  .object({
-    email: yup
-      .string()
-      .email("Email không hợp lệ")
-      .required("Trường bắt buộc")
-      .max(255)
-      .matches(
-        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-        "Email không đúng định dạng"
-      ),
-    password: yup
-      .string()
-      .required("Trường bắt buộc")
-      .min(6, "Tối thiểu 6 kí tự")
-      .max(30, "Tối đa 30 kí tự")
-      .trim(),
-    type: yup.number().required(),
-  })
-  .required("Trường bắt buộc");
+// const schema = yup
+//   .object({
+//     email: yup
+//       .string()
+//       .email("Email không hợp lệ")
+//       .required("Trường bắt buộc")
+//       .max(255)
+//       .matches(
+//         /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+//         "Email không đúng định dạng"
+//       ),
+//     password: yup
+//       .string()
+//       .required("Trường bắt buộc")
+//       .min(6, "Tối thiểu 6 kí tự")
+//       .max(30, "Tối đa 30 kí tự")
+//       .trim(),
+//     type: yup.number().required(),
+//   })
+//   .required("Trường bắt buộc");
 
 const PageLogin = () => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.account);
@@ -54,6 +55,21 @@ const PageLogin = () => {
   const [loading, setLoading] = useState(false);
   const [hiddentPass, setHiddentPass] = useState(false);
   const [data, setData] = useState(null);
+
+  const schema = yup.object({
+    email: yup
+      .string()
+      .email()
+      .required()
+      .max(255)
+      .matches(
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        t("validations:email")
+      )
+      .trim(),
+    password: yup.string().required().min(6).max(30).trim(),
+    type: yup.number().required(),
+  });
 
   const {
     register,
@@ -166,7 +182,7 @@ const PageLogin = () => {
               </span>
             </div>
             <div className="mt-4 cursor-pointer mb-10">
-              <Link href='/forgot-password' className="text-sm text-regal-red hover:text-yellow-400">
+              <Link href='/forgot-password' className="text-sm text-regal-red hover:text-yellow-400" prefetch={true}>
                 {t("forgot_password")}
               </Link>
             </div>
@@ -174,7 +190,7 @@ const PageLogin = () => {
             <div className="flex items-center justify-center mt-5">
               <span className="text-xs text-center">
                 {t("already_account")}
-                <Link href='/sign-up' className="ml-1 text-[14px] text-regal-red font-medium hover:text-yellow-400">
+                <Link href='/sign-up' prefetch={true} className="ml-1 text-[14px] text-regal-red font-medium hover:text-yellow-400">
                   {t("sign_up")}
                 </Link>
               </span>

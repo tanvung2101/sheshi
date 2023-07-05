@@ -57,10 +57,10 @@ const Cart = () => {
                 </div>
                 <div className="flex items-center justify-center gap-5 px-2 max-lg:flex-col">
                   <button className="py-2 px-3 rounded-md bg-white text-regal-red border border-regal-red text-base font-light font-serif hover:bg-regal-red transition-all hover:text-white max-lg:w-full">
-                    <Link href="/san-pham">Tiếp tục mua hàng</Link>
+                    <Link href="/san-pham" prefetch={true}>Tiếp tục mua hàng</Link>
                   </button>
                   <button className="py-2 px-3 rounded-md bg-regal-red text-white text-base font-light font-serif max-lg:w-full">
-                    <Link href="/payment-confirm">Đặt hàng</Link>
+                    <Link href="/payment-confirm" prefetch={true}>Đặt hàng</Link>
                   </button>
                 </div>
               </div>

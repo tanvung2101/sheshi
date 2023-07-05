@@ -186,6 +186,7 @@ const NavbarUser = ({ bgPageProfile, bgPageMyOrder, bgPageMyBonus, children }) =
                             <Link
                                 className="inline-block w-full text-base font-bold text-center"
                                 href="/profile"
+                                prefetch={true}
                             >
                                 Trang cá nhân
                             </Link>
@@ -194,6 +195,7 @@ const NavbarUser = ({ bgPageProfile, bgPageMyOrder, bgPageMyBonus, children }) =
                             <Link
                                 className="inline-block w-full text-base font-bold text-center"
                                 href="/my-order"
+                                prefetch={true}
                             >
                                 Đơn hàng của tôi
                             </Link>
@@ -202,6 +204,7 @@ const NavbarUser = ({ bgPageProfile, bgPageMyOrder, bgPageMyBonus, children }) =
                             <Link
                                 className="inline-block w-full text-base font-bold text-center"
                                 href="/my-bonus"
+                                prefetch={true}
                             >
                                 Lịch sử thưởng
                             </Link>

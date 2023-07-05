@@ -53,7 +53,7 @@ const TinTuc = () => {
               <p>{item.description.length > 200 ? item.description.substring(0, 200) : item.description + "..."}</p>
               <div className="w-28 mb-4">
                 <Button>
-                  <Link href={`/tin-tuc/${item.slug}`}>Xem thêm</Link>
+                  <Link href={`/tin-tuc/${item.slug}`} prefetch={true}>Xem thêm</Link>
                 </Button>
               </div>
             </div>

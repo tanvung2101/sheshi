@@ -40,27 +40,26 @@ import accountApis from "@/apis/accountApi";
 import configDataApis from "@/apis/configDataApis";
 import { MASTER_DATA_NAME, STATUS_ORDER } from "@/constants";
 import orderApis from "@/apis/orderApis";
-import { useLocation } from "@/hook/useLocation";
 import { toast } from "react-toastify";
 import { Input, SEO, SelectCustom } from "@/components";
 import useLocationForm from "@/components/location-vn";
 import Select from 'react-select'
 
-const schema = yup.object({
-  fullName: yup.string().required().min(3).max(50).trim(),
-  phoneCode: yup.string().max(5).trim().required().nullable(),
-  phoneNumber: yup.string().min(9).max(20).trim().required().nullable(),
-  address: yup.string().max(255).trim().required("Trường bắt buộc").nullable(),
-  userCode: yup.string(),
-  cityCode: yup.number().integer().required().nullable(),
-  districtCode: yup.number().integer().required().nullable(),
-  wardCode: yup.number().integer().required().nullable(),
-});
 
 const PageProfile = () => {
   const { token, info } = useSelector((state) => state.account);
   const dispatch = useDispatch();
   const router = useRouter();
+  const schema = yup.object({
+    fullName: yup.string().required().min(3).max(50).trim(),
+    phoneCode: yup.string().max(5).trim().required().nullable(),
+    phoneNumber: yup.string().min(9).max(20).trim().required().nullable(),
+    address: yup.string().max(255).trim().required("Trường bắt buộc").nullable(),
+    userCode: yup.string(),
+    cityCode: yup.number().integer().required().nullable(),
+    districtCode: yup.number().integer().required().nullable(),
+    wardCode: yup.number().integer().required().nullable(),
+  });
   console.log(info);
 
   const [listReferrer, setListReferrer] = useState([])
@@ -68,7 +67,6 @@ const PageProfile = () => {
   const [myBuyOfMonth, setMyBuyOfMonth] = useState(0);
   const [refBuyOfMonth, setRefBuyOfMonth] = useState(0);
   const [loadingUpdateProfile, setLoadingUpdateProfile] = useState(false)
-  // console.log(address)
 
 
 
@@ -119,6 +117,7 @@ const PageProfile = () => {
   useEffect(() => {
     getOrder()
   }, [])
+
 
   const {
     register,
@@ -238,8 +237,8 @@ const PageProfile = () => {
                   <BsCurrencyDollar className="text-4xl text-center text-regal-red"></BsCurrencyDollar>
                 </span>
               </div>
-              <div className="relative w-full h-1 rounded-full bg-slate-200">
-                <div className={`absolute top-0 left-0 right-0 w-[${Math.round((myBuyOfMonth / 15000000) * 100)}%] h-1 bg-red-500 rounded-full`}></div>
+              <div className={`relative w-[${Math.round((myBuyOfMonth / 15000000) * 100)}%] h-1 rounded-full bg-slate-200`}>
+                <div className={`absolute top-0 left-0 right-0 w-full h-1 bg-red-500 rounded-full`}></div>
               </div>
               <p className="text-sm">Doanh số trong tháng</p>
             </div>
