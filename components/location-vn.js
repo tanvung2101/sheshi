@@ -100,6 +100,7 @@ function LocationVietNam(shouldFetchInitialLocation, userInformation) {
                 setState({ ...state, cityOptions: options });
             }
         })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userInformation]);
 
     useEffect(() => {
@@ -111,6 +112,7 @@ function LocationVietNam(shouldFetchInitialLocation, userInformation) {
             );
             setState({ ...state, districtOptions: options });
         })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedCity]);
 
     useEffect(() => {
@@ -122,6 +124,7 @@ function LocationVietNam(shouldFetchInitialLocation, userInformation) {
             );
             setState({ ...state, wardOptions: options });
         })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedDistrict]);
 
     function onCitySelect(option) {
