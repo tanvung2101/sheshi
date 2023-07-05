@@ -1,10 +1,30 @@
-import InputCopy from "@/components/InputCopy";
-import PhoneInput from "@/components/PhoneInput";
+// import InputCopy from "@/components/InputCopy";
+// import PhoneInput from "@/components/PhoneInput";
 import React, { useState, useEffect, useCallback } from "react";
+import dynamic from 'next/dynamic'
+const NavbarUser = dynamic(() => import('../../components/NavbarUser'), {
+  ssr: false,
+  // loading: () => <p>Loading...</p>,
+})
+const Button = dynamic(() => import('../../components/Button'), {
+  ssr: false,
+  // loading: () => <p>Loading...</p>,
+})
+// const Input = dynamic(() => import('../../components/Input'), {
+//   ssr: false,
+//   // loading: () => <p>Loading...</p>,
+// })
+const InputCopy = dynamic(() => import('../../components/InputCopy'), {
+  ssr: false,
+  // loading: () => <p>Loading...</p>,
+})
+const PhoneInput = dynamic(() => import('../../components/PhoneInput'), {
+  ssr: false,
+  // loading: () => <p>Loading...</p>,
+})
 import { BiErrorCircle } from "react-icons/bi";
 import {
   BsCurrencyDollar,
-  BsFillCameraFill,
   BsGraphUpArrow,
   BsPeople,
 } from "react-icons/bs";
@@ -15,14 +35,14 @@ import * as yup from "yup";
 import AuthApis from "@/apis/authApis";
 import { useRouter } from "next/navigation";
 import { setProfileAuth } from "@/redux/accountSlice";
-import NavbarUser from "@/components/NavbarUser";
+// import NavbarUser from "@/components/NavbarUser";
 import accountApis from "@/apis/accountApi";
 import configDataApis from "@/apis/configDataApis";
 import { MASTER_DATA_NAME, STATUS_ORDER } from "@/constants";
 import orderApis from "@/apis/orderApis";
 import { useLocation } from "@/hook/useLocation";
 import { toast } from "react-toastify";
-import { Button, SelectCustom } from "@/components";
+import { Input, SEO, SelectCustom } from "@/components";
 import useLocationForm from "@/components/location-vn";
 import Select from 'react-select'
 
@@ -204,7 +224,7 @@ const PageProfile = () => {
   return (
     <>
 
-
+      <SEO title="Trang cá nhân"></SEO>
       {token && <NavbarUser bgPageProfile={true}>
         <div className="w-[75%] flex-col items-start max-md:w-full max-md:mt-4">
           <section className="flex items-start justify-between max-md:flex-col">
@@ -282,14 +302,15 @@ const PageProfile = () => {
                     Họ và tên
                   </label>
                   <div className="relative">
-                    <input
+                    <Input
                       {...register("fullName")}
                       placeholder="Họ và tên"
                       type="text"
-                      className={`inline-block w-full py-3 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${""
-                        ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
-                        : "border border-slate-300 hover:border hover:border-slate-500"
-                        }`}
+                      // className={`inline-block w-full py-3 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${""
+                      //   ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
+                      //   : "border border-slate-300 hover:border hover:border-slate-500"
+                      //   }`}
+                      errors={errors?.fullName?.message}
                     />
                     {errors?.fullName?.message && (
                       <span className="absolute top-0 right-0 -translate-x-1/2 translate-y-1/2">
@@ -309,7 +330,7 @@ const PageProfile = () => {
                     Email
                   </label>
                   <div className="relative">
-                    <input
+                    <Input
                       placeholder="Địa chỉ"
                       defaultValue={info?.email}
                       disabled
@@ -358,14 +379,15 @@ const PageProfile = () => {
                     Địa chỉ
                   </label>
                   <div className="relative">
-                    <input
+                    <Input
                       {...register("address")}
                       placeholder="Địa chỉ"
                       type="text"
-                      className={`inline-block w-full py-3 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.address?.message
-                        ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
-                        : "border border-slate-300 hover:border hover:border-slate-500"
-                        }`}
+                      // className={`inline-block w-full py-3 pl-4 pr-10 bg-[#fff] rounded-md outline-none border text-sm ${errors?.address?.message
+                      //   ? "focus:ring-2 focus:ring-red-300 border border-red-500 "
+                      //   : "border border-slate-300 hover:border hover:border-slate-500"
+                      //   }`}
+                      errors={errors?.address?.message}
                     />
                     {errors?.address?.message && (
                       <span className="absolute top-0 right-0 -translate-x-1/2 translate-y-1/2">

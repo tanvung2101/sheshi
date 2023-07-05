@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Button, SEO } from "@/components";
+// import { Button, SEO } from "@/components";
 import Link from "next/link";
 import { useSelector } from "react-redux";
-import CartTabs from "@/components/CartTabs";
-import CartItemPayment from './../../components/cartItemPayment';
-import CartEmpty from "@/components/CartEmpty";
+// import CartTabs from "@/components/CartTabs";
+// import CartItemPayment from './../../components/cartItemPayment';
+// import CartEmpty from "@/components/CartEmpty";
+import dynamic from 'next/dynamic'
+const CartEmpty = dynamic(() => import('../../components/CartEmpty'), { ssr: false, })
+const CartItemPayment = dynamic(() => import('../../components/cartItemPayment'), { ssr: false, })
+const CartTabs = dynamic(() => import('../../components/CartTabs'), { ssr: false, })
+const SEO = dynamic(() => import('../../components/SEO/index'), { ssr: false, })
 
-const Cart = ({ data }) => {
+const Cart = () => {
   const { value } = useSelector((state) => state.cartItem);
   const [totalPrice, setTotalPrice] = useState(0);
 

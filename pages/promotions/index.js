@@ -1,5 +1,10 @@
-import { Button } from '@/components';
-import NavbarUser from '@/components/NavbarUser'
+import { Button, SEO } from '@/components';
+import dynamic from 'next/dynamic'
+const NavbarUser = dynamic(() => import('../../components/NavbarUser'), {
+    ssr: false,
+    // loading: () => <p>Loading...</p>,
+})
+// import NavbarUser from '@/components/NavbarUser'
 import Head from 'next/head';
 import Image from 'next/image';
 import React from 'react'
@@ -52,11 +57,8 @@ const PagePromotions = () => {
     return (
 
         <>
-            <Head>
-
-            </Head>
-            <div className="flex items-start justify-center px-24 mt-8 mb-20">
-                <NavbarUser ></NavbarUser>
+            <SEO title='Khuyến Mãi'></SEO>
+            <NavbarUser >
                 <div className="w-[75%] flex-col items-start">
                     <h3 className='text-center text-2xl mb-10'>Khuyến mãi dành cho bạn</h3>
                     <div className='w-full'>
@@ -130,7 +132,7 @@ const PagePromotions = () => {
                         </Slider>
                     </div>
                 </div>
-            </div>
+            </NavbarUser>
         </>
     )
 }

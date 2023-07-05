@@ -1,4 +1,5 @@
 import accountApis from '@/apis/accountApi';
+import { SEO } from '@/components';
 import ModalWithdraw from '@/components/ModalWithdraw';
 import NavbarUser from '@/components/NavbarUser';
 import { BONUS_TYPE, BONUS_TYPE_MAP, MASTER_DATA_NAME } from '@/constants';
@@ -51,6 +52,7 @@ const PageMyBonus = () => {
 
     return (
         <>
+            <SEO title="Lịch sử thưởng"></SEO>
             <NavbarUser bgPageMyBonus={true}>
                 <div className="w-[75%] flex-col items-start max-lg:w-full">
                     <h3 className='text-3xl mb-4'>Lịch sử thưởng</h3>

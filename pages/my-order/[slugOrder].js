@@ -1,8 +1,12 @@
+import dynamic from 'next/dynamic'
+const NavbarUser = dynamic(() => import('../../components/NavbarUser'), { ssr: false, })
+const OrderContent = dynamic(() => import('../../components/OrderContent'), { ssr: false, })
+const OrderDetailsRow = dynamic(() => import('../../components/OrderDetailsRow'), { ssr: false, })
 import commissionApis from '@/apis/commissionApis'
 import orderApis from '@/apis/orderApis'
-import NavbarUser from '@/components/NavbarUser'
-import OrderContent from '@/components/OrderContent'
-import OrderDetailsRow from '@/components/OrderDetailsRow'
+// import NavbarUser from '@/components/NavbarUser'
+// import OrderContent from '@/components/OrderContent'
+// import OrderDetailsRow from '@/components/OrderDetailsRow'
 import { COMMISSION_TYPE, MASTER_DATA_NAME, STATUS_ORDER } from '@/constants'
 import { useLocation } from '@/hook/useLocation'
 import axios from 'axios'
@@ -11,9 +15,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useState } from 'react'
-import { BsFillCameraFill } from 'react-icons/bs'
 import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
+import { SEO } from '@/components'
 
 async function fetchMasterCapacity(params) {
     const res = await axios.get(`http://localhost:3001/api/master`, {
@@ -161,7 +165,7 @@ const PageSlugOrder = () => {
     // console.log('commisstion, ', commission)
     return (
         <>
-
+            <SEO title="Đơn hàng"></SEO>
             <NavbarUser bgPageMyOrder={true}>
                 <div className="w-[75%] flex-col items-start max-md:w-full">
                     <div className="flex flex-col items-center ">

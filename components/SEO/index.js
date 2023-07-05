@@ -1,25 +1,36 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
-import settings from "../settings/settings-Development";
+import sheshicosmetic from '../../public/sheshicosmetic.jpg'
 
 const SEO = (props) => {
-  const { title = 'CÔNG TY CỔ PHẦN TẬP ĐOÀN SHESHI', description = '', image = '' , href = '/logosheshe.png', children} = props;
+  const { title = 'CÔNG TY CỔ PHẦN TẬP ĐOÀN SHESHI',
+    description = "SHESHI là thương hiệu mỹ phẩm cao cấp được xây dựng từ tâm huyết của những con người có kinh nghiệm lâu năm trong lĩnh vực làm đẹp và mỹ phẩm. Những sản phẩm tại SHESHI đều đã được trải qua nhiều công đoạn dày công nghiên cứu và phát triển để đem đến cho khách hàng những sản phẩm chất lượng tốt nhất.",
+    image = window.location.origin + sheshicosmetic.src,
+    href = '/logosheshe.png',
+    children
+  } = props;
   return (
     <Head>
-      <link rel="icon" href={href}/>
+      <link rel="icon" href={href} />
+      <link rel="canonical" href={window.location.href} />
       <title>{title}</title>
       <meta charSet="UTF-8" />
-      <meta name="description" content={description} key="desc"/>
+      <meta property="og:title" content={title} />
+      <meta name="description" content={description} key="desc" />
+      <meta property="og:url" content={window.location.href} />
       <meta
         property="og:image"
         content={image}
       />
-      <meta property="og:title" content={title} />
       <meta
         property="og:description"
         content={description}
       />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={image} />
+      <meta name="twitter:card" content="summary_large_image" />
       {children}
     </Head>
   );

@@ -3,11 +3,13 @@ const Title = dynamic(() => import('../../components/Title'),)
 // import { Title } from '@/components';
 import axios from 'axios';
 import React, { useState } from 'react'
+import { SEO } from '@/components';
 
 const PageSlugNews = ({ data }) => {
     const [detailNews, setDetailNews] = useState(data)
     return (
         <>
+            <SEO title={detailNews.title}></SEO>
             <div className="bg-light-pink py-5 mb-4">
                 <Title className="text-3xl font-bold">tin tức</Title>
             </div>

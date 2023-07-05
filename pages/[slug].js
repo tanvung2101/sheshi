@@ -1,11 +1,22 @@
+import dynamic from 'next/dynamic'
 import configPageApis from "@/apis/configPageApis";
 import pageData, { pages } from "@/apis/pagesApi";
-import { SEO, Title } from "@/components";
+// import { SEO, Title } from "@/components";
+const Title = dynamic(() => import('./../components/Title'), {
+  ssr: false,
+  loading: () => <p>Loading...</p>,
+})
+const SEO = dynamic(() => import('./../components/SEO/index'), {
+  ssr: false,
+  loading: () => <p>Loading...</p>,
+})
+
 import { useRouter } from "next/router";
 import React from "react";
 
 const Pages = ({ data }) => {
   const router = useRouter();
+  console.log(router)
   const pageShow = pageData.getPageBySlug(router.query.slug);
   console.log(data);
   React.useEffect(() => {

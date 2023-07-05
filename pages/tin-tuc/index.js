@@ -27,7 +27,7 @@ const TinTuc = () => {
   }, [])
   return (
     <>
-      <SEO title="TIN TỨC CÔNG TY CỔ PHẦN TẬP ĐOÀN SHESHI" href="/logosheshe.png"></SEO>
+      <SEO href="/logosheshe.png"></SEO>
       {/* <Head>
         <link rel="icon" href="/logosheshe.png" />
         <title>TIN TỨC CÔNG TY CỔ PHẦN TẬP ĐOÀN SHESHI</title>

@@ -144,7 +144,7 @@ const PaymentConfirm = () => {
 
   return (
     <>
-      <SEO title="tìm kiếm"></SEO>
+      <SEO title="Giỏ hàng"></SEO>
       {value?.length === 0 ? (
         <CartEmpty></CartEmpty>
       ) : (

@@ -12,6 +12,7 @@ import Swal from 'sweetalert2'
 import { useLocation } from "@/hook/useLocation";
 import OrderContent from "@/components/OrderContent";
 import OrderDetailsRow from "@/components/OrderDetailsRow";
+import { SEO } from "@/components";
 
 // SHESHI000351
 
@@ -138,6 +139,7 @@ function PagePaymentSucces() {
   }
   return (
     <>
+      <SEO title="Thanh toán"></SEO>
       {order && (
         <div className="px-40 mt-10 max-lg:px-20 max-md:px-10">
           <div className="flex flex-col items-center">

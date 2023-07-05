@@ -1,6 +1,8 @@
 import configDataApis from '@/apis/configDataApis';
 import orderApis from '@/apis/orderApis';
-import NavbarUser from '@/components/NavbarUser';
+import dynamic from 'next/dynamic'
+const NavbarUser = dynamic(() => import('../../components/NavbarUser'), { ssr: false, })
+// import NavbarUser from '@/components/NavbarUser';
 import { MASTER_DATA_NAME } from '@/constants';
 import axios from 'axios';
 import Image from 'next/image';
@@ -9,6 +11,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { BsFillCameraFill } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
+import { SEO } from '@/components';
 
 
 const PageMyOrder = () => {
@@ -41,6 +44,7 @@ const PageMyOrder = () => {
     }, [router, token])
     return (
         <>
+            <SEO title="Đơn hàng của tôi"></SEO>
             {token && <NavbarUser bgPageMyOrder={true}>
                 <div className="w-[75%] flex-col items-start max-md:w-full">
                     <h3 className='text-[25px] pb-8'>Đơn hàng của tôi</h3>
@@ -59,16 +63,6 @@ const PageMyOrder = () => {
                             </div>
                         </div>
                     )}
-                    {/* <div className='flex items-center justify-between bg-white p-4 drop-shadow-xl'>
-                        <div className='flex flex-col items-start gap-2'>
-                            <p className='text-2xl font-bold'>Đơn hàng #SHESHI000058</p>
-                            <p className='font-normal font-serif'>Tổng giá trị: 4,501,250đ</p>
-                            <p className='font-normal font-serif'>Tình trạng: Đơn hàng đợi xác nhận</p>
-                        </div>
-                        <div className='self-end flex items-end pr-28'>
-                            <p className='uppercase text-base font-bold text-regal-red transition-all hover:text-yellow-300'>Xem chi tiết</p>
-                        </div>
-                    </div> */}
                 </div>
             </NavbarUser>}
         </>

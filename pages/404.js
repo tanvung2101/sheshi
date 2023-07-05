@@ -1,4 +1,8 @@
-import { Button } from "@/components";
+// import { Button } from "@/components";
+import dynamic from 'next/dynamic'
+const Button = dynamic(() => import('../components/Button'), {
+    ssr: false,
+})
 import Link from "next/link";
 
 export default function Custom404() {
